@@ -24,5 +24,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "StockPerformance",
+    pattern: "{controller=StockPerformance}/{action=StockPerformance}");
+
 app.Run();
 

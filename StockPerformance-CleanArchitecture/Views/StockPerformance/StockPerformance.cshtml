@@ -1,0 +1,12 @@
+﻿@model StockPerformance_CleanArchitecture.Models.StockPerformanceResponse
+@{
+    ViewData["Title"] = "Stock Performance";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Here is data that has been passed to this page.
+
+    symbol: @Model.Symbol,
+    number of year: @Model.NumberOfYear
+    profit summary: @Model.DisplayStockPerformance()
+    </p>

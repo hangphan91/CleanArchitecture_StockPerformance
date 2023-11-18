@@ -9,4 +9,14 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+  <ItemGroup>
+    <None Remove="Views\StockPerformance\" />
+    <None Remove="Models\ProfitDetails\" />
+    <None Remove="Formatters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\StockPerformance\" />
+    <Folder Include="Models\ProfitDetails\" />
+    <Folder Include="Formatters\" />
+  </ItemGroup>
 </Project>
