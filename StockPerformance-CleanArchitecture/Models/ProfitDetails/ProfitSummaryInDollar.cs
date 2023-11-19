@@ -5,8 +5,9 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
 {
     public class ProfitSummaryInDollar : ProfitSummary
     {
-        public ProfitSummaryInDollar(MetricType metric): base(metric)
+        public ProfitSummaryInDollar()
         {
+            Metric = MetricType.InDollar;
         }
 
     public override string DisplayProfitSummary()

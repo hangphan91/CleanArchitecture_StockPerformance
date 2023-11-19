@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1706.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformance-CleanArchitecture", "StockPerformance-CleanArchitecture\StockPerformance-CleanArchitecture.csproj", "{00446A8A-B576-4540-86A2-0D136B3D573E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceCalculator", "StockPerformanceCalculator\StockPerformanceCalculator.csproj", "{075F1E9E-4936-4EA2-A5E3-755A3C416D80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{00446A8A-B576-4540-86A2-0D136B3D573E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00446A8A-B576-4540-86A2-0D136B3D573E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00446A8A-B576-4540-86A2-0D136B3D573E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{075F1E9E-4936-4EA2-A5E3-755A3C416D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{075F1E9E-4936-4EA2-A5E3-755A3C416D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{075F1E9E-4936-4EA2-A5E3-755A3C416D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{075F1E9E-4936-4EA2-A5E3-755A3C416D80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

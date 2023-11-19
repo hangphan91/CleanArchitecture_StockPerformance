@@ -21,9 +21,8 @@ namespace StockPerformance_CleanArchitecture.ProfitDetails
         public decimal? AverageYearlyGrowthSpeed { get; set; }
 
 
-        public ProfitSummary(MetricType metricType)
+        public ProfitSummary()
         {
-            Metric = metricType;
             MonthlyGrowthSpeeds = new List<MonthlyGrowthSpeed>();
             MonthlyProfits = new List<MonthlyProfit>();
             YearlyGrowthSpeeds = new List<YearlyGrowthSpeed>();

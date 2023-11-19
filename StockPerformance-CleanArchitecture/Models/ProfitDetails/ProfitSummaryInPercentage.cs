@@ -5,8 +5,9 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
 {
     public class ProfitSummaryPercentage : ProfitSummary
     {
-        public ProfitSummaryPercentage(MetricType metric): base(metric)
+        public ProfitSummaryPercentage()
         {
+            Metric = MetricType.InPercentage;
         }
         public override string DisplayProfitSummary()
         {

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using StockPerformance_CleanArchitecture.Models;
+using StockPerformanceCalculator.Logic;
 
 namespace StockPerformance_CleanArchitecture.Controllers
 {
@@ -13,11 +14,15 @@ namespace StockPerformance_CleanArchitecture.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult StockPerformance(string symbol = "AAPL", int numberOfYear = 2)
+		public IActionResult StockPerformance(string symbol = "AAPL", int year = 2020)
 		{
-			var request = new StockPerformanceRequest(symbol, numberOfYear);
+			var request = new StockPerformanceRequest(symbol, year);
 
-            var response = new StockPerformanceResponse(symbol, numberOfYear);
+            var performanceMangager = new StockPerformanceManager(symbol, year);
+            var summary = performanceMangager.StartStockPerforamanceCalculation();
+
+            var response = new StockPerformanceResponse(symbol, year);
+            response = response.Map(summary);
 
             return View(response);
 		}

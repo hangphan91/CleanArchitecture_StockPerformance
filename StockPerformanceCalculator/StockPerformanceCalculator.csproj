@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Models\" />
+    <None Remove="Logic\" />
+    <None Remove="Interfaces\" />
+    <None Remove="ExternalCommunications\" />
+    <None Remove="Models\Profits\" />
+    <None Remove="Models\GrowthSpeeds\" />
+    <None Remove="Logic\TradingRules\" />
+    <None Remove="Logic\Models\" />
+    <None Remove="Logic\Calculators\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Logic\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="ExternalCommunications\" />
+    <Folder Include="Models\Profits\" />
+    <Folder Include="Models\GrowthSpeeds\" />
+    <Folder Include="Logic\TradingRules\" />
+    <Folder Include="Logic\Models\" />
+    <Folder Include="Logic\Calculators\" />
+  </ItemGroup>
+</Project>
