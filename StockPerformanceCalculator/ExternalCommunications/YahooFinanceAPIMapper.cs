@@ -9,10 +9,10 @@ namespace StockPerformanceCalculator.ExternalCommunications
 		{
 		}
 
-        internal static List<SymbolSummary> Map()
+        public static List<SymbolSummary> Map(List<SymbolSummary> summaries)
         {
             //TODO: pass parameter and mapp values
-            return new List<SymbolSummary>()
+            return summaries
                 .OrderByDescending(symbol => symbol.Date)
                 .ToList();
         }

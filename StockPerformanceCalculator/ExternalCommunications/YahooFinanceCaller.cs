@@ -2,16 +2,35 @@
 
 namespace StockPerformanceCalculator.ExternalCommunications
 {
-    public class YahooFinanceCaller
-	{
-		public YahooFinanceCaller()
-		{
-		}
+    public class YahooFinanceCaller : IYahooFinanceCaller
+    {
+        private decimal _currentPrice;
+        private List<SymbolSummary> _symbolSummaries;
+        public YahooFinanceCaller()
+        {
+            _currentPrice = 0;
+            _symbolSummaries = new List<SymbolSummary>();
+        }
 
-        internal static List<SymbolSummary> GetStockHistory(string symbol, int year)
+        public decimal GetCurrentPrice()
+        {
+            return _currentPrice;
+        }
+
+        public List<SymbolSummary> GetCurrentHistory()
+        {
+            return _symbolSummaries;
+        }
+
+        public List<SymbolSummary> GetStockHistory(string symbol, int year)
         {
             //TODO: make api call
-            return YahooFinanceAPIMapper.Map();
+
+            var result = new List<SymbolSummary>();
+            _currentPrice = result.LastOrDefault()?.ClosingPrice ?? 0;
+            _symbolSummaries = result;
+
+            return YahooFinanceAPIMapper.Map(result);
         }
     }
 }

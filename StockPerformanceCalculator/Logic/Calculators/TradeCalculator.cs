@@ -8,12 +8,9 @@ namespace StockPerformanceCalculator.Logic
     public class TradeCalculator : IBuyStock, ISellStock
     {
         private static decimal _oneTimePurchaseLimitation = TradingRule.GetPurchaseLimitation();
-        private StockLedgerDetail? _stockLedgerDetail;
         private StockLedgerCalculator _stockLedgerCalculator;
         private AvailableBalanceCalculator _availableBalanceCalculator;
         private ShareNumberCalculator _shareNumberCalculator;
-        private TradeDetailCalculator _tradeDetailCalculator;
-
 
         public TradeCalculator(
             StockLedgerCalculator stockLedgerCalculator,
@@ -25,25 +22,25 @@ namespace StockPerformanceCalculator.Logic
             _shareNumberCalculator = shareNumberCalculator;
         }
 
-        public void Buy()
+        public void Buy(StockLedgerDetail stockLedgerDetail)
         {
-            if (_stockLedgerDetail != null)
+            if (stockLedgerDetail != null)
             {
-                _stockLedgerCalculator.AddBoughtLedger(_stockLedgerDetail);
-                var toSubtractBalance = _stockLedgerDetail.GetCost();
-                _availableBalanceCalculator.DeductBalance(toSubtractBalance, _stockLedgerDetail.Date);
+                _stockLedgerCalculator.AddBoughtLedger(stockLedgerDetail);
+                var toSubtractBalance = stockLedgerDetail.GetCost();
+                _availableBalanceCalculator.DeductBalance(toSubtractBalance, stockLedgerDetail.Date);
             }
         }
 
-        public void Sell()
+        public void Sell(StockLedgerDetail stockLedgerDetail)
         {
-            if (_stockLedgerDetail != null)
+            if (stockLedgerDetail != null)
             {
-                var currentSoldPrice = _stockLedgerDetail.Price;
-                var shareCount =_shareNumberCalculator.GetHoldingShare();
-                _stockLedgerCalculator.RemoveSoldLedgers(currentSoldPrice, _stockLedgerDetail.Date);
+                var currentSoldPrice = stockLedgerDetail.Price;
+                var shareCount = _shareNumberCalculator.GetHoldingShare();
+                _stockLedgerCalculator.RemoveSoldLedgers(currentSoldPrice, stockLedgerDetail.Date);
 
-                _availableBalanceCalculator.AddBalance(shareCount * currentSoldPrice, _stockLedgerDetail.Date);
+                _availableBalanceCalculator.AddBalance(shareCount * currentSoldPrice, stockLedgerDetail.Date);
             }
         }
 
@@ -58,7 +55,7 @@ namespace StockPerformanceCalculator.Logic
             var tradingCash = GetTradingCash(availableCash);
             var shareCount = _shareNumberCalculator.CountShare(currentPrice, tradingCash);
 
-            _stockLedgerDetail = new StockLedgerDetail
+            var stockLedgerDetail = new StockLedgerDetail
             {
                 Date = tradingDate,
                 Price = currentPrice,
@@ -66,10 +63,10 @@ namespace StockPerformanceCalculator.Logic
             };
 
             if (TradingRule.IsValidForBuyingRule(currentHoldingValue, basicCost))
-                Buy();
+                Buy(stockLedgerDetail);
 
-            if (TradingRule.IsValidForSellingRule(currentHoldingValue, basicCost))
-                Sell();
+            else if (TradingRule.IsValidForSellingRule(currentHoldingValue, basicCost))
+                Sell(stockLedgerDetail);
         }
 
         private decimal GetTradingCash(decimal availableCash)

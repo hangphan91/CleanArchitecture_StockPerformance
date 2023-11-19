@@ -15,6 +15,13 @@ namespace StockPerformanceCalculator.Models
 
         public StockPerformanceSummary()
         {
+            GrowthSpeedByMonths = new List<GrowthSpeedByMonth>();
+            GrowthSpeedByYears = new List<GrowthSpeedByYear>();
+            ProfitByMonths = new List<ProfitByMonth>();
+            ProfitByYears = new List<ProfitByYear>();
+            Symbol = "";
+            Year = 0;
+            CurrentPrice = 0;
         }
     }
 }

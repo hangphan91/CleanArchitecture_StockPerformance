@@ -11,6 +11,10 @@ namespace StockPerformanceCalculator.Models
 
 		public StockLedgerSummary()
 		{
+			StockLedgers = new List<StockLedger>();
+			BalanceHolding = new BalanceHolding();
+			DepositLedgers = new List<DepositLedger>();
+			Profit = new Profit();
 		}
 	}
 }

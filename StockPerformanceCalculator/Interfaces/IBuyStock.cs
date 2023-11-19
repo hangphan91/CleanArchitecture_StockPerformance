@@ -5,7 +5,7 @@ namespace StockPerformanceCalculator.Interfaces
 {
 	public interface IBuyStock
 	{
-		void Buy();
+		void Buy(StockLedgerDetail stockLedgerDetail);
 	}
 }
 

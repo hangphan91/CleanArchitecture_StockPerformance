@@ -5,15 +5,15 @@ namespace StockPerformanceCalculator.Logic
 {
     public class StockPerformanceManager
     {
-        private StockLedgerCalculator _stockLedgerCalculator;
+        protected StockLedgerCalculator _stockLedgerCalculator;
         private TradeCalculator _tradeCalculator;
         private AvailableBalanceCalculator _availableBalanceCalculator;
         private ShareNumberCalculator _shareNumberCalculator;
-        private DepositLedgerCalculator _depositLedgerCalculator;
-        private StockPerformanceSummary _stockPerformanceSummary;
+        protected DepositLedgerCalculator _depositLedgerCalculator;
         private TradeDetailCalculator _tradeDetailCalculator;
-        private StockPerformanceSummaryCalculator _stockPerformanceSummaryCalculator;
-        private PriceCalculator _priceCalculator;
+        protected StockPerformanceSummaryCalculator _stockPerformanceSummaryCalculator;
+        protected PriceCalculator _priceCalculator;
+        protected IYahooFinanceCaller _yahooFinanceCaller;
 
         private string _symbol;
         private int _year;
@@ -23,32 +23,31 @@ namespace StockPerformanceCalculator.Logic
             _symbol = symbol;
             _year = year;
 
+            _yahooFinanceCaller = new YahooFinanceCaller();
             _depositLedgerCalculator = new DepositLedgerCalculator(year);
             _stockLedgerCalculator = new StockLedgerCalculator();
             _shareNumberCalculator = new ShareNumberCalculator(_stockLedgerCalculator);
             _availableBalanceCalculator = new AvailableBalanceCalculator(_depositLedgerCalculator);
             _tradeCalculator = new TradeCalculator(_stockLedgerCalculator,
                 _availableBalanceCalculator, _shareNumberCalculator);
-            _priceCalculator = new PriceCalculator();
+            _priceCalculator = new PriceCalculator(_yahooFinanceCaller);
             _tradeDetailCalculator = new TradeDetailCalculator(_stockLedgerCalculator, _priceCalculator, year);
             _stockPerformanceSummaryCalculator =
                 new StockPerformanceSummaryCalculator
                 (symbol, year, _priceCalculator, _stockLedgerCalculator, _depositLedgerCalculator);
-            _stockPerformanceSummary = new StockPerformanceSummary();
         }
 
         public StockPerformanceSummary StartStockPerforamanceCalculation()
         {
-            var stockSummaries = YahooFinanceCaller.GetStockHistory(_symbol, _year);
+            var stockSummaries = _yahooFinanceCaller.GetStockHistory(_symbol, _year);
             ImplementTradingStocks(stockSummaries);
-            CalculateStockPerformance();
 
-            return _stockPerformanceSummary;
+            return CalculateStockPerformance();
         }
 
-        private void CalculateStockPerformance()
+        private StockPerformanceSummary CalculateStockPerformance()
         {
-           _stockPerformanceSummary = _stockPerformanceSummaryCalculator.Calculate();
+            return _stockPerformanceSummaryCalculator.Calculate();
         }
 
         private void ImplementTradingStocks(List<SymbolSummary> stockSummaries)
@@ -56,7 +55,7 @@ namespace StockPerformanceCalculator.Logic
             var tradeDetails = _tradeDetailCalculator.GetTradeDetails(stockSummaries);
 
             tradeDetails.ForEach(_tradeCalculator.ImplementTrade);
-        }         
+        }
     }
 }
 

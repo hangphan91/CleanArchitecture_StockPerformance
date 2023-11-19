@@ -1,8 +1,10 @@
-﻿namespace StockPerformanceCalculator.Interfaces
+﻿using StockPerformanceCalculator.Models;
+
+namespace StockPerformanceCalculator.Interfaces
 {
     public interface ISellStock
 	{
-		void Sell();
+		void Sell(StockLedgerDetail stockLedgerDetail);
 	}
 }
 

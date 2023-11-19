@@ -31,9 +31,10 @@ namespace StockPerformanceCalculator.Logic
             decimal previousProfitByMonth = 0;
             foreach (var byMonth in profitByMonths)
             {
-                GrowthSpeedByYears.Add(new GrowthSpeedByYear
+                GrowthSpeedByMonths.Add(new GrowthSpeedByMonth
                 {
                     Rate = byMonth.Amount - previousProfitByMonth,
+                    Month = byMonth.Month,
                     Year = byMonth.Year,
                 });
                 previousProfitByMonth = byMonth.Amount;

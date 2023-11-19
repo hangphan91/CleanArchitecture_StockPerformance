@@ -21,14 +21,15 @@ namespace StockPerformanceCalculator.Logic
 
         public List<TradeDetail> GetTradeDetails(List<SymbolSummary> stockSummaries)
         {
+            var numberOfYear = DateTime.Now.Year - _year;
             var tradeDetails = new List<TradeDetail>();
-            for (int i = 0; i < _year; i++)
+            for (int i = 0; i <= numberOfYear; i++)
             {
                 for (int j = 1; j <= 12; j++)
                 {
                     var toTradeStock = stockSummaries
                         .Where(summary => summary.Date.Month == j
-                        && summary.Date.Year == _year &&
+                        && summary.Date.Year == _year + i &&
                         TradingRule.IsValidToTradeStockByDate(summary.Date.Date))
                         .FirstOrDefault();
 
@@ -36,7 +37,7 @@ namespace StockPerformanceCalculator.Logic
                         continue;
 
                     var currentHoldingShareCount = _stockLedgerCalculator.GetCurrentHoldingShare();
-                    var currentPrice = _priceCalculator.GetCurrentPrice(stockSummaries);
+                    var currentPrice = toTradeStock.ClosingPrice;
                     var holdingValue = currentPrice * currentHoldingShareCount;
                     var costBasicForHoldingValue = _stockLedgerCalculator.GetCostBasicForCurrentHolding();
 
