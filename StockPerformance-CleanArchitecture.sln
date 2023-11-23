@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceCalculator"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceCalculatorUnitTests", "StockPerformanceCalculatorUnitTests\StockPerformanceCalculatorUnitTests.csproj", "{12D4DCAF-D211-4C76-8834-14B0B27B590B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityDefinitions", "EntityDefinitions\EntityDefinitions.csproj", "{95B30E48-0965-4F47-96A2-FE64213BD7BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityPersistence", "EntityPersistence\EntityPersistence.csproj", "{8C5CB8D9-DDCB-47CD-9C3D-4CDE56144910}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{12D4DCAF-D211-4C76-8834-14B0B27B590B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12D4DCAF-D211-4C76-8834-14B0B27B590B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12D4DCAF-D211-4C76-8834-14B0B27B590B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95B30E48-0965-4F47-96A2-FE64213BD7BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95B30E48-0965-4F47-96A2-FE64213BD7BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95B30E48-0965-4F47-96A2-FE64213BD7BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95B30E48-0965-4F47-96A2-FE64213BD7BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5CB8D9-DDCB-47CD-9C3D-4CDE56144910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C5CB8D9-DDCB-47CD-9C3D-4CDE56144910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5CB8D9-DDCB-47CD-9C3D-4CDE56144910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C5CB8D9-DDCB-47CD-9C3D-4CDE56144910}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

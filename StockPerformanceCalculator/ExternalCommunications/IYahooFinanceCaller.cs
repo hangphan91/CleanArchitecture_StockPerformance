@@ -5,7 +5,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
 {
 	public interface IYahooFinanceCaller
 	{
-        List<SymbolSummary> GetStockHistory(string symbol, int year);
+       Task< List<SymbolSummary>> GetStockHistory(string symbol, DateTime startingDate);
         decimal GetCurrentPrice();
     }
 }

@@ -11,7 +11,7 @@ namespace StockPerformanceCalculator.Logic
             _stockLedger = new StockLedger();
 		}
 
-        internal int GetCurrentHoldingShare()
+        internal decimal GetCurrentHoldingShare()
         {
             return _stockLedger.HoldingLedgers
                 .Sum(holding => holding.ShareCount);
@@ -50,6 +50,60 @@ namespace StockPerformanceCalculator.Logic
         public StockLedger GetStockLedger()
         {
             return _stockLedger;
+        }
+
+        internal decimal GetTotalBoughtLedgersByMonth(int month, int year)
+        {
+             return _stockLedger.BoughtLedgers
+                .Where(ledger => ledger.Date.Month == month
+                && ledger.Date.Year == year)
+                .Sum(l => l.Price * l.ShareCount);
+        }
+
+        internal decimal GetTotalSoldLedgersByMonth(int month, int year)
+        {
+            return _stockLedger.SoldLedgers
+               .Where(ledger => ledger.Date.Month == month
+               && ledger.Date.Year == year)
+               .Sum(l => l.Price * l.ShareCount);
+        }
+
+        internal decimal GetTotalHoldingLedgersByMonth(int month, int year)
+        {
+            return _stockLedger.HoldingLedgers
+               .Where(ledger => ledger.Date.Month == month
+               && ledger.Date.Year == year)
+               .Sum(l => l.Price * l.ShareCount);
+        }
+
+        internal decimal GetTotalShareHoldingLedgers()
+        {
+            return _stockLedger.HoldingLedgers
+               .Sum(l => l.ShareCount);
+        }
+
+        internal decimal GetTotalHoldingLedgersByYear(int year)
+        {
+            return _stockLedger.HoldingLedgers
+                           .Where(ledger => 
+                            ledger.Date.Year == year)
+                           .Sum(l => l.Price * l.ShareCount);
+        }
+
+        internal decimal GetTotalSoldLedgersByYear(int year)
+        {
+            return _stockLedger.SoldLedgers
+                                       .Where(ledger =>
+                                        ledger.Date.Year == year)
+                                       .Sum(l => l.Price * l.ShareCount);
+        }
+
+        internal decimal GetTotalBoughtLedgersByYear(int year)
+        {
+            return _stockLedger.BoughtLedgers
+                                       .Where(ledger =>
+                                        ledger.Date.Year == year)
+                                       .Sum(l => l.Price * l.ShareCount);
         }
     }
 }

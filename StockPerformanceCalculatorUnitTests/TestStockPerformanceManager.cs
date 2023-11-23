@@ -7,7 +7,7 @@ namespace StockPerformanceCalculatorUnitTests
 	public class TestStockPerformanceManager
 	{
 		[TestMethod]
-		public void GivenMockHistoryPrice_TestStockPerformanceManagerLogic()
+		public async Task GivenMockHistoryPrice_TestStockPerformanceManagerLogic()
 		{
             //Arrange
 
@@ -17,7 +17,7 @@ namespace StockPerformanceCalculatorUnitTests
 			var manager = new MockStockPerformanceManager(symbol, year);
 
 			//Act
-			var summaries = manager.StartStockPerforamanceCalculation();
+			var summaries = await manager.StartStockPerforamanceCalculation();
 
 			//Assert
 

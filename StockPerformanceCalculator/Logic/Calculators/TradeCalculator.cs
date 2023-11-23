@@ -7,19 +7,21 @@ namespace StockPerformanceCalculator.Logic
 {
     public class TradeCalculator : IBuyStock, ISellStock
     {
-        private static decimal _oneTimePurchaseLimitation = TradingRule.GetPurchaseLimitation();
         private StockLedgerCalculator _stockLedgerCalculator;
         private AvailableBalanceCalculator _availableBalanceCalculator;
         private ShareNumberCalculator _shareNumberCalculator;
+        private TradingRule _tradingRule;
 
         public TradeCalculator(
             StockLedgerCalculator stockLedgerCalculator,
             AvailableBalanceCalculator availableBalanceCalculator,
-            ShareNumberCalculator shareNumberCalculator)
+            ShareNumberCalculator shareNumberCalculator,
+            TradingRule tradingRule)
         {
             _stockLedgerCalculator = stockLedgerCalculator;
             _availableBalanceCalculator = availableBalanceCalculator;
             _shareNumberCalculator = shareNumberCalculator;
+            _tradingRule = tradingRule;
         }
 
         public void Buy(StockLedgerDetail stockLedgerDetail)
@@ -62,19 +64,20 @@ namespace StockPerformanceCalculator.Logic
                 ShareCount = shareCount,
             };
 
-            if (TradingRule.IsValidForBuyingRule(currentHoldingValue, basicCost))
+            if (_tradingRule.IsValidForBuyingRule(currentHoldingValue, basicCost))
                 Buy(stockLedgerDetail);
 
-            else if (TradingRule.IsValidForSellingRule(currentHoldingValue, basicCost))
+            else if (_tradingRule.IsValidForSellingRule(currentHoldingValue, basicCost))
                 Sell(stockLedgerDetail);
         }
 
         private decimal GetTradingCash(decimal availableCash)
         {
-            if (_oneTimePurchaseLimitation >= availableCash)
+            var oneTimePurchaseLimitation = _tradingRule.GetPurchaseLimitation();
+            if (oneTimePurchaseLimitation >= availableCash)
                 return availableCash;
 
-            return _oneTimePurchaseLimitation;
+            return oneTimePurchaseLimitation;
         }
     }
 }

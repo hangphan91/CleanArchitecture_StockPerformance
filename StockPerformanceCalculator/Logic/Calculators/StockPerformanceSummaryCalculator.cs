@@ -12,21 +12,22 @@ namespace StockPerformanceCalculator.Logic
         private GrowthRateCalculator _growthRateCalculator;
         private PriceCalculator _priceCalculator;
         private StockLedgerCalculator _stockLedgerCalculator;
-        DepositLedgerCalculator _depositLedgerCalculator;
+        AvailableBalanceCalculator _availableBalanceCalculator;
 
 
         public StockPerformanceSummaryCalculator(string symbol, int year,
             PriceCalculator priceCalculator,
             StockLedgerCalculator stockLedgerCalculator,
-            DepositLedgerCalculator depositLedgerCalculator)
+            DepositLedgerCalculator depositLedgerCalculator,
+            AvailableBalanceCalculator availableBalanceCalculator)
         {
             _symbol = symbol;
             _year = year;
             _priceCalculator = priceCalculator;
-            _depositLedgerCalculator = depositLedgerCalculator;
             _stockLedgerCalculator = stockLedgerCalculator;
             _profitCalculator = new ProfitCalculator(_stockLedgerCalculator);
-            _growthRateCalculator = new GrowthRateCalculator();
+            _growthRateCalculator = new GrowthRateCalculator(depositLedgerCalculator);
+            _availableBalanceCalculator = availableBalanceCalculator;
         }
 
         internal StockPerformanceSummary Calculate()

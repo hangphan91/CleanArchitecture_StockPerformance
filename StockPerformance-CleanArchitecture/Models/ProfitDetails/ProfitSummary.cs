@@ -11,6 +11,8 @@ namespace StockPerformance_CleanArchitecture.ProfitDetails
         public virtual MetricType Metric { get; set; }
         public List<MonthlyProfit> MonthlyProfits { get; set; }
         public List<YearlyProfit> YearlyProfits { get; set; }
+        public List<MonthlyBalanceHolding> MonthlyBalanceHoldings { get; set; }
+        public List<YearlyBalanceHolding> YearlyBalanceHoldings { get; set; }
         public List<MonthlyGrowthSpeed> MonthlyGrowthSpeeds { get; set; }
         public List<YearlyGrowthSpeed> YearlyGrowthSpeeds { get; set; }
 
@@ -25,8 +27,10 @@ namespace StockPerformance_CleanArchitecture.ProfitDetails
         {
             MonthlyGrowthSpeeds = new List<MonthlyGrowthSpeed>();
             MonthlyProfits = new List<MonthlyProfit>();
+            MonthlyBalanceHoldings = new List<MonthlyBalanceHolding>();
             YearlyGrowthSpeeds = new List<YearlyGrowthSpeed>();
             YearlyProfits = new List<YearlyProfit>();
+            YearlyBalanceHoldings = new List<YearlyBalanceHolding>();
         }
 
         public virtual string DisplayProfitSummary()

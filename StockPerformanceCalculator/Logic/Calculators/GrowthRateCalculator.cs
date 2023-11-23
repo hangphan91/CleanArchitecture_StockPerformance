@@ -7,12 +7,15 @@ namespace StockPerformanceCalculator.Logic
 {
     public class GrowthRateCalculator : IGrowthSpeed
     {
+        protected DepositLedgerCalculator _depositLedgerCalculator;
+
         public List<GrowthSpeedByYear> GrowthSpeedByYears { get; set; }
         public List<GrowthSpeedByMonth> GrowthSpeedByMonths { get; set; }
-        public GrowthRateCalculator()
+        public GrowthRateCalculator(DepositLedgerCalculator depositLedgerCalculator)
         {
             GrowthSpeedByYears = new List<GrowthSpeedByYear>();
             GrowthSpeedByMonths = new List<GrowthSpeedByMonth>();
+            _depositLedgerCalculator = depositLedgerCalculator;
         }
 
         internal void Calculate(List<ProfitByYear> profitByYears, List<ProfitByMonth> profitByMonths)

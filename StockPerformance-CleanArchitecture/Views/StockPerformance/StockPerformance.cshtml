@@ -1,12 +1,142 @@
 ﻿@model StockPerformance_CleanArchitecture.Models.StockPerformanceResponse
 @{
     ViewData["Title"] = "Stock Performance";
+    var profit = Model.TotalBalanceHoldingInPosition - Model.TotalDeposit;
+    var profitPercentage = Math.Round(profit * 100 / Model.TotalDeposit, 2);
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Here is data that has been passed to this page.
+<p>
+    Performance report for Symbol: @Model.Symbol, starting year: @Model.Year
+</p>
+<p>
+    Total Balance After Loss: @Model.TotalBalanceAfterLoss
+    Total Deposit: @Model.TotalDeposit
+    Total Holding in Position: @Model.TotalBalanceHoldingInPosition
+    Current price: @Model.CurrentPrice
+    Current holding share: @Model.CurrentHoldingShare
+</p>
+<h2> Profit: $ @profit (@profitPercentage %)</h2>
+<p>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Profit</th>
+            <th>Metric</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryInDollar.MonthlyProfits)
+        {
+            <tr>
+                <td>@row.Month</td>
+                <td>@row.Year</td>
+                <td>@row.Amount</td>
+                <td>$</td>
+            </tr>
+        }
+    </table>
 
-    symbol: @Model.Symbol,
-    number of year: @Model.Year
-    profit summary: @Model.ToDisplay
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Year</th>
+            <th>Profit</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryInDollar.YearlyProfits)
+        {
+            <tr>
+                <td>@row.Year</td>
+                <td>@row.Amount</td>
+            </tr>
+        }
+    </table>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Month</th>
+            <th>Year</th>
+            <th>GrowthRate</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryInDollar.MonthlyGrowthSpeeds)
+        {
+            <tr>
+                <td>@row.Month</td>
+                <td>@row.Year</td>
+                <td>@row.Rate</td>
+            </tr>
+        }
+    </table>
+
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Year</th>
+            <th>Growth Rate</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryInDollar.YearlyGrowthSpeeds)
+        {
+            <tr>
+                <td>@row.Year</td>
+                <td>@row.Rate</td>
+            </tr>
+        }
+    </table>
+
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Profit</th>
+            <th>Metric</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryPercentage.MonthlyProfits)
+        {
+            <tr>
+                <td>@row.Month</td>
+                <td>@row.Year</td>
+                <td>@row.Amount</td>
+                <td>%</td>
+            </tr>
+        }
+    </table>
+
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Year</th>
+            <th>Profit</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryPercentage.YearlyProfits)
+        {
+            <tr>
+                <td>@row.Year</td>
+                <td>@row.Amount</td>
+            </tr>
+        }
+    </table>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Month</th>
+            <th>Year</th>
+            <th>GrowthRate</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryPercentage.MonthlyGrowthSpeeds)
+        {
+            <tr>
+                <td>@row.Month</td>
+                <td>@row.Year</td>
+                <td>@row.Rate</td>
+            </tr>
+        }
+    </table>
+
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Year</th>
+            <th>Growth Rate</th>
+        </tr>
+        @foreach (var row in Model.ProfitSummaryPercentage.YearlyGrowthSpeeds)
+        {
+            <tr>
+                <td>@row.Year</td>
+                <td>@row.Rate</td>
+            </tr>
+        }
+    </table>
 </p>

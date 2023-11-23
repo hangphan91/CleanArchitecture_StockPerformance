@@ -13,14 +13,23 @@
     <None Remove="Views\StockPerformance\" />
     <None Remove="Models\ProfitDetails\" />
     <None Remove="Formatters\" />
+    <None Remove="Helpers\" />
+    <None Remove="Models\Settings\" />
+    <None Remove="Managers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\StockPerformance\" />
     <Folder Include="Models\ProfitDetails\" />
     <Folder Include="Formatters\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Models\Settings\" />
+    <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockPerformanceCalculator\StockPerformanceCalculator.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\EntityPersistence\EntityPersistence.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

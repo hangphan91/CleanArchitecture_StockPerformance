@@ -1,5 +1,4 @@
-﻿using System;
-using StockPerformanceCalculator.ExternalCommunications;
+﻿using StockPerformanceCalculator.ExternalCommunications;
 using StockPerformanceCalculator.Models;
 
 namespace StockPerformanceCalculatorUnitTests.ExternalCommunications
@@ -12,9 +11,9 @@ namespace StockPerformanceCalculatorUnitTests.ExternalCommunications
             return _currentPrice;
         }
 
-        public List<SymbolSummary> GetStockHistory(string symbol, int year)
+        public Task<List<SymbolSummary>> GetStockHistory(string symbol, DateTime startingdate)
         {
-            return GetTestStockSummary();
+            return Task.FromResult(GetTestStockSummary());
         }
 
         private List<SymbolSummary> GetTestStockSummary()

@@ -9,13 +9,13 @@
             _stockLedgerCalculator = stockLedgerCalculator;
         }
 
-        internal int CountShare(decimal currentPrice, decimal tradingCash)
+        internal decimal CountShare(decimal currentPrice, decimal tradingCash)
         {
-            var shareCount = (int)Math.Floor(tradingCash / currentPrice);
+            var shareCount = tradingCash / currentPrice;
             return shareCount;
         }
 
-        internal int GetHoldingShare()
+        internal decimal GetHoldingShare()
         {
             return _stockLedgerCalculator.GetCurrentHoldingShare();
         }

@@ -1,15 +1,19 @@
-﻿using StockPerformanceCalculator.Models;
+﻿using HP.PersonalStocks.Mgr.Helpers;
+using StockPerformanceCalculator.DatabaseAccessors;
+using StockPerformanceCalculator.Models;
 
 namespace StockPerformanceCalculator.ExternalCommunications
 {
     public class YahooFinanceCaller : IYahooFinanceCaller
     {
+        private Logic.EntityEngine _entityEngine;
         private decimal _currentPrice;
         private List<SymbolSummary> _symbolSummaries;
-        public YahooFinanceCaller()
+        public YahooFinanceCaller(Logic.EntityEngine entityEngine)
         {
             _currentPrice = 0;
             _symbolSummaries = new List<SymbolSummary>();
+            _entityEngine = entityEngine;
         }
 
         public decimal GetCurrentPrice()
@@ -22,15 +26,26 @@ namespace StockPerformanceCalculator.ExternalCommunications
             return _symbolSummaries;
         }
 
-        public List<SymbolSummary> GetStockHistory(string symbol, int year)
+        public async Task<List<SymbolSummary>> GetStockHistory(string symbol, DateTime startingDate)
         {
-            //TODO: make api call
+            var dataAccessor = new GetStockDatAccessor(symbol, startingDate);
+            var result = await dataAccessor.GetHistoricalQuotesInfoAsync();
+            var response = new YahooFinanceAPIMapper().Map(result);
 
-            var result = new List<SymbolSummary>();
-            _currentPrice = result.LastOrDefault()?.ClosingPrice ?? 0;
-            _symbolSummaries = result;
+            _currentPrice = response.FirstOrDefault()?.ClosingPrice ?? 0;
+            _symbolSummaries = response;
 
-            return YahooFinanceAPIMapper.Map(result);
+            var toInsert = response.Select(result
+                => new EntityDefinitions.SymbolSummary
+                {
+                    ClosingPrice = result.ClosingPrice,
+                    Date = result.Date,
+                    Symbol = result.Symbol,
+                }).ToList();
+
+            _entityEngine.AddSymbolSummaries(toInsert);
+            return response;
+
         }
     }
 }

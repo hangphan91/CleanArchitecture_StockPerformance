@@ -10,13 +10,15 @@ namespace StockPerformanceCalculator.Logic
         private int _year;
         private StockLedgerCalculator _stockLedgerCalculator;
         private PriceCalculator _priceCalculator;
+        private TradingRule _tradingRule;
 
         public TradeDetailCalculator(StockLedgerCalculator stockLedgerCalculator,
-            PriceCalculator priceCalculator, int year)
+            PriceCalculator priceCalculator, TradingRule tradingRule, int year)
         {
             _stockLedgerCalculator = stockLedgerCalculator;
             _priceCalculator = priceCalculator;
             _year = year;
+            _tradingRule = tradingRule;
         }
 
         public List<TradeDetail> GetTradeDetails(List<SymbolSummary> stockSummaries)
@@ -30,7 +32,7 @@ namespace StockPerformanceCalculator.Logic
                     var toTradeStock = stockSummaries
                         .Where(summary => summary.Date.Month == j
                         && summary.Date.Year == _year + i &&
-                        TradingRule.IsValidToTradeStockByDate(summary.Date.Date))
+                        _tradingRule.IsValidToTradeStockByDate(summary.Date.Date))
                         .FirstOrDefault();
 
                     if (toTradeStock == null)

@@ -3,11 +3,8 @@ using StockPerformance_CleanArchitecture.ProfitDetails;
 
 namespace StockPerformance_CleanArchitecture.Formatters
 {
-    public class ProfitSummaryFormatter
+    public static class ProfitSummaryFormatter
 	{
-		public ProfitSummaryFormatter()
-		{
-		}
         public static StringBuilder FormatResultToDisplay(ProfitSummary profitSummary)
         {
             var result = new StringBuilder();           
@@ -25,6 +22,11 @@ namespace StockPerformance_CleanArchitecture.Formatters
             result.AppendLine($"Average monthly growth rate: {profitSummary.AverageMonthlyGrowthSpeed}");
             result.AppendLine($"Arverage yearly growth rate: {profitSummary.AverageYearlyGrowthSpeed}");
             return result;
+        }
+
+        public static decimal RoundNumber(this decimal number)
+        {
+            return Math.Round(number, 2);
         }
     }
 }

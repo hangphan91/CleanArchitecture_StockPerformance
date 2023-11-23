@@ -1,39 +1,57 @@
 ﻿namespace StockPerformanceCalculator.Logic.TradingRules
 {
     public class TradingRule
-	{
-		public static decimal GetPurchaseLimitation()
-		{
-			return 2000;
-		}
-		public static bool IsValidForBuyingRule(decimal currentHoldingValue, decimal basicCost)
-		{
-			// Buy stock on the available date, then continue to buy
-			// When Stock Gain 10% overall
+    {
+        private EntityEngine _entityEngine;
 
-			if (currentHoldingValue >= basicCost * (decimal)1.1)
-				return true;
-
-			return false;
-		}
-
-		public static bool IsValidForSellingRule(decimal currentHoldingValue, decimal basicCost)
+        public TradingRule(EntityEngine entityEngine)
         {
-			//Sell stock when losing 15% overall
-			if (currentHoldingValue * (decimal)1.15 <= basicCost)
-				return true;
-
-			return false;
+            _entityEngine = entityEngine;
         }
 
-		public static bool IsValidToTradeStockByDate(DateTime date)
-		{
-			//only buy stock from day 1 to day 10 of each month
-			if (date.Day >= 15 && date.Day <= 25)
-				return true;
+        public decimal GetPurchaseLimitation()
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+            return initialSetup.BuyPercentageLimitation;
+        }
+        public bool IsValidForBuyingRule(decimal currentHoldingValue, decimal basicCost)
+        {
+            // Buy stock on the available date, then continue to buy
+            // When Stock Gain 5% overall
 
-			return false;
-		}
+            var initialSetup = _entityEngine.GetInitialSetup();
+            var buyPercentage = initialSetup.BuyPercentageLimitation;
+
+            if (currentHoldingValue >= basicCost * (decimal)buyPercentage)
+                return true;
+
+            return false;
+        }
+
+        public bool IsValidForSellingRule(decimal currentHoldingValue, decimal basicCost)
+        {
+            //Sell stock when losing 7% overall
+            var initialSetup = _entityEngine.GetInitialSetup();
+            var sellPercentage = initialSetup.SecondDepositDate;
+            if (currentHoldingValue * (decimal)sellPercentage <= basicCost)
+                return true;
+
+            return false;
+        }
+
+        public bool IsValidToTradeStockByDate(DateTime date)
+        {
+            //only buy stock from day 1 to day 10 of each month
+            var initialSetup = _entityEngine.GetInitialSetup();
+
+            var lowerDate = initialSetup.LowerRangeOfTradingDate;
+            var higherDate = initialSetup.HigherRangeOfTradingDate;
+
+            if (date.Day >= lowerDate && date.Day <= higherDate)
+                return true;
+
+            return false;
+        }
     }
 }
 

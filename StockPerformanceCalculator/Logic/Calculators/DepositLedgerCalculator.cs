@@ -1,5 +1,4 @@
-﻿using System;
-using StockPerformanceCalculator.Logic.TradingRules;
+﻿using StockPerformanceCalculator.Logic.TradingRules;
 using StockPerformanceCalculator.Models;
 
 namespace StockPerformanceCalculator.Logic
@@ -7,14 +6,15 @@ namespace StockPerformanceCalculator.Logic
     public class DepositLedgerCalculator
     {
         private List<DepositLedger> _deposits;
+        private DepositRule _depositRule;
 
-        public DepositLedgerCalculator(int year)
+        public DepositLedgerCalculator(DateTime startingDate, EntityEngine entityEngine)
         {
-            var startingDate = new DateTime(year, 1, 1);
+            _depositRule = new DepositRule(entityEngine);
             _deposits = SetUpDepositLeggerFromDate(startingDate);
         }
 
-        internal static List<DepositLedger> SetUpDepositLeggerFromDate(DateTime startingDate)
+        internal List<DepositLedger> SetUpDepositLeggerFromDate(DateTime startingDate)
         {
             var depositLedgers = new List<DepositLedger>();
 
@@ -31,7 +31,7 @@ namespace StockPerformanceCalculator.Logic
                     if (startMonth > currentMonth && currentYear == startYear)
                         continue;
 
-                    if (currentYear == endYear && currentMonth == endMonth)
+                    if (currentYear == endYear && currentMonth +1 == endMonth)
                         return depositLedgers;
 
                     var depositLedgersToAdd = GetDepositLedgers(currentYear, currentMonth);
@@ -43,19 +43,20 @@ namespace StockPerformanceCalculator.Logic
             return depositLedgers;
         }
 
-        private static List<DepositLedger> GetDepositLedgers(int year, int month)
+        private List<DepositLedger> GetDepositLedgers(int year, int month)
         {
-            var depositDate = new DateTime(year, month, DepositRule.GetFirstDepositDate());
+            var depositDate = new DateTime(year, month, _depositRule.GetFirstDepositDate());
+            var amount = _depositRule.GetDepositAmount();
             var firstDeposit = new DepositLedger
             {
-                Amount = DepositRule.GetDepositAmount(),
+                Amount = amount,
                 Date = depositDate,
             };
 
-            depositDate = new DateTime(year, month, DepositRule.GetSecondDepositDate());
+            depositDate = new DateTime(year, month, _depositRule.GetSecondDepositDate());
             var secondDeposit = new DepositLedger
             {
-                Amount = DepositRule.GetDepositAmount(),
+                Amount = amount,
                 Date = depositDate,
             };
             return new List<DepositLedger> { firstDeposit, secondDeposit };
@@ -64,6 +65,12 @@ namespace StockPerformanceCalculator.Logic
         internal List<DepositLedger> GetAllDeposit()
         {
             return _deposits;
+        }
+
+        internal List<DepositLedger> GetDepositByMonth(int month, int year)
+        {
+            return _deposits.Where(d => d.Date.Month == month
+            && d.Date.Year == year).ToList();
         }
     }
 }

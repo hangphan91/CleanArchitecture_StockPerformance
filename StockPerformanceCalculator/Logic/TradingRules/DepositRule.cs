@@ -1,31 +1,37 @@
 ﻿using System;
+using EntityDefinitions;
+using StockPerformanceCalculator.Helpers;
+
 namespace StockPerformanceCalculator.Logic.TradingRules
 {
-	public class DepositRule
-	{
-		public DepositRule()
-		{
-		}
-
-		public static int GetFirstDepositDate()
-		{
-			return 1;
-		}
-
-        public static int GetSecondDepositDate()
+    public class DepositRule
+    {
+        EntityEngine _entityEngine;
+        EntityDefinitions.DepositRule _depositRule;
+        public DepositRule(EntityEngine entityEngine)
         {
-            return 15;
+            _entityEngine = entityEngine;
         }
 
-        public static int NumberOfDepositAMonth()
-		{
-			return 2;
-		}
+        public int GetFirstDepositDate()
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+           return initialSetup.FirstDepositDate;
+        }
 
-		public static decimal GetDepositAmount()
-		{
-			return 1000;
-		}
-	}
+        public int GetSecondDepositDate()
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+
+            return initialSetup.SecondDepositDate;
+        }
+
+        internal decimal GetDepositAmount()
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+
+            return initialSetup.DepositAmount;
+        }
+    }
 }
 

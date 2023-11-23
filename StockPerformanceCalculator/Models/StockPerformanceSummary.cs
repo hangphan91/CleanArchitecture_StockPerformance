@@ -1,5 +1,4 @@
-﻿using System;
-using StockPerformanceCalculator.Models.GrowthSpeeds;
+﻿using StockPerformanceCalculator.Models.GrowthSpeeds;
 
 namespace StockPerformanceCalculator.Models
 {
@@ -9,10 +8,16 @@ namespace StockPerformanceCalculator.Models
         public List<ProfitByYear> ProfitByYears { get; set; }
         public List<GrowthSpeedByYear> GrowthSpeedByYears { get; set; }
         public List<GrowthSpeedByMonth> GrowthSpeedByMonths { get; set; }
+
         public string Symbol { get; set; }
         public int Year { get; set; }
         public decimal CurrentPrice { get; set; }
-
+        public decimal TotalBalanceAfterLoss { get; set; }
+        public decimal TotalDeposit { get; set; }
+        public decimal TotalBalanceHoldingInPosition { get; set; }
+        public decimal CurrentHoldingShare { get; set; }
+        public decimal ProfitInDollar { get; set; }
+        public decimal ProfitInPercentage { get; set; }
         public StockPerformanceSummary()
         {
             GrowthSpeedByMonths = new List<GrowthSpeedByMonth>();
@@ -22,6 +27,7 @@ namespace StockPerformanceCalculator.Models
             Symbol = "";
             Year = 0;
             CurrentPrice = 0;
+            TotalDeposit = 0;
         }
     }
 }

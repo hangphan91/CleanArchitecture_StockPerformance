@@ -16,6 +16,11 @@
     <None Remove="Logic\TradingRules\" />
     <None Remove="Logic\Models\" />
     <None Remove="Logic\Calculators\" />
+    <None Remove="Models\BalanceHoldings\" />
+    <None Remove="DatabaseAccessors\" />
+    <None Remove="Models\PerformanceCalculatorSetup\" />
+    <None Remove="Logic\Mappers\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -27,5 +32,16 @@
     <Folder Include="Logic\TradingRules\" />
     <Folder Include="Logic\Models\" />
     <Folder Include="Logic\Calculators\" />
+    <Folder Include="Models\BalanceHoldings\" />
+    <Folder Include="DatabaseAccessors\" />
+    <Folder Include="Models\PerformanceCalculatorSetup\" />
+    <Folder Include="Logic\Mappers\" />
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="YahooQuotesApi" Version="5.5.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EntityDefinitions\EntityDefinitions.csproj" />
   </ItemGroup>
 </Project>

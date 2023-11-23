@@ -1,9 +1,79 @@
-﻿@{
+﻿@model StockPerformance_CleanArchitecture.Models.ProfitDetails.SearchDetail
+
+@{
     ViewData["Title"] = "Home Page";
+    var symbols = Model.SearchSetup.Symbols.OrderBy(a => a);
+    var selectListSymbols = symbols
+        .Select(symbol => new SelectListItem { Text = symbol.ToUpper(), Value = symbol.ToUpper() })
+        .ToList();
+
+    var count = Model.SearchSetup.EndingYear - Model.SearchSetup.StartingYear + 1;
+    var selectListYears = Enumerable.Range(Model.SearchSetup.StartingYear, count)
+        .Select(year => new SelectListItem
+        {
+            Text = year.ToString(),
+            Value = year.ToString(),
+        }).ToList();
+    var selectListNumberOfDeposits = Enumerable.Range(0, 100)
+        .Select(number => new SelectListItem
+        {
+            Text = number.ToString(),
+            Value = number.ToString(),
+        }).ToList();
+    var selectListDateOfMonth = Enumerable.Range(1, 31)
+        .Select(number => new SelectListItem
+        {
+            Text = number.ToString(),
+            Value = number.ToString(),
+        }).ToList();
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @using (Html.BeginForm("StockPerformance", "StockPerformance", FormMethod.Get))
+    {
+
+        <fieldset>
+           <span>
+               <p> Deposit Setting</p>
+               <p>Deposit Amount: @Html.TextBoxFor(m => m.DepositRule.DepositAmount)</p>
+               <p>
+                   First deposit date @Html.DropDownListFor(m =>
+   m.DepositRule.FirstDepositDate, selectListDateOfMonth)
+               </p>
+               <p>
+                   Last deposit date @Html.DropDownListFor(m =>
+     m.DepositRule.SecondDepositDate, selectListDateOfMonth)
+               </p>
+           </span>
+            <span>
+                Trading Rule:
+                Buy more when we are already gain 
+                @Html.TextBoxFor(m => m.TradingRule.BuyPercentageLimitation)%
+                Sell all when we are currently losing
+                @Html.TextBoxFor(m =>m.TradingRule.SellPercentageLimitation)%
+                Maximum amount to trade at once $
+                @Html.TextBoxFor(m => m.TradingRule.PurchaseLimitation)
+
+                We will trade between
+                @Html.DropDownListFor(m => m.TradingRule.LowerRangeOfTradingDate, selectListDateOfMonth)
+                and @Html.DropDownListFor(m => m.TradingRule.HigherRangeOfTradingDate, selectListDateOfMonth)
+                of a month
+
+            </span>
+            <p>
+
+            <p>Symbol List </p>
+            @Html.DropDownListFor(m => m.Symbol, selectListSymbols)
+            <p> Year List</p>
+            @Html.DropDownListFor(m => m.Year, selectListYears)
+            </p>
+            <p>
+                <input type="submit" value="Submit" />
+            </p>
+
+        </fieldset>
+
+    }
+
 </div>
 

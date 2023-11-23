@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DataAccessors\" />
+    <None Remove="Calculators\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataAccessors\" />
+    <Folder Include="Calculators\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StockPerformanceCalculator\StockPerformanceCalculator.csproj" />
+    <ProjectReference Include="..\EntityDefinitions\EntityDefinitions.csproj" />
+  </ItemGroup>
+</Project>

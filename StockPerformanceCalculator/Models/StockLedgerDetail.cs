@@ -5,7 +5,7 @@ namespace StockPerformanceCalculator.Models
     {
         public long Id { get; set; } = 0;
         public DateTime Date { get; set; }
-        public int ShareCount { get; set; }
+        public decimal ShareCount { get; set; }
         public decimal Price { get; set; }
 
         public StockLedgerDetail()
