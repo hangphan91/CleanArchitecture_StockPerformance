@@ -12,9 +12,9 @@
         public decimal GetPurchaseLimitation()
         {
             var initialSetup = _entityEngine.GetInitialSetup();
-            return initialSetup.BuyPercentageLimitation;
+            return initialSetup.PurchaseLimitation;
         }
-        public bool IsValidForBuyingRule(decimal currentHoldingValue, decimal basicCost)
+        public bool IsValidForBuyingRule(decimal aboutToTradePrice, decimal averagePrice)
         {
             // Buy stock on the available date, then continue to buy
             // When Stock Gain 5% overall
@@ -22,18 +22,18 @@
             var initialSetup = _entityEngine.GetInitialSetup();
             var buyPercentage = initialSetup.BuyPercentageLimitation;
 
-            if (currentHoldingValue >= basicCost * (decimal)buyPercentage)
+            if (aboutToTradePrice >= averagePrice * (decimal)buyPercentage)
                 return true;
 
             return false;
         }
 
-        public bool IsValidForSellingRule(decimal currentHoldingValue, decimal basicCost)
+        public bool IsValidForSellingRule(decimal aboutToTradePrice, decimal averagePrice)
         {
             //Sell stock when losing 7% overall
             var initialSetup = _entityEngine.GetInitialSetup();
-            var sellPercentage = initialSetup.SecondDepositDate;
-            if (currentHoldingValue * (decimal)sellPercentage <= basicCost)
+            var sellPercentage = initialSetup.SellPercentageLimitation;
+            if (aboutToTradePrice <= averagePrice * (decimal)sellPercentage)
                 return true;
 
             return false;

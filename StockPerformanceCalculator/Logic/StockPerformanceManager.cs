@@ -13,7 +13,7 @@ namespace StockPerformanceCalculator.Logic
     {
         protected StockLedgerCalculator _stockLedgerCalculator;
         private TradeCalculator _tradeCalculator;
-        private AvailableBalanceCalculator _availableBalanceCalculator;
+        protected AvailableBalanceCalculator _availableBalanceCalculator;
         private ShareNumberCalculator _shareNumberCalculator;
         protected DepositLedgerCalculator _depositLedgerCalculator;
         private TradeDetailCalculator _tradeDetailCalculator;
@@ -46,10 +46,12 @@ namespace StockPerformanceCalculator.Logic
             _tradeCalculator = new TradeCalculator(_stockLedgerCalculator,
                 _availableBalanceCalculator, _shareNumberCalculator, _tradingRule);
             _priceCalculator = new PriceCalculator(_yahooFinanceCaller);
-            _tradeDetailCalculator = new TradeDetailCalculator(_stockLedgerCalculator, _priceCalculator, _tradingRule, year);
+            _tradeDetailCalculator = new TradeDetailCalculator(_stockLedgerCalculator,
+                _priceCalculator, _tradingRule, year);
             _stockPerformanceSummaryCalculator =
                 new StockPerformanceSummaryCalculator
-                (symbol, year, _priceCalculator, _stockLedgerCalculator, _depositLedgerCalculator, _availableBalanceCalculator);
+                (symbol, year, _priceCalculator, _stockLedgerCalculator,
+                _depositLedgerCalculator, _availableBalanceCalculator);
             _holdingPositionCalculator = new HoldingPositionCalculator(_stockLedgerCalculator);
             _growthRateCalculator = new GrowthRateCalculator(_depositLedgerCalculator);
         }
@@ -74,20 +76,33 @@ namespace StockPerformanceCalculator.Logic
             ImplementTradingStocks(stockSummaries);
 
             var result = CalculateStockPerformance();
-            SavePerformanceRecord(result, newPerformanceSetup, newTradingRule, newDepositRule);
+            var performanceInMonths = StockPerformanceSummaryMapper.Map(result.ProfitByMonths);
+            var allDeposit = StockPerformanceSummaryMapper.Map(result.DepositLedgers);
+            var allPositions = StockPerformanceSummaryMapper.Map(result.StockLedger);
+
+            SavePerformanceRecord(result, newPerformanceSetup,
+                newTradingRule, newDepositRule, performanceInMonths,
+                allPositions, allDeposit);
+
             return result;
         }
 
         private void SavePerformanceRecord(StockPerformanceSummary result,
             EntityDefinitions.PerformanceSetup newPerformanceSetup,
             EntityDefinitions.TradingRule newTradingRule,
-            EntityDefinitions.DepositRule newDepositRule)
+            EntityDefinitions.DepositRule newDepositRule,
+            List<EntityDefinitions.PerformanceByMonth> performanceByMonths,
+            List<EntityDefinitions.Position> positions,
+            List<EntityDefinitions.Deposit> deposits)
         {
             var symbolId = _entityEngine.GetSymbolId(result.Symbol);
             var performanceSetupId = _entityEngine.AddPerformanceSetup(newPerformanceSetup);
             var tradingRuleId = _entityEngine.AddTradingRule(newTradingRule);
             var mappedPerformance = StockPerformanceSummaryMapper.Map(result);
-            var performanceId = _entityEngine.AddPerformanceSummary(mappedPerformance);
+
+            var performanceId = _entityEngine
+                .AddPerformanceSummary(mappedPerformance, performanceByMonths,
+                deposits, positions);
             var depositRuleId = _entityEngine.AddDepositRule(newDepositRule);
 
             var performanceIdHub = new EntityDefinitions.PerformanceIdHub
@@ -114,7 +129,11 @@ namespace StockPerformanceCalculator.Logic
             var currentPrice = _priceCalculator.GetCurrentPrice();
             summary.TotalBalanceHoldingInPosition = currentHoldingShare * currentPrice;
             summary.CurrentHoldingShare = currentHoldingShare;
-            summary.ProfitInDollar = currentHoldingShare * currentPrice - totalDeposit;
+
+            var hasFreeCash = summary.TotalBalanceAfterLoss > summary.TotalBalanceHoldingInPosition;
+
+            summary.ProfitInDollar = totalProfit;
+
             summary.ProfitInPercentage = summary.ProfitInDollar * 100 / totalDeposit;
             _holdingPositionCalculator.Calculate(summary);
             return summary;

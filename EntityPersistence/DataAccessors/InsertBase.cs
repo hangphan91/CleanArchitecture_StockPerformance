@@ -1,8 +1,6 @@
-﻿using System;
-using EntityDefinitions;
+﻿using EntityDefinitions;
 using EntityPersistence.Calculators;
 using StockPerformanceCalculator.DatabaseAccessors;
-using YahooQuotesApi;
 
 namespace EntityPersistence.DataAccessors
 {
@@ -33,10 +31,78 @@ namespace EntityPersistence.DataAccessors
         {
             SetId(performance, _dataContext.DepositRules.Select(a => a.Id));
 
-            _dataContext.Performances.Add(performance);
+            _dataContext.PerformanceSummaries.Add(performance);
             return performance.Id;
         }
 
+        public List<long> Insert(List<PerformanceByMonth> performanceByMonths)
+        {
+            var increment = 0;
+
+            performanceByMonths.ForEach(performance =>
+            {
+                increment++;
+                var ids = _dataContext.DepositRules.Select(a => a.Id);
+                if (_dataContext.DepositRules.Any())
+                {
+                    var id = _idCalculator.GetNewId(ids);
+                    performance.Id = increment + id;
+                }
+                else
+                {
+                    performance.Id = increment;
+                }
+            });
+
+            _dataContext.PerformanceByMonths.AddRange(performanceByMonths);
+            return performanceByMonths.Select(s => s.Id).ToList();
+        }
+
+        public List<long> Insert(List<Position> positions)
+        {
+            var increment = 0;
+
+            positions.ForEach(performance =>
+            {
+                increment++;
+                var ids = _dataContext.Positions.Select(a => a.Id);
+                if (_dataContext.Positions.Any())
+                {
+                    var id = _idCalculator.GetNewId(ids);
+                    performance.Id = increment + id;
+                }
+                else
+                {
+                    performance.Id = increment;
+                }
+            });
+
+            _dataContext.Positions.AddRange(positions);
+            return positions.Select(s => s.Id).ToList();
+        }
+
+        public List<long> Insert(List<Deposit> deposits)
+        {
+            var increment = 0;
+
+            deposits.ForEach(performance =>
+            {
+                increment++;
+                var ids = _dataContext.Deposits.Select(a => a.Id);
+                if (_dataContext.Deposits.Any())
+                {
+                    var id = _idCalculator.GetNewId(ids);
+                    performance.Id = increment + id;
+                }
+                else
+                {
+                    performance.Id = increment;
+                }
+            });
+
+            _dataContext.Deposits.AddRange(deposits);
+            return deposits.Select(s => s.Id).ToList();
+        }
         public List<long> Insert(List<SymbolSummary> symbolSummaries)
         {
             var increment = 0;

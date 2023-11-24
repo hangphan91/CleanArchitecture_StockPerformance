@@ -19,7 +19,7 @@ namespace EntityPersistence.DataAccessors
 
         public List<PerformanceSummary> GetPerformancesBySymbol(string symbol)
         {
-            return _dataContext.Performances
+            return _dataContext.PerformanceSummaries
                 .Where(performance => performance.Symbol == symbol)
                 .ToList();
         }

@@ -27,11 +27,8 @@ namespace StockPerformanceCalculator.Logic
         {
             var stockLedger = _stockLedgerCalculator.GetStockLedger();
 
-            var boughtLedgers = stockLedger.BoughtLedgers;
-            GetProfitFromBoughtLedgers(boughtLedgers);
-
-            var soldLedgers = stockLedger.SoldLedgers;
-            GetProfitFromSoldLedgers(soldLedgers);
+            var closedPositions = stockLedger.ClosedLedgers;
+            GetProfitFromClosedLedgers(closedPositions);
 
             var holdingLedgers = stockLedger.HoldingLedgers;
             GetProfitFromHoldingLedger(holdingLedgers, currentPrice);
@@ -68,61 +65,44 @@ namespace StockPerformanceCalculator.Logic
 
         private void GetProfitFromHoldingLedger(List<StockLedgerDetail> holdingLedgers, decimal currentPrice)
         {
-            foreach (var boughtLedger in holdingLedgers)
+            foreach (var holdingLedger in holdingLedgers.OrderBy(a => a.BoughtDate))
             {
-                var amount = currentPrice * boughtLedger.ShareCount;
+                var amount = (currentPrice - holdingLedger.BoughtPrice) * holdingLedger.ShareCount;
                 ProfitByMonths.Add(new ProfitByMonth
                 {
-                    Month = boughtLedger.Date.Month,
-                    Year = boughtLedger.Date.Year,
+                    Month = holdingLedger.BoughtDate.Month,
+                    Year = holdingLedger.BoughtDate.Year,
                     Amount = amount,
                 });
 
                 ProfitByYears.Add(new ProfitByYear
                 {
                     Amount = amount,
-                    Year = boughtLedger.Date.Year,
+                    Year = holdingLedger.BoughtDate.Year,
                 });
             }
         }
 
-        private void GetProfitFromSoldLedgers(List<StockLedgerDetail> soldLedgers)
+        private void GetProfitFromClosedLedgers(List<StockLedgerDetail> closedLedgers)
         {
-            foreach (var boughtLedger in soldLedgers)
+            foreach (var closedLedger in closedLedgers.OrderBy(a =>a.BoughtDate))
             {
-                var amount = boughtLedger.Price * boughtLedger.ShareCount;
-                ProfitByMonths.Add(new ProfitByMonth
+                if (closedLedger.SoldDate.HasValue)
                 {
-                    Month = boughtLedger.Date.Month,
-                    Year = boughtLedger.Date.Year,
-                    Amount = amount,
-                });
+                    var amount = (closedLedger.SoldPrice - closedLedger.BoughtPrice) * closedLedger.ShareCount;
+                    ProfitByMonths.Add(new ProfitByMonth
+                    {
+                        Month = closedLedger.SoldDate?.Month ?? 0,
+                        Year = closedLedger.SoldDate?.Year ?? 0,
+                        Amount = amount,
+                    });
 
-                ProfitByYears.Add(new ProfitByYear
-                {
-                    Amount = amount,
-                    Year = boughtLedger.Date.Year,
-                });
-            }
-        }
-
-        private void GetProfitFromBoughtLedgers(List<StockLedgerDetail> boughtLedgers)
-        {
-            foreach (var boughtLedger in boughtLedgers)
-            {
-                var amount = boughtLedger.Price * boughtLedger.ShareCount;
-                ProfitByMonths.Add(new ProfitByMonth
-                {
-                    Month = boughtLedger.Date.Month,
-                    Year = boughtLedger.Date.Year,
-                    Amount = -amount,
-                });
-
-                ProfitByYears.Add(new ProfitByYear
-                {
-                    Amount = -amount,
-                    Year = boughtLedger.Date.Year,
-                });
+                    ProfitByYears.Add(new ProfitByYear
+                    {
+                        Amount = amount,
+                        Year = closedLedger.SoldDate?.Year ?? 0,
+                    });
+                }
             }
         }
 

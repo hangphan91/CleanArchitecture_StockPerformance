@@ -39,19 +39,18 @@ namespace StockPerformanceCalculator.Logic
                         continue;
 
                     var currentHoldingShareCount = _stockLedgerCalculator.GetCurrentHoldingShare();
-                    var currentPrice = toTradeStock.ClosingPrice;
-                    var holdingValue = currentPrice * currentHoldingShareCount;
-                    var costBasicForHoldingValue = _stockLedgerCalculator.GetCostBasicForCurrentHolding();
+                    var aboutToTradePrice = toTradeStock.ClosingPrice;
+                    var averagePrice = _stockLedgerCalculator.GetAveragePriceForAllShares();
 
                     var tradeDate = toTradeStock.Date;
                     var tradePrice = toTradeStock.ClosingPrice;
 
                     var tradingDetail = new TradeDetail
                     {
-                        BasicCost = costBasicForHoldingValue,
+                        PriceAverage = averagePrice,
                         TradingDate = tradeDate,
-                        CurrentHoldingValue = costBasicForHoldingValue,
-                        CurrentPrice = currentPrice,
+                        AboutToTradePrice = aboutToTradePrice,
+                        CurrentPrice = aboutToTradePrice,
                     };
                     tradeDetails.Add(tradingDetail);
                 }

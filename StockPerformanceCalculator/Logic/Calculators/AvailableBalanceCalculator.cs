@@ -54,7 +54,9 @@ namespace StockPerformanceCalculator.Logic
         {
             var currentHoldingCash = _balanceHoldings
                 .Where(holding => holding.Date < tradingDate)
-                .Sum(h => h.CashAvailable);
+                .OrderByDescending(a =>a.Date)
+                .Select(h => h.CashAvailable)
+                .First();
 
             return currentHoldingCash;
         }

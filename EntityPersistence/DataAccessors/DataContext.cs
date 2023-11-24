@@ -6,21 +6,27 @@ namespace EntityPersistence.DataAccessors
     {
         public List<PerformanceIdHub> PerformanceIdHubs { get; set; }
         public List<DepositRule> DepositRules { get; set; }
-        public List<PerformanceSummary> Performances { get; set; }
+        public List<PerformanceSummary> PerformanceSummaries { get; set; }
+        public List<PerformanceByMonth> PerformanceByMonths { get; set; }
         public List<SymbolSummary> SymbolSummaries { get; set; }
         public List<TradingRule> TradingRules { get; set; }
         public List<Symbol> Symbols { get; set; }
         public List<PerformanceSetup> PerformanceSetups { get; set; }
+        public List<Position> Positions { get; set; }
+        public List<Deposit> Deposits { get; set; }
 
         public DataContext()
         {
             DepositRules = new List<DepositRule>();
-            Performances = new List<PerformanceSummary>();
+            PerformanceSummaries = new List<PerformanceSummary>();
             SymbolSummaries = new List<SymbolSummary>();
             TradingRules = new List<TradingRule>();
             Symbols = new List<Symbol>();
             PerformanceSetups = new List<PerformanceSetup>();
             PerformanceIdHubs = new List<PerformanceIdHub>();
+            PerformanceByMonths = new List<PerformanceByMonth>();
+            Positions = new List<Position>();
+            Deposits = new List<Deposit>();
 
             var tradingRule = SetDefaultTradingRule();
             var symbols = SetDefaultSymbolList();

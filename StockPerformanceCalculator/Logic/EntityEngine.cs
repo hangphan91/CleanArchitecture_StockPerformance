@@ -12,14 +12,23 @@ namespace StockPerformanceCalculator.Logic
         {
             _entityDefinitionsAccessor = entityDefinitionsAccessor;
         }
-         
 
-        internal long AddPerformanceSummary(EntityDefinitions.PerformanceSummary performance)
+
+        internal long AddPerformanceSummary(
+            EntityDefinitions.PerformanceSummary performance,
+            List<EntityDefinitions.PerformanceByMonth> performanceByMonths,
+            List<EntityDefinitions.Deposit> deposits,
+            List<EntityDefinitions.Position> positions)
         {
-            // ToDO add performance details
-           
-            //
-            return _entityDefinitionsAccessor.Insert(performance);
+            var id = _entityDefinitionsAccessor.Insert(performance);
+            performanceByMonths.ForEach(a => a.PerformanceSummaryId = id);
+            deposits.ForEach(a => a.PerformanceSummaryId = id);
+            positions.ForEach(a => a.PerfomanceSummaryId = id);
+            _entityDefinitionsAccessor.Insert(performanceByMonths);
+            _entityDefinitionsAccessor.Insert(positions);
+            _entityDefinitionsAccessor.Insert(deposits);
+
+            return id;
 
         }
 
@@ -28,14 +37,14 @@ namespace StockPerformanceCalculator.Logic
             _entityDefinitionsAccessor.Insert(mappedResult);
         }
 
-       
+
 
         internal InitialPerformanceSetup GetInitialSetup()
         {
             var performanceSetup = StockPerformanceManagerHelper
                 .GetPerformanceSetupInstance(_entityDefinitionsAccessor);
-           var symbols = StockPerformanceManagerHelper
-                .GetSymbols(_entityDefinitionsAccessor, performanceSetup);
+            var symbols = StockPerformanceManagerHelper
+                 .GetSymbols(_entityDefinitionsAccessor, performanceSetup);
             var depositRule = StockPerformanceManagerHelper
                 .GetDepositRuleInstance(_entityDefinitionsAccessor);
             var tradingRule = StockPerformanceManagerHelper

@@ -1,12 +1,16 @@
-﻿using System;
+﻿using EntityDefinitions;
+
 namespace StockPerformanceCalculator.Models
 {
     public class StockLedgerDetail
     {
         public long Id { get; set; } = 0;
-        public DateTime Date { get; set; }
+        public DateTime BoughtDate { get; set; }
         public decimal ShareCount { get; set; }
-        public decimal Price { get; set; }
+        public decimal BoughtPrice { get; set; }
+        public decimal SoldPrice { get; set; }
+        public DateTime? SoldDate { get; set; }
+        public PositionType PositionType { get; set; }
 
         public StockLedgerDetail()
         {
@@ -15,7 +19,7 @@ namespace StockPerformanceCalculator.Models
 
         internal decimal GetCost()
         {
-            return Price * ShareCount;
+            return BoughtPrice * ShareCount;
         }
     }
 }

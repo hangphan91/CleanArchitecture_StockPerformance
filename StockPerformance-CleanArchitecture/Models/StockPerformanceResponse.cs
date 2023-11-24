@@ -11,17 +11,23 @@ namespace StockPerformance_CleanArchitecture.Models
         public int Year { get; set; }
         public ProfitSummaryInDollar ProfitSummaryInDollar { get; set; }
         public ProfitSummaryPercentage ProfitSummaryPercentage { get; set; }
+        public List<DepositLedger> DepositLedgers { get; set; }
+        public List<StockLedgerDetail> StockLedgerDetails { get; set; }
         public string ToDisplay { get; set; }
         public decimal TotalBalanceAfterLoss { get; set; } = 0;
         public decimal TotalDeposit { get; set; } = 0;
         public decimal TotalBalanceHoldingInPosition { get; set; }
         public decimal CurrentPrice { get; set; }
         public decimal CurrentHoldingShare { get; set; }
+        public decimal ProfitInDollar { get; set; }
+        public decimal ProfitInPercentage { get; set; }
 
         public StockPerformanceResponse()
         {
             ProfitSummaryInDollar = new ProfitSummaryInDollar();
             ProfitSummaryPercentage = new ProfitSummaryPercentage();
+            DepositLedgers = new List<DepositLedger>();
+            StockLedgerDetails = new List<StockLedgerDetail>();
         }
         public StockPerformanceResponse(string symbol, int numberOfyear)
         {
@@ -52,7 +58,11 @@ namespace StockPerformance_CleanArchitecture.Models
                 TotalDeposit = summary.TotalDeposit.RoundNumber(),
                 CurrentPrice = summary.CurrentPrice,
                 CurrentHoldingShare = summary.CurrentHoldingShare.RoundNumber(),
+                ProfitInDollar = summary.ProfitInDollar.RoundNumber(),
+                ProfitInPercentage = summary.ProfitInPercentage.RoundNumber(),
                 TotalBalanceHoldingInPosition = summary.TotalBalanceHoldingInPosition.RoundNumber(),
+                StockLedgerDetails = Map(summary.StockLedger),
+                DepositLedgers = summary.DepositLedgers,
                 ProfitSummaryInDollar = new ProfitSummaryInDollar
                 {
                     MonthlyGrowthSpeeds = new List<MonthlyGrowthSpeed>(),
@@ -67,6 +77,19 @@ namespace StockPerformance_CleanArchitecture.Models
             GetProfitInPercentage(summary, response);
 
             return response;
+        }
+
+        private List<StockLedgerDetail> Map(StockLedger stockLedger)
+        {
+            return stockLedger.All.Select(a => new StockLedgerDetail
+            {
+                BoughtDate = a.BoughtDate,
+                PositionType = a.PositionType,
+                BoughtPrice = a.BoughtPrice.RoundNumber(),
+                ShareCount= a.ShareCount.RoundNumber(),
+                SoldPrice = a.SoldPrice.RoundNumber(),
+                SoldDate = a.SoldDate,
+            }).OrderBy(a =>a.BoughtDate).ToList();
         }
 
         private static void GetProfitInDollar(StockPerformanceSummary summary, StockPerformanceResponse response)

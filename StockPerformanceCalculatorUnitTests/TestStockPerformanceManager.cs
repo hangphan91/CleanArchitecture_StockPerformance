@@ -1,4 +1,7 @@
 ﻿using System;
+using EntityPersistence.DataAccessors;
+using StockPerformance_CleanArchitecture.Helpers;
+using StockPerformanceCalculator.DatabaseAccessors;
 using StockPerformanceCalculator.Logic;
 
 namespace StockPerformanceCalculatorUnitTests
@@ -13,11 +16,14 @@ namespace StockPerformanceCalculatorUnitTests
 
             var symbol = "AAPL";
             var year = 2020;
-
-			var manager = new MockStockPerformanceManager(symbol, year);
+			var context = new DataContext();
+			var accessor = new PerformanceDataAccessor(context);
+            var manager = new MockStockPerformanceManager(symbol, year, accessor);
 
 			//Act
-			var summaries = await manager.StartStockPerforamanceCalculation();
+			var searchDetail = SearchDetailHelper.GetCurrentSearchDetail(accessor);
+            var mapped = SearchDetailHelper.Map(searchDetail);
+            var summaries = await manager.StartStockPerforamanceCalculation(mapped);
 
 			//Assert
 

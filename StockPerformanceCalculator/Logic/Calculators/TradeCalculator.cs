@@ -11,6 +11,8 @@ namespace StockPerformanceCalculator.Logic
         private AvailableBalanceCalculator _availableBalanceCalculator;
         private ShareNumberCalculator _shareNumberCalculator;
         private TradingRule _tradingRule;
+        private decimal _averagePrice;
+        private decimal _totalShareCount;
 
         public TradeCalculator(
             StockLedgerCalculator stockLedgerCalculator,
@@ -30,7 +32,7 @@ namespace StockPerformanceCalculator.Logic
             {
                 _stockLedgerCalculator.AddBoughtLedger(stockLedgerDetail);
                 var toSubtractBalance = stockLedgerDetail.GetCost();
-                _availableBalanceCalculator.DeductBalance(toSubtractBalance, stockLedgerDetail.Date);
+                _availableBalanceCalculator.DeductBalance(toSubtractBalance, stockLedgerDetail.BoughtDate);
             }
         }
 
@@ -38,11 +40,11 @@ namespace StockPerformanceCalculator.Logic
         {
             if (stockLedgerDetail != null)
             {
-                var currentSoldPrice = stockLedgerDetail.Price;
+                var currentSoldPrice = stockLedgerDetail.BoughtPrice;
                 var shareCount = _shareNumberCalculator.GetHoldingShare();
-                _stockLedgerCalculator.RemoveSoldLedgers(currentSoldPrice, stockLedgerDetail.Date);
+                _stockLedgerCalculator.RemoveSoldLedgers(currentSoldPrice, stockLedgerDetail.BoughtDate);
 
-                _availableBalanceCalculator.AddBalance(shareCount * currentSoldPrice, stockLedgerDetail.Date);
+                _availableBalanceCalculator.AddBalance(shareCount * currentSoldPrice, stockLedgerDetail.BoughtDate);
             }
         }
 
@@ -50,8 +52,7 @@ namespace StockPerformanceCalculator.Logic
         {
             var tradingDate = tradeDetail.TradingDate;
             var currentPrice = tradeDetail.CurrentPrice;
-            var currentHoldingValue = tradeDetail.CurrentHoldingValue;
-            var basicCost = tradeDetail.BasicCost;
+            var aboutToTradePrice = tradeDetail.AboutToTradePrice;
 
             var availableCash = _availableBalanceCalculator.Calculate(tradingDate);
             var tradingCash = GetTradingCash(availableCash);
@@ -59,16 +60,29 @@ namespace StockPerformanceCalculator.Logic
 
             var stockLedgerDetail = new StockLedgerDetail
             {
-                Date = tradingDate,
-                Price = currentPrice,
+                BoughtDate = tradingDate,
+                BoughtPrice = currentPrice,
                 ShareCount = shareCount,
             };
 
-            if (_tradingRule.IsValidForBuyingRule(currentHoldingValue, basicCost))
-                Buy(stockLedgerDetail);
+            if (_tradingRule.IsValidForBuyingRule(aboutToTradePrice, _averagePrice)
+                && availableCash > 0)
+            {
+                _averagePrice = (currentPrice * shareCount + _averagePrice * _totalShareCount) /
+                    (_totalShareCount + shareCount);
+                _totalShareCount += shareCount;
 
-            else if (_tradingRule.IsValidForSellingRule(currentHoldingValue, basicCost))
+                Buy(stockLedgerDetail);
+            }
+
+            else if (_tradingRule.IsValidForSellingRule(aboutToTradePrice, _averagePrice)
+                && _stockLedgerCalculator.GetTotalShareHoldingLedgers() > 0)
+            {
+                _totalShareCount = 0;
+                _averagePrice = 0;
                 Sell(stockLedgerDetail);
+            }
+
         }
 
         private decimal GetTradingCash(decimal availableCash)

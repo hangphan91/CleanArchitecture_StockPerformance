@@ -8,6 +8,8 @@ namespace StockPerformanceCalculator.Models
         public List<ProfitByYear> ProfitByYears { get; set; }
         public List<GrowthSpeedByYear> GrowthSpeedByYears { get; set; }
         public List<GrowthSpeedByMonth> GrowthSpeedByMonths { get; set; }
+        public List<DepositLedger> DepositLedgers { get; set; }
+        public StockLedger StockLedger { get; set; }
 
         public string Symbol { get; set; }
         public int Year { get; set; }
@@ -24,6 +26,8 @@ namespace StockPerformanceCalculator.Models
             GrowthSpeedByYears = new List<GrowthSpeedByYear>();
             ProfitByMonths = new List<ProfitByMonth>();
             ProfitByYears = new List<ProfitByYear>();
+            DepositLedgers = new List<DepositLedger>();
+            StockLedger = new StockLedger();
             Symbol = "";
             Year = 0;
             CurrentPrice = 0;

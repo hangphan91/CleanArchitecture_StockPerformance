@@ -31,12 +31,13 @@ namespace StockPerformanceCalculator.Logic
                     if (startMonth > currentMonth && currentYear == startYear)
                         continue;
 
-                    if (currentYear == endYear && currentMonth +1 == endMonth)
-                        return depositLedgers;
-
                     var depositLedgersToAdd = GetDepositLedgers(currentYear, currentMonth);
 
                     depositLedgers.AddRange(depositLedgersToAdd);
+
+                    if (currentYear == endYear && currentMonth == endMonth)
+                        return depositLedgers;
+
                 }
             }
 

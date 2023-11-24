@@ -13,7 +13,7 @@ namespace StockPerformanceCalculator.Logic
         private PriceCalculator _priceCalculator;
         private StockLedgerCalculator _stockLedgerCalculator;
         AvailableBalanceCalculator _availableBalanceCalculator;
-
+        DepositLedgerCalculator _depositLedgerCalculator;
 
         public StockPerformanceSummaryCalculator(string symbol, int year,
             PriceCalculator priceCalculator,
@@ -28,6 +28,7 @@ namespace StockPerformanceCalculator.Logic
             _profitCalculator = new ProfitCalculator(_stockLedgerCalculator);
             _growthRateCalculator = new GrowthRateCalculator(depositLedgerCalculator);
             _availableBalanceCalculator = availableBalanceCalculator;
+            _depositLedgerCalculator = depositLedgerCalculator;
         }
 
         internal StockPerformanceSummary Calculate()
@@ -49,6 +50,8 @@ namespace StockPerformanceCalculator.Logic
 
             result.GrowthSpeedByMonths = _growthRateCalculator.GetGrowthRateByMonth();
             result.GrowthSpeedByYears = _growthRateCalculator.GetGrowthRateByYear();
+            result.StockLedger = _stockLedgerCalculator.GetStockLedger();
+            result.DepositLedgers = _depositLedgerCalculator.GetAllDeposit();
 
             return result;
         }

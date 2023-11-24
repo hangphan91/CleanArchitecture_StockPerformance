@@ -83,6 +83,21 @@ namespace EntityPersistence.DataAccessors
         {
             return _insertBase.Insert(performanceIdHub);
         }
+
+        public List<long> Insert(List<PerformanceByMonth> performanceByMonths)
+        {
+            return _insertBase.Insert(performanceByMonths);
+        }
+
+        public List<long> Insert(List<Position> positions)
+        {
+            return _insertBase.Insert(positions);
+        }
+
+        public List<long> Insert(List<Deposit> deposits)
+        {
+            return _insertBase.Insert(deposits);
+        }
     }
 }
 

@@ -6,20 +6,18 @@ namespace StockPerformanceCalculatorUnitTests.ExternalCommunications
 	public class TestYahooFinanceAPIMapper
 	{
 		[TestMethod]
-		public void UseMockCaller_TestMapping()
+		public async void UseMockCaller_TestMapping()
 		{
 			//Arrange
 
 			var symbol = "AAPL";
-			var year = 2020;
+			var date = DateTime.Now.AddYears(-3);
 
 			//Act
-			var summaries = new MockYahooFinanceCaller().GetStockHistory(symbol, year);
-			var mappedSummaries = YahooFinanceAPIMapper.Map(summaries);
+			var summaries = await (new MockYahooFinanceCaller().GetStockHistory(symbol, date));
 			//Assert
 
 			Assert.IsTrue(summaries.Count > 0);
-			Assert.AreEqual(summaries.Count, mappedSummaries.Count);
 		}
 	}
 }
