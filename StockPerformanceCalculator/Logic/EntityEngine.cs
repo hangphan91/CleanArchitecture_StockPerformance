@@ -37,8 +37,6 @@ namespace StockPerformanceCalculator.Logic
             _entityDefinitionsAccessor.Insert(mappedResult);
         }
 
-
-
         internal InitialPerformanceSetup GetInitialSetup()
         {
             var performanceSetup = StockPerformanceManagerHelper

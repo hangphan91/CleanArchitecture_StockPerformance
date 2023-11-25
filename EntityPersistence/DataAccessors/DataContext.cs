@@ -49,7 +49,7 @@ namespace EntityPersistence.DataAccessors
             {
                 EndingSymbolId = lastSymbolId,
                 StartingSymbolId = firstSymbolId,
-                StartingYear = 2020,
+                StartingYear = 2000,
                 EndingYear = 2023,
             };
         }
@@ -78,12 +78,12 @@ namespace EntityPersistence.DataAccessors
         {
             return new DepositRule
             {
-                DepositAmount = 1500,
+                DepositAmount = 100,
                 FirstDepositDate = 1,
                 SecondDepositDate = 16,
                 NumberOfDepositDate = 2,
                 Id = 0,
-                InitialDepositAmount = 30000,
+                InitialDepositAmount = 3000,
             };
         }
 
@@ -94,10 +94,10 @@ namespace EntityPersistence.DataAccessors
                 BuyPercentageLimitation = (decimal)1.07,
                 SellPercentageLimitation = (decimal)0.94,
                 HigherRangeOfTradingDate = 25,
-                LowerRangeOfTradingDate = 10,
-                PurchaseLimitation = 5000,
+                LowerRangeOfTradingDate = 1,
+                PurchaseLimitation = 1000,
                 Id = 0,
-                LossLimitation = 4000,
+                LossLimitation = 1000,
             };
         }
     }

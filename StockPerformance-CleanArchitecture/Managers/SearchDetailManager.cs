@@ -38,8 +38,8 @@ namespace StockPerformance_CleanArchitecture.Managers
                 searchDetail = currentSearchDetail;
             SetCurrentSearchDetail(searchDetail);
 
-            var symbol = searchDetail.Symbol;
-            var year = searchDetail.Year;
+            var symbol = searchDetail.Symbol ?? "AAPL";
+            var year = searchDetail.Year == 0 ? 2020: searchDetail.Year;
             var response = new StockPerformanceResponse(symbol, year);
             SetCurrentSearchDetail(searchDetail);
             var performanceMangager = new StockPerformanceManager(symbol, year, _entityDefinitionsAccessor);
