@@ -18,9 +18,12 @@ public class HomeController : Controller
         _searchDetailManager = ManagerHelper.SearchDetailManager;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string symbol)
     {
         var currentSearchDetail = _searchDetailManager.GetCurrentSearchDetail();
+        if (string.IsNullOrWhiteSpace(symbol))
+            currentSearchDetail.Symbol = symbol;
+
         return View(currentSearchDetail);
     }
 

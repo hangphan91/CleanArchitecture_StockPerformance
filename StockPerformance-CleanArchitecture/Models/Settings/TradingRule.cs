@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+
 namespace StockPerformance_CleanArchitecture.Models.Settings
 {
 	public class TradingRule
@@ -12,6 +14,16 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
         public TradingRule()
 		{
 		}
-	}
+        public override string ToString()
+        {
+            var str = new StringBuilder();
+            str.AppendLine($"Purchase limitation: {PurchaseLimitation}," +
+                $" sell percentage limitation : {SellPercentageLimitation}" +
+                $" buy percentage limitation: {BuyPercentageLimitation}" +
+                $" lower range of trading date: {LowerRangeOfTradingDate}" +
+                $" higher range of trading date: {HigherRangeOfTradingDate}");
+            return str.ToString();
+        }
+    }
 }
 

@@ -1,4 +1,5 @@
-﻿using StockPerformance_CleanArchitecture.Models.Settings;
+﻿using System.Text;
+using StockPerformance_CleanArchitecture.Models.Settings;
 
 namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
 {
@@ -15,6 +16,17 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         }
         public string Symbol { get; set; }
         public int Year { get; set; }
+
+        public override string ToString()
+        {
+            var str = new StringBuilder();
+
+            str.Append(SearchSetup.ToString());
+            str.Append(DepositRule.ToString());
+            str.Append(TradingRule.ToString());
+
+;            return str.ToString();
+        }
     }
 }
 

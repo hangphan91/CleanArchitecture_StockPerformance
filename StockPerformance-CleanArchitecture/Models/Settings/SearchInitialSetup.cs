@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Text;
+
 namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
 {
-	public class SearchInitialSetup
+    public class SearchInitialSetup
 	{
         public int StartingYear { get; set; }
         public int EndingYear { get; set; }
@@ -15,6 +16,12 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
 			AddingSymbols = new List<string>();
 			AddedSymbols = new List<string>();	
 		}
-	}
+        public override string ToString()
+        {
+			var str = new StringBuilder();
+			str.AppendLine($"Start year: {StartingYear}, End year: {EndingYear}");
+            return str.ToString();
+        }
+    }
 }
 

@@ -47,6 +47,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             var summary = await performanceMangager.StartStockPerforamanceCalculation(mapped);
 
             response = response.Map(summary);
+            response.SearchDetail = searchDetail;
 
             return response;
         }

@@ -10,11 +10,11 @@
         .OrderBy(a => a.Year).ThenBy(a => a.Month);
     var startingMonth = months.First();
     var endingMonth = months.Last();
+    var searchDetail = Model.SearchDetail;
 }
 <h1>@ViewData["Title"]</h1>
-
 <p>
-    Performance report for Symbol: @Model.Symbol, starting year: @Model.Year
+    Performance report for Symbol: @Model.Symbol, starting year: @Model.Year Using setting @Model.DisplayStockPerformance()
 </p>
 <p>
     Total Balance After Loss: @Model.TotalBalanceAfterLoss

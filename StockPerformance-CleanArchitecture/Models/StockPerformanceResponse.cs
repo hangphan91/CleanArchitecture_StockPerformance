@@ -21,6 +21,7 @@ namespace StockPerformance_CleanArchitecture.Models
         public decimal CurrentHoldingShare { get; set; }
         public decimal ProfitInDollar { get; set; }
         public decimal ProfitInPercentage { get; set; }
+        public SearchDetail SearchDetail { get; set; }
 
         public StockPerformanceResponse()
         {
@@ -28,6 +29,7 @@ namespace StockPerformance_CleanArchitecture.Models
             ProfitSummaryPercentage = new ProfitSummaryPercentage();
             DepositLedgers = new List<DepositLedger>();
             StockLedgerDetails = new List<StockLedgerDetail>();
+            SearchDetail = new SearchDetail();
         }
         public StockPerformanceResponse(string symbol, int numberOfyear)
         {
@@ -35,16 +37,12 @@ namespace StockPerformance_CleanArchitecture.Models
             ProfitSummaryInDollar = new ProfitSummaryInDollar();
             Symbol = symbol;
             Year = numberOfyear;
-            ToDisplay = DisplayStockPerformance();
         }
 
         public string DisplayStockPerformance()
         {
             var toDisplay = $"Symbol {Symbol}, look back number of years: {Year}.";
-
-            var result = ProfitSummaryInDollar.DisplayProfitSummary();
-            toDisplay = toDisplay + " " + result + " " + ProfitSummaryPercentage.DisplayProfitSummary();
-
+            toDisplay += SearchDetail.ToString();
             return toDisplay;
         }
 

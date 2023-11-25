@@ -30,7 +30,9 @@
     <p>Added these symbols:</p>
     @foreach (var item in Model.AddingSymbols)
     {
-        @Html.DisplayTextFor(model => item)
+        <tr>
+            @Html.ActionLink(item, "Index", new { symbol = item })
+        </tr>
     }
 </span>
 <br />
@@ -43,7 +45,9 @@
     @foreach (var row in Model.Symbols)
     {
         <tr>
-            <td>@row</td>
+            <th>
+                @Html.ActionLink(row, "Index", new { symbol = row })
+            </th>
         </tr>
     }
 </table>
