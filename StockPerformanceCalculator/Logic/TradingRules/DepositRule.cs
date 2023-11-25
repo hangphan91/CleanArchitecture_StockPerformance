@@ -32,6 +32,13 @@ namespace StockPerformanceCalculator.Logic.TradingRules
 
             return initialSetup.DepositAmount;
         }
+
+        internal decimal GetInitialDepositAmount()
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+
+            return initialSetup.InitialDepositAmount;
+        }
     }
 }
 

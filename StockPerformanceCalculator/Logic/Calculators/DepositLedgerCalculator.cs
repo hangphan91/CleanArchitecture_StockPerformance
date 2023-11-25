@@ -8,7 +8,7 @@ namespace StockPerformanceCalculator.Logic
         private List<DepositLedger> _deposits;
         private DepositRule _depositRule;
 
-        public DepositLedgerCalculator(DateTime startingDate, EntityEngine entityEngine)
+        public DepositLedgerCalculator(EntityEngine entityEngine)
         {
             _depositRule = new DepositRule(entityEngine);
         }
@@ -22,6 +22,12 @@ namespace StockPerformanceCalculator.Logic
 
             var endYear = DateTime.Now.Year;
             var endMonth = DateTime.Now.Month;
+
+            depositLedgers.Add(new DepositLedger
+            {
+                Amount = _depositRule.GetInitialDepositAmount(),
+                Date = startingDate,
+            });
 
             for (int currentYear = startYear; currentYear <= endYear; currentYear++)
             {

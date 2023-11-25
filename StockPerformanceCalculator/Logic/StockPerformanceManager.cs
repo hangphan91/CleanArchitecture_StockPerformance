@@ -37,7 +37,7 @@ namespace StockPerformanceCalculator.Logic
 
             _symbol = symbol;
             _yahooFinanceCaller = new YahooFinanceCaller(_entityEngine);
-            _depositLedgerCalculator = new DepositLedgerCalculator(_startingDate, _entityEngine);
+            _depositLedgerCalculator = new DepositLedgerCalculator(_entityEngine);
             _stockLedgerCalculator = new StockLedgerCalculator();
             _shareNumberCalculator = new ShareNumberCalculator(_stockLedgerCalculator);
             _availableBalanceCalculator = new AvailableBalanceCalculator
