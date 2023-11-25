@@ -1,0 +1,50 @@
+﻿@model StockPerformance_CleanArchitecture.Models.ProfitDetails.SearchInitialSetup
+@{
+    ViewData["Title"] = "Symbol Dashboard";
+    var selectList = Model.Symbols
+     .Select(symbol => new SelectListItem
+     {
+         Text = symbol.ToString(),
+         Value = symbol.ToString(),
+     }).ToList();
+}
+<h1>@ViewData["Title"]</h1>
+@using (Html.BeginForm("Symbol", "Home", FormMethod.Get))
+{
+    <fieldset>
+        <span>
+            <p>Add this symbol:</p>
+
+            @Html.TextBoxFor(a => a.AddSymbol, "INTL")
+
+        </span>
+
+
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+    </fieldset>
+
+}
+<span>
+    <p>Added these symbols:</p>
+    @foreach (var item in Model.AddingSymbols)
+    {
+        @Html.DisplayTextFor(model => item)
+    }
+</span>
+<br />
+<h2>We will see list of our symbols here</h2>
+
+<table class="table table-bordered table-responsive table-hover">
+    <tr>
+        <th>Symbol</th>
+    </tr>
+    @foreach (var row in Model.Symbols)
+    {
+        <tr>
+            <td>@row</td>
+        </tr>
+    }
+</table>
+

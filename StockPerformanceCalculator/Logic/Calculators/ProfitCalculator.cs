@@ -89,7 +89,7 @@ namespace StockPerformanceCalculator.Logic
             {
                 if (closedLedger.SoldDate.HasValue)
                 {
-                    var amount = (closedLedger.SoldPrice - closedLedger.BoughtPrice) * closedLedger.ShareCount;
+                    var amount = (closedLedger.SoldPrice.Value - closedLedger.BoughtPrice) * closedLedger.ShareCount;
                     ProfitByMonths.Add(new ProfitByMonth
                     {
                         Month = closedLedger.SoldDate?.Month ?? 0,

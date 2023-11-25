@@ -83,6 +83,7 @@ namespace EntityPersistence.DataAccessors
                 SecondDepositDate = 16,
                 NumberOfDepositDate = 2,
                 Id = 0,
+                InitialDepositAmount = 30000,
             };
         }
 
@@ -96,6 +97,7 @@ namespace EntityPersistence.DataAccessors
                 LowerRangeOfTradingDate = 10,
                 PurchaseLimitation = 5000,
                 Id = 0,
+                LossLimitation = 4000,
             };
         }
     }

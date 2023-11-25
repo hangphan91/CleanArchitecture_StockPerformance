@@ -49,12 +49,8 @@ namespace StockPerformanceCalculator.Logic.Mappers
 
         internal static List<Position> Map(StockLedger stockLedger)
         {
-            var bought = stockLedger.BoughtLedgers
-                .Select(a => Map(a, PositionType.Bought))
-                .ToList();
-
-            var sold = stockLedger.SoldLedgers
-                .Select(a => Map(a, PositionType.Sold))
+            var closed = stockLedger.ClosedLedgers
+                .Select(a => Map(a, PositionType.Closed))
                 .ToList();
 
             var holding = stockLedger.HoldingLedgers
@@ -62,11 +58,10 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 .ToList();
 
             var result = new List<Position>();
-            result.AddRange(bought);
-            result.AddRange(sold);
+            result.AddRange(closed);
             result.AddRange(holding);
 
-            return result;
+            return result.OrderBy(a => a.Date).ToList();
         }
 
         private static Position Map(StockLedgerDetail a, PositionType positionType)

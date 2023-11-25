@@ -52,6 +52,12 @@
 
             return false;
         }
+
+        internal bool IsLostMoreThanLimitation(decimal currentLoss)
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+            return initialSetup.LossLimitation < currentLoss;
+        }
     }
 }
 

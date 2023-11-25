@@ -8,6 +8,7 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
         public decimal BuyPercentageLimitation { get; set; }
         public int LowerRangeOfTradingDate { get; set; }
         public int HigherRangeOfTradingDate { get; set; }
+        public decimal LossLimitation { get; set; }
         public TradingRule()
 		{
 		}

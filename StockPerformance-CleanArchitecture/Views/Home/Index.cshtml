@@ -33,38 +33,48 @@
     {
 
         <fieldset>
-           <span>
-               <p> Deposit Setting</p>
-               <p>Deposit Amount: @Html.TextBoxFor(m => m.DepositRule.DepositAmount)</p>
-               <p>
-                   First deposit date @Html.DropDownListFor(m =>
-   m.DepositRule.FirstDepositDate, selectListDateOfMonth)
-               </p>
-               <p>
-                   Last deposit date @Html.DropDownListFor(m =>
-     m.DepositRule.SecondDepositDate, selectListDateOfMonth)
-               </p>
-           </span>
             <span>
-                Trading Rule:
-                Buy more when we are already gain 
-                @Html.TextBoxFor(m => m.TradingRule.BuyPercentageLimitation)%
-                Sell all when we are currently losing
-                @Html.TextBoxFor(m =>m.TradingRule.SellPercentageLimitation)%
-                Maximum amount to trade at once $
-                @Html.TextBoxFor(m => m.TradingRule.PurchaseLimitation)
+                <h4> Deposit Setting</h4>
+                <p>First One Time Deposit Amount @Html.TextAreaFor(m => m.DepositRule.InitialDepositAmount)</p>
+                <p>Repetitive Deposit Amount: @Html.TextBoxFor(m => m.DepositRule.DepositAmount)</p>
+                <p>
+                    First deposit date @Html.DropDownListFor(m => m.DepositRule.FirstDepositDate, selectListDateOfMonth)
+                </p><p>
+                    Last deposit date @Html.DropDownListFor(m => m.DepositRule.SecondDepositDate, selectListDateOfMonth)
+                </p>
+            </span>
+            <span>
+                <h4>Trading Rule:</h4>
+                <p>
+                    Buy more when we are already gain
+                    @Html.TextBoxFor(m => m.TradingRule.BuyPercentageLimitation)%
+                </p>
+                <p>
+                    Sell all when we are currently losing
+                    @Html.TextBoxFor(m => m.TradingRule.SellPercentageLimitation)%
+                </p>
+                <p>
+                    Maximum amount to trade at once $
+                    @Html.TextBoxFor(m => m.TradingRule.PurchaseLimitation)
+                </p>
+                <p>
+                    Loss Limitation:
+                    @Html.TextBoxFor(m => m.TradingRule.LossLimitation)
+                </p>
 
-                We will trade between
-                @Html.DropDownListFor(m => m.TradingRule.LowerRangeOfTradingDate, selectListDateOfMonth)
-                and @Html.DropDownListFor(m => m.TradingRule.HigherRangeOfTradingDate, selectListDateOfMonth)
-                of a month
+                <p>We will trade between</p>
+                <p>
+                    @Html.DropDownListFor(m => m.TradingRule.LowerRangeOfTradingDate, selectListDateOfMonth)
+                    and @Html.DropDownListFor(m => m.TradingRule.HigherRangeOfTradingDate, selectListDateOfMonth)
+                    of a month
+                </p>
 
             </span>
             <p>
 
-            <p>Symbol List </p>
+            <h4>Symbol List </h4>
             @Html.DropDownListFor(m => m.Symbol, selectListSymbols)
-            <p> Year List</p>
+            <h4> Year List</h4>
             @Html.DropDownListFor(m => m.Year, selectListYears)
             </p>
             <p>

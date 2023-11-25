@@ -57,6 +57,13 @@ namespace EntityPersistence.DataAccessors
                 .ToList();
         }
 
+        public List<string> GetSavedSymbols(List<string> symbols)
+        {
+            return _dataContext.Symbols
+                .Where(s => symbols.Contains(s.TradingSymbol))
+                .Select(s => s.TradingSymbol)
+                .ToList();
+        }
     }
 }
 

@@ -29,6 +29,11 @@ namespace EntityPersistence.DataAccessors
             return _getBase.GetPerformanceSetup();
         }
 
+        public List<string> GetSavedSymbols(List<string> symbols)
+        {
+            return _getBase.GetSavedSymbols(symbols);
+        }
+
         public long GetSymbolId(string symbol)
         {
             return _getBase.GetSymbolId(symbol);

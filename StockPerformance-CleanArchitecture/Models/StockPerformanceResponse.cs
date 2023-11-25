@@ -87,7 +87,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 PositionType = a.PositionType,
                 BoughtPrice = a.BoughtPrice.RoundNumber(),
                 ShareCount= a.ShareCount.RoundNumber(),
-                SoldPrice = a.SoldPrice.RoundNumber(),
+                SoldPrice = a.SoldPrice?.RoundNumber(),
                 SoldDate = a.SoldDate,
             }).OrderBy(a =>a.BoughtDate).ToList();
         }

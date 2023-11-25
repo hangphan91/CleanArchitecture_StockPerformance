@@ -4,6 +4,12 @@
     var profit = Model.ProfitInDollar;
     var profitPercentage = Model.ProfitInPercentage;
 
+    var years = Model.DepositLedgers.Select(a => a.Date.Year).Distinct();
+    var months = Model.DepositLedgers.Select(a => new { a.Date.Month, a.Date.Year})
+        .Distinct()
+        .OrderBy(a => a.Year).ThenBy(a => a.Month);
+    var startingMonth = months.First();
+    var endingMonth = months.Last();
 }
 <h1>@ViewData["Title"]</h1>
 
@@ -17,7 +23,9 @@
     Current price: @Model.CurrentPrice
     Current holding share: @Model.CurrentHoldingShare
 </p>
-<h2> Profit: $ @profit (@profitPercentage %)</h2>
+<h2> Profit: $ @profit (@profitPercentage %) from
+    @startingMonth.Month/@startingMonth.Year to
+    @endingMonth.Month/@endingMonth.Year (@months.Count() months)</h2>
 <p>
     <h3>Monthly Profit</h3>
 
@@ -25,7 +33,7 @@
         <tr>
             <th>Month</th>
             <th>Year</th>
-            <th>Cost On Positions</th>
+            <th>Profit</th>
             <th>Metric</th>
         </tr>
         @foreach (var row in Model.ProfitSummaryInDollar.MonthlyProfits)
@@ -53,7 +61,7 @@
             </tr>
         }
     </table>
-   
+
     <h3>Deposit Ledgers</h3>
     <table class="table table-bordered table-responsive table-hover">
         <tr>

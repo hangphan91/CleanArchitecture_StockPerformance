@@ -28,6 +28,7 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 FirstDepositDate = mapped.FirstDepositDate,
                 NumberOfDepositDate = mapped.NumberOfDepositDate,
                 SecondDepositDate = mapped.SecondDepositDate,
+                InitialDepositAmount = mapped.InitialDepositAmount,
             };
         }
 
@@ -40,6 +41,7 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 LowerRangeOfTradingDate = mapped.LowerRangeOfTradingDate,
                 PurchaseLimitation = mapped.PurchaseLimitation,
                 SellPercentageLimitation = mapped.SellPercentageLimitation,
+                LossLimitation = mapped.LossLimitation
             };
         }
     }

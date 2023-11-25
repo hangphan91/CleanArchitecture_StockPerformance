@@ -28,6 +28,8 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 HigherRangeOfTradingDate = tradingRule.HigherRangeOfTradingDate,
                 LowerRangeOfTradingDate = tradingRule.LowerRangeOfTradingDate,
                 PurchaseLimitation = tradingRule.PurchaseLimitation,
+                LossLimitation = tradingRule.LossLimitation,
+                InitialDepositAmount = depositRule.InitialDepositAmount,
             };
         }
     }

@@ -58,6 +58,7 @@ namespace StockPerformanceCalculator.Logic
             var tradingCash = GetTradingCash(availableCash);
             var shareCount = _shareNumberCalculator.CountShare(currentPrice, tradingCash);
 
+            var currentLoss = _totalShareCount * (currentPrice - _averagePrice);
             var stockLedgerDetail = new StockLedgerDetail
             {
                 BoughtDate = tradingDate,
@@ -75,8 +76,9 @@ namespace StockPerformanceCalculator.Logic
                 Buy(stockLedgerDetail);
             }
 
-            else if (_tradingRule.IsValidForSellingRule(aboutToTradePrice, _averagePrice)
+            else if ((_tradingRule.IsValidForSellingRule(aboutToTradePrice, _averagePrice)
                 && _stockLedgerCalculator.GetTotalShareHoldingLedgers() > 0)
+                || _tradingRule.IsLostMoreThanLimitation(currentLoss))
             {
                 _totalShareCount = 0;
                 _averagePrice = 0;

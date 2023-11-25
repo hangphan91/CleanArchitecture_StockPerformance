@@ -55,7 +55,7 @@ namespace StockPerformanceCalculator.Logic
                     ShareCount = bought.ShareCount,
                     SoldPrice = sold.SoldPrice,
                     SoldDate = sold.SoldDate,
-                });
+                }).Distinct();
 
             _stockLedger.ClosedLedgers.AddRange(closedLedgers.ToList());
             _stockLedger.SoldLedgers.AddRange(closedLedgers);
@@ -69,11 +69,14 @@ namespace StockPerformanceCalculator.Logic
 
         public StockLedger GetStockLedger()
         {
-            _stockLedger.BoughtLedgers.ForEach(a => a.PositionType = EntityDefinitions.PositionType.Bought);
-            _stockLedger.SoldLedgers.ForEach(a => a.PositionType = EntityDefinitions.PositionType.Sold);
+            if (!_stockLedger.All.Any())
+            {
+                _stockLedger.HoldingLedgers.ForEach(a => a.PositionType = EntityDefinitions.PositionType.Holding);
+                _stockLedger.ClosedLedgers.ForEach(a => a.PositionType = EntityDefinitions.PositionType.Closed);
 
-            _stockLedger.All.AddRange(_stockLedger.BoughtLedgers);
-            _stockLedger.All.AddRange(_stockLedger.SoldLedgers);
+                _stockLedger.All.AddRange(_stockLedger.HoldingLedgers);
+                _stockLedger.All.AddRange(_stockLedger.ClosedLedgers);
+            }
             return _stockLedger;
         }
 

@@ -46,7 +46,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
             {
                 EndingYear = searchInitialSetup.EndingYear,
                 StartingYear = searchInitialSetup.StartingYear,
-                Symbols = searchInitialSetup.Symbols,
+                Symbols = searchInitialSetup.Symbols.OrderBy(a=> a).ToList(),
             };
             var initialDepositRule = new DepositRule
             {
@@ -54,6 +54,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 FirstDepositDate = searchInitialSetup.FirstDepositDate,
                 SecondDepositDate = searchInitialSetup.SecondDepositDate,
                 NumberOfDepositDate = searchInitialSetup.NumberOfDepositDate,
+                InitialDepositAmount = searchInitialSetup.InitialDepositAmount,
             };
             var initialTradingRule = new TradingRule
             {
@@ -62,6 +63,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 HigherRangeOfTradingDate = searchInitialSetup.HigherRangeOfTradingDate,
                 LowerRangeOfTradingDate = searchInitialSetup.LowerRangeOfTradingDate,
                 PurchaseLimitation = searchInitialSetup.PurchaseLimitation,
+                LossLimitation = searchInitialSetup.LossLimitation,
             };
             var searchDetail = new SearchDetail
             {
@@ -92,6 +94,8 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 StartingYear = performanceSetup.StartingYear,
                 EndingYear = DateTime.Now.Year,
                 Symbols = performanceSetup.Symbols,
+                LossLimitation = tradingrule.LossLimitation,
+                InitialDepositAmount = depositRule.InitialDepositAmount,
             };
         }
     }

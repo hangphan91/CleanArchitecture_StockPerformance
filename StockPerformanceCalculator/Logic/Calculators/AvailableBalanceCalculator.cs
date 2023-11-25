@@ -8,17 +8,13 @@ namespace StockPerformanceCalculator.Logic
     {
         private List<BalanceHolding> _balanceHoldings;
         private DepositLedgerCalculator _depositLedgerCalculator;
-        StockLedgerCalculator _stockLedgerCalculator;
 
         private Dictionary<string, BalanceHoldingByMonth> BalanceByMonthDictionary { get; set; }
         private Dictionary<string, BalanceHoldingByYear> BalanceByYearDictionary { get; set; }
 
-        public AvailableBalanceCalculator(DepositLedgerCalculator depositLedgerCalculator,
-            StockLedgerCalculator stockLedgerCalculator)
+        public AvailableBalanceCalculator(DepositLedgerCalculator depositLedgerCalculator)
         {
             _depositLedgerCalculator = depositLedgerCalculator;
-            _balanceHoldings = Calculate();
-            _stockLedgerCalculator = stockLedgerCalculator;
             BalanceByMonthDictionary = new Dictionary<string, BalanceHoldingByMonth>();
             BalanceByYearDictionary = new Dictionary<string, BalanceHoldingByYear>();
         }
@@ -52,6 +48,8 @@ namespace StockPerformanceCalculator.Logic
 
         internal decimal Calculate(DateTime tradingDate)
         {
+            _balanceHoldings = Calculate();
+
             var currentHoldingCash = _balanceHoldings
                 .Where(holding => holding.Date < tradingDate)
                 .OrderByDescending(a =>a.Date)

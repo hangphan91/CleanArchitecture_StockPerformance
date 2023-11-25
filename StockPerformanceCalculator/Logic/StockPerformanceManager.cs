@@ -41,7 +41,7 @@ namespace StockPerformanceCalculator.Logic
             _stockLedgerCalculator = new StockLedgerCalculator();
             _shareNumberCalculator = new ShareNumberCalculator(_stockLedgerCalculator);
             _availableBalanceCalculator = new AvailableBalanceCalculator
-                (_depositLedgerCalculator, _stockLedgerCalculator);
+                (_depositLedgerCalculator);
             _tradingRule = new TradingRule(_entityEngine);
             _tradeCalculator = new TradeCalculator(_stockLedgerCalculator,
                 _availableBalanceCalculator, _shareNumberCalculator, _tradingRule);
@@ -72,7 +72,7 @@ namespace StockPerformanceCalculator.Logic
             StockPerformanceManagerHelper.SetDepositRule(newDepositRule);
             StockPerformanceManagerHelper.SetTradingRule(newTradingRule);
             StockPerformanceManagerHelper.SetPerformanceSetup(newPerformanceSetup);
-
+            _depositLedgerCalculator.SetUpDepositLeggerFromDate(_startingDate);
             ImplementTradingStocks(stockSummaries);
 
             var result = CalculateStockPerformance();
@@ -119,6 +119,7 @@ namespace StockPerformanceCalculator.Logic
         private StockPerformanceSummary CalculateStockPerformance()
         {
             var summary = _stockPerformanceSummaryCalculator.Calculate();
+            _availableBalanceCalculator.Calculate();
 
             var totalDeposit = _availableBalanceCalculator.GetTotalDeposit();
             var totalProfit = summary.ProfitByYears.Sum(profit => profit.Amount);
