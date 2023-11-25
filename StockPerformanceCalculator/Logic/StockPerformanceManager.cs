@@ -19,12 +19,14 @@ namespace StockPerformanceCalculator.Logic
         private TradeDetailCalculator _tradeDetailCalculator;
         protected StockPerformanceSummaryCalculator _stockPerformanceSummaryCalculator;
         protected PriceCalculator _priceCalculator;
-        protected HoldingPositionCalculator _holdingPositionCalculator;
+        protected BalanceHoldingCalculator _holdingPositionCalculator;
         protected decimal _totalBalance = 0;
         protected IYahooFinanceCaller _yahooFinanceCaller;
         protected GrowthRateCalculator _growthRateCalculator;
         protected EntityEngine _entityEngine;
         protected TradingRule _tradingRule;
+        private BalanceHoldingCalculator _balanceHoldingCalculator;
+
 
         private string _symbol;
         private DateTime _startingDate;
@@ -40,8 +42,9 @@ namespace StockPerformanceCalculator.Logic
             _depositLedgerCalculator = new DepositLedgerCalculator(_entityEngine);
             _stockLedgerCalculator = new StockLedgerCalculator();
             _shareNumberCalculator = new ShareNumberCalculator(_stockLedgerCalculator);
+            _balanceHoldingCalculator = new BalanceHoldingCalculator(_depositLedgerCalculator);
             _availableBalanceCalculator = new AvailableBalanceCalculator
-                (_depositLedgerCalculator);
+                (_depositLedgerCalculator, _balanceHoldingCalculator);
             _tradingRule = new TradingRule(_entityEngine);
             _tradeCalculator = new TradeCalculator(_stockLedgerCalculator,
                 _availableBalanceCalculator, _shareNumberCalculator, _tradingRule);
@@ -52,7 +55,6 @@ namespace StockPerformanceCalculator.Logic
                 new StockPerformanceSummaryCalculator
                 (symbol, year, _priceCalculator, _stockLedgerCalculator,
                 _depositLedgerCalculator, _availableBalanceCalculator);
-            _holdingPositionCalculator = new HoldingPositionCalculator(_stockLedgerCalculator);
             _growthRateCalculator = new GrowthRateCalculator(_depositLedgerCalculator);
         }
 
@@ -136,7 +138,6 @@ namespace StockPerformanceCalculator.Logic
             summary.ProfitInDollar = totalProfit;
 
             summary.ProfitInPercentage = summary.ProfitInDollar * 100 / totalDeposit;
-            _holdingPositionCalculator.Calculate(summary);
             return summary;
         }
 

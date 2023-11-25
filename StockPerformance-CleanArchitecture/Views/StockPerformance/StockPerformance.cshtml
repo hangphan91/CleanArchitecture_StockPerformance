@@ -62,20 +62,6 @@
         }
     </table>
 
-    <h3>Deposit Ledgers</h3>
-    <table class="table table-bordered table-responsive table-hover">
-        <tr>
-            <th>Date</th>
-            <th>Amount</th>
-        </tr>
-        @foreach (var row in Model.DepositLedgers)
-        {
-            <tr>
-                <td>@row.Date</td>
-                <td>@row.Amount</td>
-            </tr>
-        }
-    </table>
     <h3> Stock Ledgers</h3>
     <table class="table table-bordered table-responsive table-hover">
         <tr>
@@ -95,6 +81,20 @@
                 <td>@row.BoughtPrice</td>
                 <td>@row.SoldPrice</td>
                 <td>@row.PositionType</td>
+            </tr>
+        }
+    </table>
+    <h3>Deposit Ledgers</h3>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+        </tr>
+        @foreach (var row in Model.DepositLedgers)
+        {
+            <tr>
+                <td>@row.Date</td>
+                <td>@row.Amount</td>
             </tr>
         }
     </table>

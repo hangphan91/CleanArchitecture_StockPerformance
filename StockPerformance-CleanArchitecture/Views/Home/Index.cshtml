@@ -35,7 +35,7 @@
         <fieldset>
             <span>
                 <h4> Deposit Setting</h4>
-                <p>First One Time Deposit Amount @Html.TextAreaFor(m => m.DepositRule.InitialDepositAmount)</p>
+                <p>First One Time Deposit Amount @Html.TextBoxFor(m => m.DepositRule.InitialDepositAmount)</p>
                 <p>Repetitive Deposit Amount: @Html.TextBoxFor(m => m.DepositRule.DepositAmount)</p>
                 <p>
                     First deposit date @Html.DropDownListFor(m => m.DepositRule.FirstDepositDate, selectListDateOfMonth)

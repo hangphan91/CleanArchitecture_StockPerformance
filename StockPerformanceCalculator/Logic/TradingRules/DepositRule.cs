@@ -1,8 +1,4 @@
-﻿using System;
-using EntityDefinitions;
-using StockPerformanceCalculator.Helpers;
-
-namespace StockPerformanceCalculator.Logic.TradingRules
+﻿namespace StockPerformanceCalculator.Logic.TradingRules
 {
     public class DepositRule
     {

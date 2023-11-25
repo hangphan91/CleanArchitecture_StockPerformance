@@ -26,7 +26,7 @@ namespace StockPerformanceCalculator.Logic
             depositLedgers.Add(new DepositLedger
             {
                 Amount = _depositRule.GetInitialDepositAmount(),
-                Date = startingDate,
+                Date = new DateTime(startYear, startMonth, 1),
             });
 
             for (int currentYear = startYear; currentYear <= endYear; currentYear++)
@@ -45,7 +45,7 @@ namespace StockPerformanceCalculator.Logic
 
                 }
             }
-            _deposits = depositLedgers;
+            _deposits = depositLedgers.OrderBy(a => a.Date).ToList();
             return depositLedgers;
         }
 

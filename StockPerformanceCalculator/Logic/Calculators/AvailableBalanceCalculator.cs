@@ -1,22 +1,18 @@
-﻿using System;
-using StockPerformanceCalculator.Models;
-using StockPerformanceCalculator.Models.BalanceHoldings;
+﻿using StockPerformanceCalculator.Logic.Calculators;
 
 namespace StockPerformanceCalculator.Logic
 {
     public class AvailableBalanceCalculator
     {
-        private List<BalanceHolding> _balanceHoldings;
         private DepositLedgerCalculator _depositLedgerCalculator;
+        private BalanceHoldingCalculator _balanceHoldingCalculator; 
 
-        private Dictionary<string, BalanceHoldingByMonth> BalanceByMonthDictionary { get; set; }
-        private Dictionary<string, BalanceHoldingByYear> BalanceByYearDictionary { get; set; }
 
-        public AvailableBalanceCalculator(DepositLedgerCalculator depositLedgerCalculator)
+        public AvailableBalanceCalculator(DepositLedgerCalculator depositLedgerCalculator,
+            BalanceHoldingCalculator balanceHodingCalculator)
         {
             _depositLedgerCalculator = depositLedgerCalculator;
-            BalanceByMonthDictionary = new Dictionary<string, BalanceHoldingByMonth>();
-            BalanceByYearDictionary = new Dictionary<string, BalanceHoldingByYear>();
+            _balanceHoldingCalculator = balanceHodingCalculator;
         }
 
         public decimal GetTotalDeposit()
@@ -26,110 +22,26 @@ namespace StockPerformanceCalculator.Logic
             return deposits.Sum(deposit => deposit.Amount);
         }
 
-        internal List<BalanceHolding> Calculate()
+        internal void AddBalance(decimal toAddBalance, DateTime boughtDate)
         {
-            var holdings = new List<BalanceHolding>();
-            var deposits = _depositLedgerCalculator.GetAllDeposit();
-            var totalHolding = (decimal)0;
+            _balanceHoldingCalculator.AddBalance(toAddBalance, boughtDate);
+        }
 
-            foreach (var deposit in deposits)
-            {
-                totalHolding += deposit.Amount;
-                var holding = new BalanceHolding
-                {
-                    CashAvailable = totalHolding,
-                    Date = deposit.Date
-                };
-                holdings.Add(holding);
-            }
-
-            return holdings;
+        internal void Calculate()
+        {
+           _balanceHoldingCalculator.Calculate();
         }
 
         internal decimal Calculate(DateTime tradingDate)
         {
-            _balanceHoldings = Calculate();
+            _balanceHoldingCalculator.Calculate();
 
-            var currentHoldingCash = _balanceHoldings
-                .Where(holding => holding.Date < tradingDate)
-                .OrderByDescending(a =>a.Date)
-                .Select(h => h.CashAvailable)
-                .First();
-
-            return currentHoldingCash;
+            return _balanceHoldingCalculator.GetCurrentHoldingCash(tradingDate);
         }
 
-        internal void DeductBalance(decimal amount, DateTime appliedDate)
+        internal void DeductBalance(decimal toSubtractBalance, DateTime boughtDate)
         {
-            foreach (var holding in _balanceHoldings)
-            {
-                if (holding.Date >= appliedDate)
-                    holding.CashAvailable -= amount;
-            }
-        }
-
-        internal void AddBalance(decimal amount, DateTime appliedDate)
-        {
-            foreach (var holding in _balanceHoldings)
-            {
-                if (holding.Date >= appliedDate)
-                    holding.CashAvailable += amount;
-            }
-        }
-
-        internal List<BalanceHoldingByMonth> GetBalanceHoldingsByMonth()
-        {
-            var balanceHoldingsByMonth = _balanceHoldings.Select(holding => new BalanceHoldingByMonth
-            {
-                Month = holding.Date.Month,
-                Date = holding.Date,
-                CashAvailable = holding.CashAvailable,
-                Year = holding.Date.Year,
-            }).ToList();
-
-            return CalculateBalanceByMonths(balanceHoldingsByMonth);
-        }
-
-        internal List<BalanceHoldingByYear> GetBalanceHoldingsByYear()
-        {
-            var balanceHoldingsByYear = _balanceHoldings.Select(holding => new BalanceHoldingByYear
-            {
-                Date = holding.Date,
-                CashAvailable = holding.CashAvailable,
-                Year = holding.Date.Year
-            }).ToList();
-
-            return CalculateBalanceByYears(balanceHoldingsByYear);
-        }
-
-        private List<BalanceHoldingByYear> CalculateBalanceByYears(List<BalanceHoldingByYear> balanceHoldingByYears)
-        {
-            balanceHoldingByYears.ForEach(profit =>
-            {
-                var key = profit.Year.ToString();
-
-                if (!BalanceByYearDictionary.ContainsKey(key))
-                    BalanceByYearDictionary.Add(key, profit);
-                else if(BalanceByYearDictionary[key].CashAvailable < profit.CashAvailable)
-                    BalanceByYearDictionary[key].CashAvailable = profit.CashAvailable;
-            });
-
-            return BalanceByYearDictionary.Values.ToList();
-        }
-
-        private List<BalanceHoldingByMonth> CalculateBalanceByMonths(List<BalanceHoldingByMonth> balanceHoldingByMonths)
-        {
-            balanceHoldingByMonths.ForEach(profit =>
-            {
-                var key = profit.Month.ToString() + "/" + profit.Year.ToString();
-
-                if (!BalanceByMonthDictionary.ContainsKey(key))
-                    BalanceByMonthDictionary.Add(key, profit);
-                else if (BalanceByMonthDictionary[key].CashAvailable < profit.CashAvailable)
-                    BalanceByMonthDictionary[key].CashAvailable = profit.CashAvailable;
-            });
-
-            return BalanceByMonthDictionary.Values.ToList();
+            _balanceHoldingCalculator.DeductBalance(toSubtractBalance, boughtDate);
         }
     }
 }
