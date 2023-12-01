@@ -20,7 +20,7 @@ namespace StockPerformanceCalculator.Logic.Calculators
                 .Where(holding => holding.Date < tradingDate)
                 .OrderByDescending(a => a.Date)
                 .Select(h => h.CashAvailable)
-                .First();
+                .FirstOrDefault();
         }
 
         internal List<BalanceHolding> Calculate()

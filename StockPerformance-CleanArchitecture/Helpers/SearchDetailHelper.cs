@@ -9,9 +9,13 @@ namespace StockPerformance_CleanArchitecture.Helpers
 {
     public static class SearchDetailHelper
     {
+        private static string _symbol = "AAPL";
+        private static int _year = 2020;
         private static SearchDetail _searchDetail;
         private static SearchInitialSetup _searchInitialSetup;
         private static IEntityDefinitionsAccessor _entityDefinitionsAccessor;
+        private static List<SearchDetail> _searchDetails = new List<SearchDetail>();
+        private static StockPerformanceManager _stockPerformanceManager;
 
         public static SearchDetail GetCurrentSearchDetail(IEntityDefinitionsAccessor entityDefinitionsAccessor)
         {
@@ -22,21 +26,35 @@ namespace StockPerformance_CleanArchitecture.Helpers
         {
             _searchDetail = searchDetail;
         }
+
+        public static void AddAdvanceSearchDetail(SearchDetail searchDetail)
+        {
+            _searchDetails.Add(searchDetail);
+        }
+
         public static SearchInitialSetup GetSearchInitialSetup()
         {
             return _searchInitialSetup;
+        }
+
+        public static StockPerformanceManager GetStockPerformanceManager(int year, string symbol)
+        {
+            _stockPerformanceManager = new StockPerformanceManager(
+                symbol, year, _entityDefinitionsAccessor);
+
+            return _stockPerformanceManager;
         }
 
         private static SearchDetail GetCurrentSearchDetail()
         {
             if (_searchDetail == null)
             {
-                var performanceMangager = new StockPerformanceManager(_entityDefinitionsAccessor);
+                var performanceMangager = GetStockPerformanceManager(_year, _symbol);
                 var searchInitialSetup = performanceMangager.GetInitialSetup();
                 SearchDetail searchDetail = Map(searchInitialSetup);
                 _searchDetail = searchDetail;
+                _stockPerformanceManager = performanceMangager;
             }
-
             return _searchDetail;
         }
 
@@ -46,7 +64,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
             {
                 EndingYear = searchInitialSetup.EndingYear,
                 StartingYear = searchInitialSetup.StartingYear,
-                Symbols = searchInitialSetup.Symbols.OrderBy(a=> a).ToList(),
+                Symbols = searchInitialSetup.Symbols.OrderBy(a => a).ToList(),
             };
             var initialDepositRule = new DepositRule
             {
@@ -97,6 +115,16 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 LossLimitation = tradingrule.LossLimitation,
                 InitialDepositAmount = depositRule.InitialDepositAmount,
             };
+        }
+
+        internal static List<SearchDetail> GetSearchDetails()
+        {
+            return _searchDetails;
+        }
+
+        internal static void ClearSearchDetails()
+        {
+            _searchDetails.Clear();
         }
     }
 }

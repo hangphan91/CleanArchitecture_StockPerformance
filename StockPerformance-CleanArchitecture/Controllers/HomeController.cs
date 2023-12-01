@@ -20,30 +20,22 @@ public class HomeController : Controller
 
     public IActionResult Index(string symbol)
     {
-        var currentSearchDetail = _searchDetailManager.GetCurrentSearchDetail();
-        if (string.IsNullOrWhiteSpace(symbol))
-            currentSearchDetail.Symbol = symbol;
+        var currentSearchDetail = _searchDetailManager.SetInitialView(symbol);
 
         return View(currentSearchDetail);
     }
 
     public IActionResult Symbol(SearchInitialSetup searchSetup)
     {
-        var accessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
-        var detail = SearchDetailHelper.GetCurrentSearchDetail(accessor);
-
-        if (!string.IsNullOrWhiteSpace(searchSetup?.AddSymbol))
-        {
-            searchSetup.AddingSymbols.Add(searchSetup.AddSymbol);
-            _searchDetailManager.AddNewSymbols(searchSetup, detail.SearchSetup.Symbols);
-            searchSetup.StartingYear = detail.SearchSetup.StartingYear;
-            searchSetup.EndingYear = detail.SearchSetup.EndingYear;
-            detail.SearchSetup = searchSetup;
-        }
-        else
-            searchSetup = detail.SearchSetup;
-        SearchDetailHelper.SetCurrentSearchDetail(detail);
+        searchSetup = _searchDetailManager.AddSymbol(searchSetup);
         return View(searchSetup);
+    }
+
+    public IActionResult AdvanceSearch(AdvanceSearch advanceSearch, bool willClearAllSearch)
+    {
+       var result = _searchDetailManager.UpdateAdvanceSearch(advanceSearch, willClearAllSearch);
+       
+        return View(result);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,0 +1,116 @@
+﻿@model StockPerformance_CleanArchitecture.Models.AdvanceSearch
+
+@{
+    ViewData["Title"] = "Home Page";
+    var symbols = Model.SearchDetail.SearchSetup.Symbols.OrderBy(a => a);
+    var selectListSymbols = symbols
+        .Select(symbol => new SelectListItem { Text = symbol.ToUpper(), Value = symbol.ToUpper() })
+        .ToList();
+
+    var count = Model.SearchDetail.SearchSetup.EndingYear - Model.SearchDetail.SearchSetup.StartingYear + 1;
+    var selectListYears = Enumerable.Range(Model.SearchDetail.SearchSetup.StartingYear, count)
+        .Select(year => new SelectListItem
+        {
+            Text = year.ToString(),
+            Value = year.ToString(),
+        }).ToList();
+    var selectListNumberOfDeposits = Enumerable.Range(0, 100)
+        .Select(number => new SelectListItem
+        {
+            Text = number.ToString(),
+            Value = number.ToString(),
+        }).ToList();
+    var selectListDateOfMonth = Enumerable.Range(1, 31)
+        .Select(number => new SelectListItem
+        {
+            Text = number.ToString(),
+            Value = number.ToString(),
+        }).ToList();
+}
+<div>
+    Performance Queue @Model.SearchDetails.Count(), for @string.Join(", ",
+                                                       Model.SearchDetails.Select(a => new { a.Symbol, a.Year }))
+</div>
+<div class="text-center">
+    @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get))
+    {
+
+        <fieldset>
+            <span>
+                <h4> Deposit Setting</h4>
+                <p>First One Time Deposit Amount @Html.TextBoxFor(m => m.SearchDetail.DepositRule.InitialDepositAmount)</p>
+                <p>Repetitive Deposit Amount: @Html.TextBoxFor(m => m.SearchDetail.DepositRule.DepositAmount)</p>
+                <p>
+                    First deposit date @Html.DropDownListFor(m => m.SearchDetail.DepositRule.FirstDepositDate, selectListDateOfMonth)
+
+                    Last deposit date @Html.DropDownListFor(m => m.SearchDetail.DepositRule.SecondDepositDate, selectListDateOfMonth)
+                </p>
+            </span>
+            <span>
+                <h4>Trading Rule:</h4>
+                <p>
+                    Buy more when we are already gain
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.BuyPercentageLimitation)%
+
+                </p>
+                <p>
+                    Sell all when we are currently losing
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellPercentageLimitation)%
+                </p>
+                <p>
+                    Maximum amount to trade at once $
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.PurchaseLimitation)
+                </p>
+                <p>
+                    Loss Limitation:
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.LossLimitation)
+                </p>
+
+                <p>We will trade between</p>
+                <p>
+                    @Html.DropDownListFor(m => m.SearchDetail.TradingRule.LowerRangeOfTradingDate, selectListDateOfMonth)
+                    and @Html.DropDownListFor(m => m.SearchDetail.TradingRule.HigherRangeOfTradingDate, selectListDateOfMonth)
+                    of a month
+                </p>
+
+            </span>
+            <p>
+
+                <h4>Symbol List </h4>
+                @Html.DropDownListFor(m => m.SearchDetail.Symbol, selectListSymbols)
+            <p>
+                Start Year
+                @Html.TextBoxFor(m => m.StartYear)
+                End Year
+                @Html.TextBoxFor(m => m.EndYear)
+            </p>
+            </p>
+            <p>
+                <input type="submit" value="Add Search" />
+            </p>
+
+        </fieldset>
+
+    }
+
+</div>
+
+
+<div class="text-center">
+    <button>
+        @Html.ActionLink("Implement Searches", "AdvanceSearch", "StockPerformance")
+    </button>
+
+</div>
+
+
+<div class="text-center">
+    <button>
+        @Html.ActionLink("Clear All Seaches", "AdvanceSearch", "Home", new { willClearAllSearch = true })
+    </button>
+
+</div>
+
+
+
+

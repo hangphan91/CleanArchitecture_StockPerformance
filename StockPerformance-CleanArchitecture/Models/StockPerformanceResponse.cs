@@ -22,6 +22,7 @@ namespace StockPerformance_CleanArchitecture.Models
         public decimal ProfitInDollar { get; set; }
         public decimal ProfitInPercentage { get; set; }
         public SearchDetail SearchDetail { get; set; }
+        public DateTime CreatedTime { get; set; } = DateTime.Now;
 
         public StockPerformanceResponse()
         {

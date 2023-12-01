@@ -1,0 +1,33 @@
+﻿@model StockPerformance_CleanArchitecture.Models.StockPerformanceHistory
+@{
+    ViewData["Title"] = "Performance History";
+
+}
+<h1>@ViewData["Title"]</h1>
+<span>
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Symbol</th>
+                <th>Profit In Percentage</th>
+                <th>Profit In $</th>
+                <th>Start Year</th>
+                <th>End Year</th>
+                <th>Created Time</th>
+            </tr>
+            @foreach (var row in Model.StockPerformanceResponses
+                    .OrderBy(a => a.Symbol)
+                    .ThenBy(a =>a.SearchDetail.Year))
+            {
+                <tr>
+                    <th>
+                        @Html.ActionLink(row.Symbol, "StockPerformance", "StockPerformance",  new { searchDetail = row.SearchDetail })
+                    </th>
+                    <th>@row.ProfitInPercentage</th>
+                    <th>@row.ProfitInDollar</th>
+                    <th>@row.SearchDetail.Year</th>
+                    <th>@row.SearchDetail.SearchSetup.EndingYear</th>
+                    <th>@row.CreatedTime</th>
+                </tr>
+            }
+        </table>
+</span>

@@ -58,11 +58,6 @@ namespace StockPerformanceCalculator.Logic
             _growthRateCalculator = new GrowthRateCalculator(_depositLedgerCalculator);
         }
 
-        public StockPerformanceManager(IEntityDefinitionsAccessor entityDefinitionsAccessor)
-        {
-            _entityEngine = new EntityEngine(entityDefinitionsAccessor);
-        }
-
         public async Task<StockPerformanceSummary> StartStockPerforamanceCalculation(InitialPerformanceSetup mapped)
         {
             var stockSummaries = await _yahooFinanceCaller.GetStockHistory(_symbol, _startingDate);

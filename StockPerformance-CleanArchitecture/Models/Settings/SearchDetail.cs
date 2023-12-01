@@ -8,11 +8,14 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         public SearchInitialSetup SearchSetup { get; set; }
         public DepositRule DepositRule { get; set; }
         public TradingRule TradingRule { get; set; }
+
         public SearchDetail()
         {
             SearchSetup = new SearchInitialSetup();
             DepositRule = new DepositRule();
             TradingRule = new TradingRule();
+            Symbol = "AAPL";
+            Year = 2020;
         }
         public string Symbol { get; set; }
         public int Year { get; set; }
