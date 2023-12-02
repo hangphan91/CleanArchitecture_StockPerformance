@@ -1,33 +1,57 @@
-﻿@model StockPerformance_CleanArchitecture.Models.StockPerformanceHistory
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model StockPerformance_CleanArchitecture.Models.StockPerformanceHistory
 @{
     ViewData["Title"] = "Performance History";
 
 }
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <title>ColumnChart</title>
+</head>
+
+<body>
+    <form method="post">
+        <div>@Html.Raw(Model.ProfitChart.ChartJson)</div>
+        <br />
+    </form>
+</body>
+</html>
+
+
 <h1>@ViewData["Title"]</h1>
 <span>
-        <table class="table table-bordered table-responsive table-hover">
+
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Symbol</th>
+            <th>Profit In Percentage</th>
+            <th>Profit In $</th>
+            <th>Start Year</th>
+            <th>End Year</th>
+            <th>Created Time</th>
+        </tr>
+        @foreach (var row in Model.StockPerformanceResponses
+             .OrderBy(a => a.Symbol)
+             .ThenBy(a => a.SearchDetail.SettingDate.Year))
+        {
+
+
             <tr>
-                <th>Symbol</th>
-                <th>Profit In Percentage</th>
-                <th>Profit In $</th>
-                <th>Start Year</th>
-                <th>End Year</th>
-                <th>Created Time</th>
+                <th>
+                    @Html.ActionLink(row.Symbol, "StockPerformance", "StockPerformance", new { json = row.SearchDetail.ToJson() })
+                </th>
+                <th>@row.ProfitInPercentage</th>
+                <th>@row.ProfitInDollar</th>
+                <th>@row.SearchDetail.SettingDate</th>
+                <th>@row.SearchDetail.SearchSetup.EndingYear</th>
+                <th>@row.CreatedTime</th>
             </tr>
-            @foreach (var row in Model.StockPerformanceResponses
-                    .OrderBy(a => a.Symbol)
-                    .ThenBy(a =>a.SearchDetail.Year))
-            {
-                <tr>
-                    <th>
-                        @Html.ActionLink(row.Symbol, "StockPerformance", "StockPerformance",  new { searchDetail = row.SearchDetail })
-                    </th>
-                    <th>@row.ProfitInPercentage</th>
-                    <th>@row.ProfitInDollar</th>
-                    <th>@row.SearchDetail.Year</th>
-                    <th>@row.SearchDetail.SearchSetup.EndingYear</th>
-                    <th>@row.CreatedTime</th>
-                </tr>
-            }
-        </table>
+        }
+    </table>
 </span>

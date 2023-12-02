@@ -31,9 +31,10 @@ public class HomeController : Controller
         return View(searchSetup);
     }
 
-    public IActionResult AdvanceSearch(AdvanceSearch advanceSearch, bool willClearAllSearch)
+    public IActionResult AdvanceSearch(AdvanceSearch advanceSearch,
+        bool willClearAllSearch, bool willPerformSearch)
     {
-       var result = _searchDetailManager.UpdateAdvanceSearch(advanceSearch, willClearAllSearch);
+       var result = _searchDetailManager.UpdateAdvanceSearch(advanceSearch, willClearAllSearch, willPerformSearch);
        
         return View(result);
     }

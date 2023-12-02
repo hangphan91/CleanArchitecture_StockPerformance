@@ -1,5 +1,4 @@
-﻿using System;
-using StockPerformanceCalculator.Logic.Models;
+﻿using StockPerformanceCalculator.Logic.Models;
 using StockPerformanceCalculator.Logic.TradingRules;
 using StockPerformanceCalculator.Models;
 
@@ -7,23 +6,23 @@ namespace StockPerformanceCalculator.Logic
 {
     public class TradeDetailCalculator
     {
-        private int _year;
+        private DateDetail _startDate;
         private StockLedgerCalculator _stockLedgerCalculator;
         private PriceCalculator _priceCalculator;
         private TradingRule _tradingRule;
 
         public TradeDetailCalculator(StockLedgerCalculator stockLedgerCalculator,
-            PriceCalculator priceCalculator, TradingRule tradingRule, int year)
+            PriceCalculator priceCalculator, TradingRule tradingRule, DateDetail startDate)
         {
             _stockLedgerCalculator = stockLedgerCalculator;
             _priceCalculator = priceCalculator;
-            _year = year;
+            _startDate = startDate;
             _tradingRule = tradingRule;
         }
 
         public List<TradeDetail> GetTradeDetails(List<SymbolSummary> stockSummaries)
         {
-            var numberOfYear = DateTime.Now.Year - _year;
+            var numberOfYear = DateTime.Now.Year - _startDate.Year;
             var tradeDetails = new List<TradeDetail>();
             for (int i = 0; i <= numberOfYear; i++)
             {
@@ -31,7 +30,7 @@ namespace StockPerformanceCalculator.Logic
                 {
                     var toTradeStock = stockSummaries
                         .Where(summary => summary.Date.Month == j
-                        && summary.Date.Year == _year + i &&
+                        && summary.Date.Year == _startDate.Year + i &&
                         _tradingRule.IsValidToTradeStockByDate(summary.Date.Date))
                         .FirstOrDefault();
 

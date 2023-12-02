@@ -6,7 +6,7 @@ namespace StockPerformanceCalculator.Logic
     public class StockPerformanceSummaryCalculator
     {
         private string _symbol;
-        private int _year;
+        private DateDetail _startDate;
         private decimal _currentPrice;
         private ProfitCalculator _profitCalculator;
         private GrowthRateCalculator _growthRateCalculator;
@@ -15,14 +15,14 @@ namespace StockPerformanceCalculator.Logic
         AvailableBalanceCalculator _availableBalanceCalculator;
         DepositLedgerCalculator _depositLedgerCalculator;
 
-        public StockPerformanceSummaryCalculator(string symbol, int year,
+        public StockPerformanceSummaryCalculator(string symbol, DateDetail startDate,
             PriceCalculator priceCalculator,
             StockLedgerCalculator stockLedgerCalculator,
             DepositLedgerCalculator depositLedgerCalculator,
             AvailableBalanceCalculator availableBalanceCalculator)
         {
             _symbol = symbol;
-            _year = year;
+            _startDate = startDate;
             _priceCalculator = priceCalculator;
             _stockLedgerCalculator = stockLedgerCalculator;
             _profitCalculator = new ProfitCalculator(_stockLedgerCalculator);
@@ -37,7 +37,7 @@ namespace StockPerformanceCalculator.Logic
             var result = new StockPerformanceSummary
             {
                 Symbol = _symbol,
-                Year = _year,
+                StartDate = _startDate,
                 CurrentPrice = _currentPrice,
             };
 

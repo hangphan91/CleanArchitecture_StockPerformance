@@ -3,8 +3,8 @@ namespace StockPerformanceCalculator.Models.PerformanceCalculatorSetup
 {
 	public class InitialPerformanceSetup
 	{
-        public int StartingYear { get; set; }
-        public int EndingYear { get; set; }
+        public DateOnly StartingYear { get; set; }
+        public DateOnly EndingYear { get; set; }
 		public List<string> Symbols { get; set; }
         public decimal PurchaseLimitation { get; set; }
         public decimal SellPercentageLimitation { get; set; }

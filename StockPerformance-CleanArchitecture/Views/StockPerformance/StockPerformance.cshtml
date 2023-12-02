@@ -1,20 +1,42 @@
-﻿@model StockPerformance_CleanArchitecture.Models.StockPerformanceResponse
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model StockPerformance_CleanArchitecture.Models.StockPerformanceResponse
 @{
     ViewData["Title"] = "Stock Performance";
     var profit = Model.ProfitInDollar;
     var profitPercentage = Model.ProfitInPercentage;
 
     var years = Model.DepositLedgers.Select(a => a.Date.Year).Distinct();
-    var months = Model.DepositLedgers.Select(a => new { a.Date.Month, a.Date.Year})
+    var months = Model.DepositLedgers.Select(a => new { a.Date.Month, a.Date.Year })
         .Distinct()
         .OrderBy(a => a.Year).ThenBy(a => a.Month);
     var startingMonth = months.First();
     var endingMonth = months.Last();
     var searchDetail = Model.SearchDetail;
+
+
 }
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <title>ColumnChart</title>
+</head>
+
+<body>
+    <form method="post">
+        <div>@Html.Raw(Model.ProfitChart.ChartJson)</div>
+        <br />
+    </form>
+</body>
+</html>
 <h1>@ViewData["Title"]</h1>
 <p>
-    Performance report for Symbol: @Model.Symbol, starting year: @Model.Year Using setting @Model.DisplayStockPerformance()
+    Performance report for Symbol: @Model.Symbol,
+    starting year: @Model.StartDate Using setting @Model.DisplayStockPerformance()
 </p>
 <p>
     Total Balance After Loss: @Model.TotalBalanceAfterLoss
@@ -23,9 +45,14 @@
     Current price: @Model.CurrentPrice
     Current holding share: @Model.CurrentHoldingShare
 </p>
-<h2> Profit: $ @profit (@profitPercentage %) from
+<h2>
+    Profit: $ @profit (@profitPercentage %) from
     @startingMonth.Month/@startingMonth.Year to
-    @endingMonth.Month/@endingMonth.Year (@months.Count() months)</h2>
+    @endingMonth.Month/@endingMonth.Year (@months.Count() months)
+</h2>
+
+
+
 <p>
     <h3>Monthly Profit</h3>
 

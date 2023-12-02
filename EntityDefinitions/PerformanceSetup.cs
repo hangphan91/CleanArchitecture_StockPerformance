@@ -3,8 +3,8 @@ namespace EntityDefinitions
 {
 	public class PerformanceSetup :IdBase
 	{
-		public int StartingYear { get; set; }
-		public int EndingYear { get; set; }
+		public DateOnly StartingYear { get; set; }
+		public DateOnly EndingYear { get; set; }
 		public long StartingSymbolId { get; set; }
 		public long EndingSymbolId { get; set; }
 		public PerformanceSetup()

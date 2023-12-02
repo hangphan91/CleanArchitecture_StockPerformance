@@ -7,8 +7,8 @@
         .Select(symbol => new SelectListItem { Text = symbol.ToUpper(), Value = symbol.ToUpper() })
         .ToList();
 
-    var count = Model.SearchDetail.SearchSetup.EndingYear - Model.SearchDetail.SearchSetup.StartingYear + 1;
-    var selectListYears = Enumerable.Range(Model.SearchDetail.SearchSetup.StartingYear, count)
+    var count = Model.SearchDetail.SearchSetup.EndingYear.Year - Model.SearchDetail.SearchSetup.StartingYear.Year + 1;
+    var selectListYears = Enumerable.Range(2000, DateTime.Now.Year + 1 - 2000)
         .Select(year => new SelectListItem
         {
             Text = year.ToString(),
@@ -26,13 +26,23 @@
             Text = number.ToString(),
             Value = number.ToString(),
         }).ToList();
+    var selectListMonths = Enumerable.Range(1, 12)
+      .Select(month => new SelectListItem
+      {
+          Text = month.ToString(),
+          Value = month.ToString(),
+      }).ToList();
 }
 <div>
-    Performance Queue @Model.SearchDetails.Count(), for @string.Join(", ",
-                                                       Model.SearchDetails.Select(a => new { a.Symbol, a.Year }))
+    Performance Queue @Model.SearchDetails.Count(),
+    for @string.Join(", ",
+Model.SearchDetails.Select(a => new
+{
+Date = $"{a.Symbol} from {a.SettingDate.Day}/{a.SettingDate.Month}/{a.SettingDate.Year}"
+}))
 </div>
 <div class="text-center">
-    @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get))
+    @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get, new { willPerformSearch = true }))
     {
 
         <fieldset>
@@ -79,11 +89,27 @@
                 <h4>Symbol List </h4>
                 @Html.DropDownListFor(m => m.SearchDetail.Symbol, selectListSymbols)
             <p>
-                Start Year
-                @Html.TextBoxFor(m => m.StartYear)
-                End Year
-                @Html.TextBoxFor(m => m.EndYear)
+            <p>
+                Start Date
+
+                Year List
+                @Html.DropDownListFor(m => m.StartDate.Year, selectListYears)
+                Month List
+                @Html.DropDownListFor(m => m.StartDate.Month, selectListMonths)
+                Date List
+                @Html.DropDownListFor(m => m.StartDate.Day, selectListDateOfMonth)
+
             </p>
+            <p>
+                End Date
+
+                Year List
+                @Html.DropDownListFor(m => m.EndDate.Year, selectListYears)
+                Month List
+                @Html.DropDownListFor(m => m.EndDate.Month, selectListMonths)
+                Date List
+                @Html.DropDownListFor(m => m.EndDate.Day, selectListDateOfMonth)
+
             </p>
             <p>
                 <input type="submit" value="Add Search" />

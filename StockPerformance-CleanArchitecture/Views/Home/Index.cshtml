@@ -7,19 +7,27 @@
         .Select(symbol => new SelectListItem { Text = symbol.ToUpper(), Value = symbol.ToUpper() })
         .ToList();
 
-    var count = Model.SearchSetup.EndingYear - Model.SearchSetup.StartingYear + 1;
-    var selectListYears = Enumerable.Range(Model.SearchSetup.StartingYear, count)
+    var count = Model.SearchSetup.EndingYear.Year - Model.SearchSetup.StartingYear.Year + 1;
+    var selectListYears = Enumerable.Range(2000, DateTime.Now.Year + 1 - 2000)
         .Select(year => new SelectListItem
         {
             Text = year.ToString(),
             Value = year.ToString(),
         }).ToList();
+
+    var selectListMonths = Enumerable.Range(1, 12)
+    .Select(month => new SelectListItem
+    {
+        Text = month.ToString(),
+        Value = month.ToString(),
+    }).ToList();
+
     var selectListNumberOfDeposits = Enumerable.Range(0, 100)
-        .Select(number => new SelectListItem
-        {
-            Text = number.ToString(),
-            Value = number.ToString(),
-        }).ToList();
+.Select(number => new SelectListItem
+{
+    Text = number.ToString(),
+    Value = number.ToString(),
+}).ToList();
     var selectListDateOfMonth = Enumerable.Range(1, 31)
         .Select(number => new SelectListItem
         {
@@ -29,7 +37,7 @@
 }
 
 <div class="text-center">
-    @using (Html.BeginForm("StockPerformance", "StockPerformance", FormMethod.Get))
+    @using (Html.BeginForm("StockPerformanceFromSelectedDetail", "StockPerformance", FormMethod.Get))
     {
 
         <fieldset>
@@ -39,7 +47,7 @@
                 <p>Repetitive Deposit Amount: @Html.TextBoxFor(m => m.DepositRule.DepositAmount)</p>
                 <p>
                     First deposit date @Html.DropDownListFor(m => m.DepositRule.FirstDepositDate, selectListDateOfMonth)
-                
+
                     Last deposit date @Html.DropDownListFor(m => m.DepositRule.SecondDepositDate, selectListDateOfMonth)
                 </p>
             </span>
@@ -72,10 +80,16 @@
             </span>
             <p>
 
-            <h4>Symbol List </h4>
-            @Html.DropDownListFor(m => m.Symbol, selectListSymbols)
-            <h4> Year List</h4>
-            @Html.DropDownListFor(m => m.Year, selectListYears)
+                <h4>Symbol List </h4>
+                @Html.DropDownListFor(m => m.Symbol, selectListSymbols)
+            <p>
+                Year List
+                @Html.DropDownListFor(m => m.SettingDate.Year, selectListYears)
+                Month List
+                @Html.DropDownListFor(m => m.SettingDate.Month, selectListMonths)
+                Date List
+                @Html.DropDownListFor(m => m.SettingDate.Day, selectListDateOfMonth)
+            </p>
             </p>
             <p>
                 <input type="submit" value="Submit" />

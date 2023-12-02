@@ -24,6 +24,19 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
                 $" higher range of trading date: {HigherRangeOfTradingDate}");
             return str.ToString();
         }
+
+        internal bool IsSame(TradingRule tradingRule)
+        {
+            if (tradingRule == null)
+                return false;
+
+            return tradingRule.PurchaseLimitation == PurchaseLimitation
+                && tradingRule.SellPercentageLimitation == SellPercentageLimitation
+                && tradingRule.BuyPercentageLimitation == BuyPercentageLimitation
+                && tradingRule.LowerRangeOfTradingDate == LowerRangeOfTradingDate
+                && tradingRule.HigherRangeOfTradingDate == HigherRangeOfTradingDate
+                && tradingRule.LossLimitation == LossLimitation;
+        }
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using StockPerformance_CleanArchitecture.Helpers;
 using StockPerformance_CleanArchitecture.Managers;
@@ -18,10 +19,21 @@ namespace StockPerformance_CleanArchitecture.Controllers
             _searchDetailManager = ManagerHelper.SearchDetailManager;
         }
 
-        public async Task<IActionResult> StockPerformance(SearchDetail searchDetail)
+        public async Task<IActionResult> StockPerformance(string json)
         {
+            SearchDetail? searchDetail = null;
+
+            if (!string.IsNullOrWhiteSpace(json))
+                searchDetail = JsonSerializer.Deserialize<SearchDetail>(json);
+
             var response = await _searchDetailManager.GetStockPerformanceResponse(searchDetail);
             return View(response);
+        }
+
+        public async Task<IActionResult> StockPerformanceFromSelectedDetail(SearchDetail searchDetail)
+        {
+            var response = await _searchDetailManager.GetStockPerformanceResponse(searchDetail);
+            return View("StockPerformance", response);
         }
 
         public IActionResult StockPerformanceHistory()

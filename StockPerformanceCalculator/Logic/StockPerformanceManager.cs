@@ -31,10 +31,9 @@ namespace StockPerformanceCalculator.Logic
         private string _symbol;
         private DateTime _startingDate;
 
-        public StockPerformanceManager(string symbol, int year, IEntityDefinitionsAccessor entityDefinitionsAccessor)
+        public StockPerformanceManager(string symbol, DateDetail startDate, IEntityDefinitionsAccessor entityDefinitionsAccessor)
         {
-            var now = DateTime.Now;
-            _startingDate = new DateTime(year, now.Month, now.Day);
+            _startingDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
             _entityEngine = new EntityEngine(entityDefinitionsAccessor);
 
             _symbol = symbol;
@@ -50,10 +49,10 @@ namespace StockPerformanceCalculator.Logic
                 _availableBalanceCalculator, _shareNumberCalculator, _tradingRule);
             _priceCalculator = new PriceCalculator(_yahooFinanceCaller);
             _tradeDetailCalculator = new TradeDetailCalculator(_stockLedgerCalculator,
-                _priceCalculator, _tradingRule, year);
+                _priceCalculator, _tradingRule, startDate);
             _stockPerformanceSummaryCalculator =
                 new StockPerformanceSummaryCalculator
-                (symbol, year, _priceCalculator, _stockLedgerCalculator,
+                (symbol, startDate, _priceCalculator, _stockLedgerCalculator,
                 _depositLedgerCalculator, _availableBalanceCalculator);
             _growthRateCalculator = new GrowthRateCalculator(_depositLedgerCalculator);
         }
@@ -132,7 +131,7 @@ namespace StockPerformanceCalculator.Logic
 
             summary.ProfitInDollar = totalProfit;
 
-            summary.ProfitInPercentage = summary.ProfitInDollar * 100 / totalDeposit;
+            summary.ProfitInPercentage = totalDeposit != 0 ? summary.ProfitInDollar * 100 / totalDeposit :0;
             return summary;
         }
 

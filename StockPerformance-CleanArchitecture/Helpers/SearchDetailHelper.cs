@@ -3,6 +3,7 @@ using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformance_CleanArchitecture.Models.Settings;
 using StockPerformanceCalculator.DatabaseAccessors;
 using StockPerformanceCalculator.Logic;
+using StockPerformanceCalculator.Models;
 using StockPerformanceCalculator.Models.PerformanceCalculatorSetup;
 
 namespace StockPerformance_CleanArchitecture.Helpers
@@ -10,7 +11,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
     public static class SearchDetailHelper
     {
         private static string _symbol = "AAPL";
-        private static int _year = 2020;
+        private static DateDetail _startDate = new DateDetail();
         private static SearchDetail _searchDetail;
         private static SearchInitialSetup _searchInitialSetup;
         private static IEntityDefinitionsAccessor _entityDefinitionsAccessor;
@@ -37,24 +38,26 @@ namespace StockPerformance_CleanArchitecture.Helpers
             return _searchInitialSetup;
         }
 
-        public static StockPerformanceManager GetStockPerformanceManager(int year, string symbol)
+        public static StockPerformanceManager GetStockPerformanceManager(DateDetail startDate, string symbol)
         {
             _stockPerformanceManager = new StockPerformanceManager(
-                symbol, year, _entityDefinitionsAccessor);
+                symbol, startDate, _entityDefinitionsAccessor);
 
             return _stockPerformanceManager;
         }
 
         private static SearchDetail GetCurrentSearchDetail()
         {
+            var performanceMangager = GetStockPerformanceManager(_startDate, _symbol);
+
             if (_searchDetail == null)
             {
-                var performanceMangager = GetStockPerformanceManager(_year, _symbol);
                 var searchInitialSetup = performanceMangager.GetInitialSetup();
                 SearchDetail searchDetail = Map(searchInitialSetup);
                 _searchDetail = searchDetail;
-                _stockPerformanceManager = performanceMangager;
             }
+            _stockPerformanceManager = performanceMangager;
+
             return _searchDetail;
         }
 
@@ -110,7 +113,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 LowerRangeOfTradingDate = tradingrule.LowerRangeOfTradingDate,
                 PurchaseLimitation = tradingrule.PurchaseLimitation,
                 StartingYear = performanceSetup.StartingYear,
-                EndingYear = DateTime.Now.Year,
+                EndingYear = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
                 Symbols = performanceSetup.Symbols,
                 LossLimitation = tradingrule.LossLimitation,
                 InitialDepositAmount = depositRule.InitialDepositAmount,

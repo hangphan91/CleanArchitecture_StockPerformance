@@ -30,7 +30,7 @@ namespace StockPerformanceCalculatorUnitTests
 			Assert.IsTrue(summaries != null);
 			Assert.IsFalse(summaries.CurrentPrice == 0);
 			Assert.AreEqual(summaries.Symbol, symbol);
-			Assert.AreEqual(summaries.Year, year);
+			Assert.AreEqual(summaries.StartDate, year);
 
 			Assert.IsTrue(summaries.ProfitByYears.Any());
             Assert.IsTrue(summaries.ProfitByMonths.Any());

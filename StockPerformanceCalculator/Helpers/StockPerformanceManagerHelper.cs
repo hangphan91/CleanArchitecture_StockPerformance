@@ -11,7 +11,7 @@ namespace StockPerformanceCalculator.Helpers
         public static EntityDefinitions.TradingRule GetTradingRuleInstance(
             IEntityDefinitionsAccessor entityDefinitionsAccessor)
         {
-            if (_tradingRule == null)
+            if (_tradingRule == null|| _tradingRule.BuyPercentageLimitation == 0)
                 _tradingRule = entityDefinitionsAccessor.GetTradingRule();
 
             return _tradingRule;
@@ -20,7 +20,7 @@ namespace StockPerformanceCalculator.Helpers
         public static EntityDefinitions.DepositRule GetDepositRuleInstance(
             IEntityDefinitionsAccessor entityDefinitionsAccessor)
         {
-            if (_depositRule == null)
+            if (_depositRule == null || _depositRule.DepositAmount == 0)
                 _depositRule = entityDefinitionsAccessor.GetDepositRule();
 
             return _depositRule;

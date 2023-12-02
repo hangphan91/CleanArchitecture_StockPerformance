@@ -12,7 +12,7 @@ namespace StockPerformanceCalculator.Models
         public StockLedger StockLedger { get; set; }
 
         public string Symbol { get; set; }
-        public int Year { get; set; }
+        public DateDetail StartDate { get; set; }
         public decimal CurrentPrice { get; set; }
         public decimal TotalBalanceAfterLoss { get; set; }
         public decimal TotalDeposit { get; set; }
@@ -29,7 +29,7 @@ namespace StockPerformanceCalculator.Models
             DepositLedgers = new List<DepositLedger>();
             StockLedger = new StockLedger();
             Symbol = "";
-            Year = 0;
+            StartDate = new DateDetail();
             CurrentPrice = 0;
             TotalDeposit = 0;
         }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using FusionChartsRazorSamples.Pages;
 using StockPerformance_CleanArchitecture.Formatters;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformanceCalculator.Models;
@@ -8,7 +8,7 @@ namespace StockPerformance_CleanArchitecture.Models
     public class StockPerformanceResponse
     {
         public string Symbol { get; set; }
-        public int Year { get; set; }
+        public DateDetail StartDate { get; set; }
         public ProfitSummaryInDollar ProfitSummaryInDollar { get; set; }
         public ProfitSummaryPercentage ProfitSummaryPercentage { get; set; }
         public List<DepositLedger> DepositLedgers { get; set; }
@@ -23,6 +23,7 @@ namespace StockPerformance_CleanArchitecture.Models
         public decimal ProfitInPercentage { get; set; }
         public SearchDetail SearchDetail { get; set; }
         public DateTime CreatedTime { get; set; } = DateTime.Now;
+        public ProfitChart ProfitChart { get; set; }
 
         public StockPerformanceResponse()
         {
@@ -31,18 +32,19 @@ namespace StockPerformance_CleanArchitecture.Models
             DepositLedgers = new List<DepositLedger>();
             StockLedgerDetails = new List<StockLedgerDetail>();
             SearchDetail = new SearchDetail();
+
         }
-        public StockPerformanceResponse(string symbol, int numberOfyear)
+        public StockPerformanceResponse(string symbol, DateDetail startDate)
         {
             ProfitSummaryPercentage = new ProfitSummaryPercentage();
             ProfitSummaryInDollar = new ProfitSummaryInDollar();
             Symbol = symbol;
-            Year = numberOfyear;
+            StartDate = startDate;
         }
 
         public string DisplayStockPerformance()
         {
-            var toDisplay = $"Symbol {Symbol}, look back number of years: {Year}.";
+            var toDisplay = $"Symbol {Symbol}, look back number of years: {StartDate}.";
             toDisplay += SearchDetail.ToString();
             return toDisplay;
         }
@@ -51,7 +53,7 @@ namespace StockPerformance_CleanArchitecture.Models
         {
             var response = new StockPerformanceResponse
             {
-                Year = summary.Year,
+                StartDate = summary.StartDate,
                 Symbol = summary.Symbol,
                 TotalBalanceAfterLoss = summary.TotalBalanceAfterLoss.RoundNumber(),
                 TotalDeposit = summary.TotalDeposit.RoundNumber(),
@@ -74,7 +76,7 @@ namespace StockPerformance_CleanArchitecture.Models
             };
             GetProfitInDollar(summary, response);
             GetProfitInPercentage(summary, response);
-
+            response.ProfitChart = new ProfitChart(response.ProfitSummaryInDollar.MonthlyProfits, summary.Symbol);
             return response;
         }
 

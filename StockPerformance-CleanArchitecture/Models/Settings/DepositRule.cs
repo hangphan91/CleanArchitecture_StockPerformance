@@ -22,6 +22,18 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
             str.AppendLine($"Repeated deposit amount: {DepositAmount}. Initial deposit amount: {InitialDepositAmount}");
             return str.ToString();
         }
+
+        internal bool IsSame(DepositRule depositRule)
+        {
+            if (depositRule == null)
+                return false;
+
+            return depositRule.FirstDepositDate == FirstDepositDate
+                && depositRule.SecondDepositDate == SecondDepositDate
+                && depositRule.NumberOfDepositDate == NumberOfDepositDate
+                && depositRule.DepositAmount == DepositAmount
+                && depositRule.InitialDepositAmount == InitialDepositAmount;
+        }
     }
 }
 
