@@ -35,10 +35,10 @@
             <th>Start Year</th>
             <th>End Year</th>
             <th>Created Time</th>
+            <th>Number of trade a month</th>
+
         </tr>
-        @foreach (var row in Model.StockPerformanceResponses
-             .OrderBy(a => a.Symbol)
-             .ThenBy(a => a.SearchDetail.SettingDate.Year))
+        @foreach (var row in Model.StockPerformanceResponses)
         {
 
 
@@ -51,6 +51,8 @@
                 <th>@row.SearchDetail.SettingDate</th>
                 <th>@row.SearchDetail.SearchSetup.EndingYear</th>
                 <th>@row.CreatedTime</th>
+                <th>@row.SearchDetail.TradingRule.NumberOfTradeAMonth</th>
+
             </tr>
         }
     </table>

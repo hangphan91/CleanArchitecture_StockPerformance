@@ -32,6 +32,12 @@
           Text = month.ToString(),
           Value = month.ToString(),
       }).ToList();
+    var selectListForNumberOftrademonthly = Enumerable.Range(1, 2)
+    .Select(number => new SelectListItem
+    {
+        Text = number.ToString(),
+        Value = number.ToString(),
+    }).ToList();
 }
 <div>
     Performance Queue @Model.SearchDetails.Count(),
@@ -64,8 +70,8 @@ Date = $"{a.Symbol} from {a.SettingDate.Day}/{a.SettingDate.Month}/{a.SettingDat
 
                 </p>
                 <p>
-                    Sell all when we are currently losing
-                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellPercentageLimitation)%
+                    Sell all when we are lost and currently at
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellPercentageLimitation)% of cost of investment
                 </p>
                 <p>
                     Maximum amount to trade at once $
@@ -76,6 +82,10 @@ Date = $"{a.Symbol} from {a.SettingDate.Day}/{a.SettingDate.Month}/{a.SettingDat
                     @Html.TextBoxFor(m => m.SearchDetail.TradingRule.LossLimitation)
                 </p>
 
+                <p>
+                    Number of Trade monthly:
+                    @Html.DropDownListFor(m => m.SearchDetail.TradingRule.NumberOfTradeAMonth, selectListForNumberOftrademonthly)
+                </p>
                 <p>We will trade between</p>
                 <p>
                     @Html.DropDownListFor(m => m.SearchDetail.TradingRule.LowerRangeOfTradingDate, selectListDateOfMonth)

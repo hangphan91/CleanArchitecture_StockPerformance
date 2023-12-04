@@ -53,10 +53,16 @@
             return false;
         }
 
+        internal int GetNumberOfTrade()
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+            return initialSetup.NumberOfTradeAMonth;
+        }
+
         internal bool IsLostMoreThanLimitation(decimal currentLoss)
         {
             var initialSetup = _entityEngine.GetInitialSetup();
-            return initialSetup.LossLimitation < currentLoss;
+            return initialSetup.LossLimitation < Math.Abs(currentLoss) && currentLoss < 0;
         }
     }
 }

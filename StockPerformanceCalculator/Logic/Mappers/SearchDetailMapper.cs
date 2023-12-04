@@ -41,7 +41,8 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 LowerRangeOfTradingDate = mapped.LowerRangeOfTradingDate,
                 PurchaseLimitation = mapped.PurchaseLimitation,
                 SellPercentageLimitation = mapped.SellPercentageLimitation,
-                LossLimitation = mapped.LossLimitation
+                LossLimitation = mapped.LossLimitation,
+                NumberOfTradeAMonth = mapped.NumberOfTradeAMonth,
             };
         }
     }

@@ -23,12 +23,18 @@
     }).ToList();
 
     var selectListNumberOfDeposits = Enumerable.Range(0, 100)
-.Select(number => new SelectListItem
-{
-    Text = number.ToString(),
-    Value = number.ToString(),
-}).ToList();
+    .Select(number => new SelectListItem
+    {
+        Text = number.ToString(),
+        Value = number.ToString(),
+    }).ToList();
     var selectListDateOfMonth = Enumerable.Range(1, 31)
+        .Select(number => new SelectListItem
+        {
+            Text = number.ToString(),
+            Value = number.ToString(),
+        }).ToList();
+    var selectListForNumberOftrademonthly = Enumerable.Range(1, 2)
         .Select(number => new SelectListItem
         {
             Text = number.ToString(),
@@ -58,8 +64,8 @@
                     @Html.TextBoxFor(m => m.TradingRule.BuyPercentageLimitation)%
                 </p>
                 <p>
-                    Sell all when we are currently losing
-                    @Html.TextBoxFor(m => m.TradingRule.SellPercentageLimitation)%
+                    Sell all when we are lost and currently at
+                    @Html.TextBoxFor(m => m.TradingRule.SellPercentageLimitation)% of cost of investment
                 </p>
                 <p>
                     Maximum amount to trade at once $
@@ -70,6 +76,10 @@
                     @Html.TextBoxFor(m => m.TradingRule.LossLimitation)
                 </p>
 
+                <p>
+                    Number of Trade monthly:
+                    @Html.DropDownListFor(m => m.TradingRule.NumberOfTradeAMonth, selectListForNumberOftrademonthly)
+                </p>
                 <p>We will trade between</p>
                 <p>
                     @Html.DropDownListFor(m => m.TradingRule.LowerRangeOfTradingDate, selectListDateOfMonth)

@@ -35,7 +35,9 @@ namespace StockPerformance_CleanArchitecture.Helpers
         {
             if (_responses == null)
                 _responses = new ConcurrentBag<StockPerformanceResponse>();
-            return _responses.Select(a => a).ToList();
+            return _responses.Select(a => a)
+                .OrderByDescending(a=>a.ProfitInDollar)
+                .ToList();
         }
 
         internal static StockPerformanceResponse GetResponseFromCache(SearchDetail searchDetail)

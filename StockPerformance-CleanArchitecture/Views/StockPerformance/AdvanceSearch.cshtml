@@ -36,6 +36,7 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Created Time</th>
+            <th>Number of trade a month</th>
         </tr>
         @foreach (var row in Model.StockPerformanceResponses
             .OrderBy(a => a.Symbol)
@@ -50,6 +51,7 @@
                 <th>@row.SearchDetail.SettingDate.ToString()</th>
                 <th>@row.SearchDetail.SearchSetup.EndingYear.ToString()</th>
                 <th>@row.CreatedTime</th>
+                <th>@row.SearchDetail.TradingRule.NumberOfTradeAMonth</th>
             </tr>
         }
     </table>

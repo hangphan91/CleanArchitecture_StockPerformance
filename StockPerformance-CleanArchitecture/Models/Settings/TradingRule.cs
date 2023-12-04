@@ -11,6 +11,7 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
         public int LowerRangeOfTradingDate { get; set; }
         public int HigherRangeOfTradingDate { get; set; }
         public decimal LossLimitation { get; set; }
+        public int NumberOfTradeAMonth { get; set; }
         public TradingRule()
 		{
 		}
@@ -21,7 +22,8 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
                 $" sell percentage limitation : {SellPercentageLimitation}" +
                 $" buy percentage limitation: {BuyPercentageLimitation}" +
                 $" lower range of trading date: {LowerRangeOfTradingDate}" +
-                $" higher range of trading date: {HigherRangeOfTradingDate}");
+                $" higher range of trading date: {HigherRangeOfTradingDate}" +
+                $" number of trade a month is {NumberOfTradeAMonth}");
             return str.ToString();
         }
 
@@ -35,7 +37,8 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
                 && tradingRule.BuyPercentageLimitation == BuyPercentageLimitation
                 && tradingRule.LowerRangeOfTradingDate == LowerRangeOfTradingDate
                 && tradingRule.HigherRangeOfTradingDate == HigherRangeOfTradingDate
-                && tradingRule.LossLimitation == LossLimitation;
+                && tradingRule.LossLimitation == LossLimitation
+                && tradingRule.NumberOfTradeAMonth == NumberOfTradeAMonth;
         }
     }
 }

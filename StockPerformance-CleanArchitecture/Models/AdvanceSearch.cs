@@ -11,6 +11,7 @@ namespace StockPerformance_CleanArchitecture.Models
         public List<SearchDetail> SearchDetails { get; set; }
         public SettingDate StartDate { get; set; } = new SettingDate(2020, 0,0);
         public SettingDate EndDate { get; set; } = new SettingDate(2023, 12,1);
+        public bool All { get; set; }
         public AdvanceSearch()
 		{
 			SearchDetail = new SearchDetail();

@@ -83,6 +83,7 @@ namespace StockPerformance_CleanArchitecture.Managers
                 SearchDetails = searchDetails.Select(a => a).ToList(),
                 StartDate = advanceSearch.StartDate,
                 EndDate = advanceSearch.EndDate,
+                All = advanceSearch.All
             };
             return result;
         }
@@ -190,6 +191,10 @@ namespace StockPerformance_CleanArchitecture.Managers
                 }
                 var response = await GetStockPerformanceResponse(searchDetail);
                 advancedSearchResult.StockPerformanceResponses.Add(response);
+                advancedSearchResult.StockPerformanceResponses =
+                    advancedSearchResult.StockPerformanceResponses
+                    .OrderByDescending(a => a.ProfitInDollar)
+                    .ToList();
             }
 
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
@@ -206,6 +211,10 @@ namespace StockPerformance_CleanArchitecture.Managers
                 StockPerformanceResponses = responses,
                 ProfitChart = new FusionChartsRazorSamples.Pages.ProfitChart(responses)
             };
+            history.StockPerformanceResponses =
+                history.StockPerformanceResponses.
+                OrderByDescending(a => a.ProfitInDollar)
+                .ToList();
             return history;
         }
 

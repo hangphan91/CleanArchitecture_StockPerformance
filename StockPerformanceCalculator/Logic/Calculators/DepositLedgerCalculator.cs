@@ -8,9 +8,9 @@ namespace StockPerformanceCalculator.Logic
         private List<DepositLedger> _deposits;
         private DepositRule _depositRule;
 
-        public DepositLedgerCalculator(EntityEngine entityEngine)
+        public DepositLedgerCalculator(DepositRule depositRule)
         {
-            _depositRule = new DepositRule(entityEngine);
+            _depositRule = depositRule;
         }
 
         internal List<DepositLedger> SetUpDepositLeggerFromDate(DateTime startingDate)
@@ -28,23 +28,19 @@ namespace StockPerformanceCalculator.Logic
                 Amount = _depositRule.GetInitialDepositAmount(),
                 Date = new DateTime(startYear, startMonth, 1),
             });
+            var dates = new List<DateOnly>();
 
-            for (int currentYear = startYear; currentYear <= endYear; currentYear++)
+            for (DateTime date = startingDate; date <= DateTime.Now; date = date.AddMonths(1))
             {
-                for (int currentMonth = 1; currentMonth <= 12; currentMonth++)
-                {
-                    if (startMonth > currentMonth && currentYear == startYear)
-                        continue;
-
-                    var depositLedgersToAdd = GetDepositLedgers(currentYear, currentMonth);
-
-                    depositLedgers.AddRange(depositLedgersToAdd);
-
-                    if (currentYear == endYear && currentMonth == endMonth)
-                        break;
-
-                }
+                dates.Add(new DateOnly(date.Year, date.Month, date.Day));
             }
+
+            foreach (var date in dates)
+            {
+                var depositLedgersToAdd = GetDepositLedgers(date.Year, date.Month);
+                depositLedgers.AddRange(depositLedgersToAdd);
+            }
+
             _deposits = depositLedgers.OrderBy(a => a.Date).ToList();
             return depositLedgers;
         }

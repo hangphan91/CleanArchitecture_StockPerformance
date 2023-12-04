@@ -10,6 +10,7 @@ namespace StockPerformanceCalculator.Models.PerformanceCalculatorSetup
         public decimal SellPercentageLimitation { get; set; }
         public decimal LossLimitation { get; set; }
         public decimal BuyPercentageLimitation { get; set; }
+        public int NumberOfTradeAMonth { get; set; }
         public int LowerRangeOfTradingDate { get; set; }
         public int HigherRangeOfTradingDate { get; set; }
         public int FirstDepositDate { get; set; }

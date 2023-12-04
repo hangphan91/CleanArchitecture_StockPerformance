@@ -30,6 +30,7 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 PurchaseLimitation = tradingRule.PurchaseLimitation,
                 LossLimitation = tradingRule.LossLimitation,
                 InitialDepositAmount = depositRule.InitialDepositAmount,
+                NumberOfTradeAMonth = tradingRule.NumberOfTradeAMonth,
             };
         }
     }

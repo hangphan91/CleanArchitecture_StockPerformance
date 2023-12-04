@@ -85,6 +85,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 LowerRangeOfTradingDate = searchInitialSetup.LowerRangeOfTradingDate,
                 PurchaseLimitation = searchInitialSetup.PurchaseLimitation,
                 LossLimitation = searchInitialSetup.LossLimitation,
+                NumberOfTradeAMonth = searchInitialSetup.NumberOfTradeAMonth,
             };
             var searchDetail = new SearchDetail
             {
@@ -117,6 +118,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 Symbols = performanceSetup.Symbols,
                 LossLimitation = tradingrule.LossLimitation,
                 InitialDepositAmount = depositRule.InitialDepositAmount,
+                NumberOfTradeAMonth = tradingrule.NumberOfTradeAMonth,
             };
         }
 

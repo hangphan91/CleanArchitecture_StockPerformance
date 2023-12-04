@@ -26,6 +26,7 @@ namespace StockPerformanceCalculator.Logic
         protected EntityEngine _entityEngine;
         protected TradingRule _tradingRule;
         private BalanceHoldingCalculator _balanceHoldingCalculator;
+        private DepositRule _depositRule;
 
 
         private string _symbol;
@@ -35,10 +36,10 @@ namespace StockPerformanceCalculator.Logic
         {
             _startingDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
             _entityEngine = new EntityEngine(entityDefinitionsAccessor);
-
+            _depositRule = new DepositRule(_entityEngine);
             _symbol = symbol;
             _yahooFinanceCaller = new YahooFinanceCaller(_entityEngine);
-            _depositLedgerCalculator = new DepositLedgerCalculator(_entityEngine);
+            _depositLedgerCalculator = new DepositLedgerCalculator(_depositRule);
             _stockLedgerCalculator = new StockLedgerCalculator();
             _shareNumberCalculator = new ShareNumberCalculator(_stockLedgerCalculator);
             _balanceHoldingCalculator = new BalanceHoldingCalculator(_depositLedgerCalculator);
@@ -49,7 +50,7 @@ namespace StockPerformanceCalculator.Logic
                 _availableBalanceCalculator, _shareNumberCalculator, _tradingRule);
             _priceCalculator = new PriceCalculator(_yahooFinanceCaller);
             _tradeDetailCalculator = new TradeDetailCalculator(_stockLedgerCalculator,
-                _priceCalculator, _tradingRule, startDate);
+                _priceCalculator, _tradingRule, startDate, _depositRule );
             _stockPerformanceSummaryCalculator =
                 new StockPerformanceSummaryCalculator
                 (symbol, startDate, _priceCalculator, _stockLedgerCalculator,

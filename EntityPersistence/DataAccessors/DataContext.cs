@@ -49,8 +49,8 @@ namespace EntityPersistence.DataAccessors
             {
                 EndingSymbolId = lastSymbolId,
                 StartingSymbolId = firstSymbolId,
-                StartingYear = new DateOnly(2020, 1,1),
-                EndingYear = new DateOnly(2023,12,1),
+                StartingYear = new DateOnly(2020, 1, 1),
+                EndingYear = new DateOnly(2023, 12, 1),
             };
         }
 
@@ -64,6 +64,16 @@ namespace EntityPersistence.DataAccessors
                     "msft", "lkncy", "vrt", "cmt", "stvn", "anet", "onto", "MLM",
                     "vmc","acls", "alv","avgo","matx"
                  };
+            var growingIn2022To2023 = new List<string>
+            {
+                "ndva", "onto", "anet", "avgo", "msft", "vrt",
+                "cdns", "cprt", "klac", "pcar", "tdg", "tol",
+                "bld", "smci", "bkng", "pwr", "mlm", "lly",
+                "sap", "arcb"
+            };
+
+            symbols.AddRange(growingIn2022To2023);
+            symbols = symbols.Distinct().ToList();
 
             var toSaveSymbols = symbols.Select(symbol => new Symbol
             {
@@ -93,11 +103,12 @@ namespace EntityPersistence.DataAccessors
             {
                 BuyPercentageLimitation = (decimal)1.07,
                 SellPercentageLimitation = (decimal)0.94,
-                HigherRangeOfTradingDate = 25,
+                HigherRangeOfTradingDate = 31,
                 LowerRangeOfTradingDate = 1,
                 PurchaseLimitation = 1000,
                 Id = 0,
                 LossLimitation = 1000,
+                NumberOfTradeAMonth = 2,
             };
         }
     }
