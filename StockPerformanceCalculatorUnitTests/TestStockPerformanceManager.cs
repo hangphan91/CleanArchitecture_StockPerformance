@@ -1,12 +1,10 @@
-﻿using System;
-using EntityPersistence.DataAccessors;
+﻿using EntityPersistence.DataAccessors;
 using StockPerformance_CleanArchitecture.Helpers;
-using StockPerformanceCalculator.DatabaseAccessors;
-using StockPerformanceCalculator.Logic;
+using StockPerformanceCalculator.Models;
 
 namespace StockPerformanceCalculatorUnitTests
 {
-	[TestClass]
+    [TestClass]
 	public class TestStockPerformanceManager
 	{
 		[TestMethod]
@@ -18,7 +16,8 @@ namespace StockPerformanceCalculatorUnitTests
             var year = 2020;
 			var context = new DataContext();
 			var accessor = new PerformanceDataAccessor(context);
-            var manager = new MockStockPerformanceManager(symbol, year, accessor);
+			var date = new DateDetail(2020, 1, 1);
+            var manager = new MockStockPerformanceManager(symbol, date, accessor);
 
 			//Act
 			var searchDetail = SearchDetailHelper.GetCurrentSearchDetail(accessor);

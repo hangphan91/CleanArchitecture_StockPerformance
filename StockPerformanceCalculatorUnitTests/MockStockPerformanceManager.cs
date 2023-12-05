@@ -1,13 +1,14 @@
 ﻿using System;
 using StockPerformanceCalculator.DatabaseAccessors;
 using StockPerformanceCalculator.Logic;
+using StockPerformanceCalculator.Models;
 using StockPerformanceCalculatorUnitTests.ExternalCommunications;
 
 namespace StockPerformanceCalculatorUnitTests
 {
 	public class MockStockPerformanceManager : StockPerformanceManager
     {
-		public MockStockPerformanceManager(string symbol, int year, IEntityDefinitionsAccessor accessor)
+		public MockStockPerformanceManager(string symbol, DateDetail year, IEntityDefinitionsAccessor accessor)
 			: base(symbol, year, accessor)
 		{
 			_yahooFinanceCaller = new MockYahooFinanceCaller();
