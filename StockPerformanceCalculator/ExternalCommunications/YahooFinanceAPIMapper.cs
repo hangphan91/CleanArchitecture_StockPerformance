@@ -1,4 +1,7 @@
-﻿using StockPerformanceCalculator.Models;
+﻿using Fynance.Result;
+using HP.PersonalStocks.Mgr.Helpers;
+using OoplesFinance.YahooFinanceAPI.Models;
+using StockPerformanceCalculator.Models;
 using YahooQuotesApi;
 
 namespace StockPerformanceCalculator.ExternalCommunications
@@ -32,6 +35,51 @@ namespace StockPerformanceCalculator.ExternalCommunications
 
             return SymbolSummaries.OrderByDescending(symbol => symbol.Date)
                 .ToList(); ;
+        }
+
+        internal List<SymbolSummary> Map(Response result2, string symbol)
+        {
+             var summaries = new List<SymbolSummary>();
+            foreach (var item in result2.data)
+            {
+                summaries.Add(new SymbolSummary
+                {
+                    ClosingPrice = (decimal)item.close,
+                    Date = DateTime.Parse( item.date),
+                    Symbol = symbol,
+                });
+            }
+            return summaries;
+        }
+
+        internal List<SymbolSummary> Map(List<HistoricalData> result, string symbol)
+        {
+            var summaries = new List<SymbolSummary>();
+            foreach (var item in result)
+            {
+                summaries.Add(new SymbolSummary
+                {
+                    ClosingPrice = (decimal)item.Close,
+                    Date = item.Date,
+                    Symbol = symbol,
+                });
+            }
+            return summaries;
+        }
+
+        internal List<SymbolSummary> Map(FyResult result, string symbol)
+        {
+            var summaries = new List<SymbolSummary>();
+            foreach (var item in result.Quotes)
+            {
+                summaries.Add(new SymbolSummary
+                {
+                    ClosingPrice = (decimal)item.Close,
+                    Date = item.Period,
+                    Symbol = symbol,
+                });
+            }
+            return summaries;
         }
     }
 }

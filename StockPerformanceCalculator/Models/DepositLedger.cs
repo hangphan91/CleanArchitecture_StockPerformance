@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace StockPerformanceCalculator.Models
 {
 	public class DepositLedger

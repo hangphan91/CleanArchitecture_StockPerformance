@@ -28,11 +28,21 @@ namespace StockPerformanceCalculator.ExternalCommunications
 
         public async Task<List<SymbolSummary>> GetStockHistory(string symbol, DateTime startingDate)
         {
+            var response = new List<SymbolSummary>();
             var dataAccessor = new GetStockDatAccessor(symbol, startingDate);
-            var result = await dataAccessor.GetHistoricalQuotesInfoAsync();
-            var response = new YahooFinanceAPIMapper().Map(result);
 
-            _currentPrice = response.FirstOrDefault()?.ClosingPrice ?? 0;
+            try
+            {
+                var result = await dataAccessor.GetHistoricalQuotesInfoAsyncFromYahoo3();
+                response = new YahooFinanceAPIMapper().Map(result, symbol);
+            }
+            catch (Exception ex)
+            {
+                var result2 = await dataAccessor.GetHistoricalQuotesInfoAsyncFromMarketStack();
+                response = new YahooFinanceAPIMapper().Map(result2, symbol);
+            }
+
+            _currentPrice = response.OrderByDescending(a =>a.Date).FirstOrDefault()?.ClosingPrice ?? 0;
             _symbolSummaries = response;
 
             var toInsert = response.Select(result
