@@ -211,10 +211,6 @@ namespace StockPerformance_CleanArchitecture.Managers
                 StockPerformanceResponses = responses,
                 ProfitChart = new FusionChartsRazorSamples.Pages.ProfitChart(responses)
             };
-            history.StockPerformanceResponses =
-                history.StockPerformanceResponses.
-                OrderByDescending(a => a.ProfitInDollar)
-                .ToList();
             return history;
         }
 
