@@ -26,7 +26,6 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         {
             var str = new StringBuilder();
 
-            str.Append(SearchSetup.ToString());
             str.Append(DepositRule.ToString());
             str.Append(TradingRule.ToString());
 

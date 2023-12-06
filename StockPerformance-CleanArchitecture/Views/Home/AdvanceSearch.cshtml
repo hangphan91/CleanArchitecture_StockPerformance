@@ -64,13 +64,13 @@
             <span>
                 <h4>Trading Rule:</h4>
                 <p>
-                    Buy more when we are already gain
+                    Buy more when we are already gained
                     @Html.TextBoxFor(m => m.SearchDetail.TradingRule.BuyPercentageLimitation)%
 
                 </p>
                 <p>
                     Sell all when we are lost and currently at
-                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellPercentageLimitation)% of cost of investment
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellPercentageLimitation)% of cost of overall investment
                 </p>
                 <p>
                     Maximum amount to trade at once $
@@ -101,22 +101,22 @@
             <p>
                 Start Date
 
-                Year List
+                Year
                 @Html.DropDownListFor(m => m.StartDate.Year, selectListYears)
-                Month List
+                Month
                 @Html.DropDownListFor(m => m.StartDate.Month, selectListMonths)
-                Date List
+                Date
                 @Html.DropDownListFor(m => m.StartDate.Day, selectListDateOfMonth)
 
             </p>
             <p>
                 End Date
 
-                Year List
+                Year 
                 @Html.DropDownListFor(m => m.EndDate.Year, selectListYears)
-                Month List
+                Month 
                 @Html.DropDownListFor(m => m.EndDate.Month, selectListMonths)
-                Date List
+                Date 
                 @Html.DropDownListFor(m => m.EndDate.Day, selectListDateOfMonth)
 
             </p>

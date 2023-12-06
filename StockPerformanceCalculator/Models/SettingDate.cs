@@ -19,6 +19,11 @@
             Month = DateTime.Now.Month;
             Day = DateTime.Now.Day;
         }
+
+        public override string ToString()
+        {
+            return $"{Month}/{Day}/{Year}";
+        }
     }
 }
 

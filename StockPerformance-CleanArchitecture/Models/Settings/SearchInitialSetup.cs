@@ -19,7 +19,7 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         public override string ToString()
         {
 			var str = new StringBuilder();
-			str.AppendLine($"Start year: {StartingYear}, End year: {EndingYear}");
+			str.AppendLine($"From {StartingYear} to {EndingYear},");
             return str.ToString();
         }
 

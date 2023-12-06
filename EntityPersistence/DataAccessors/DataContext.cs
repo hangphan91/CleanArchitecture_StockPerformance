@@ -101,8 +101,8 @@ namespace EntityPersistence.DataAccessors
         {
             return new TradingRule
             {
-                BuyPercentageLimitation = (decimal)1.07,
-                SellPercentageLimitation = (decimal)0.94,
+                BuyPercentageLimitation = (decimal)1.07*100,
+                SellPercentageLimitation = (decimal)0.94*100,
                 HigherRangeOfTradingDate = 31,
                 LowerRangeOfTradingDate = 1,
                 PurchaseLimitation = 1000,

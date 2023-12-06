@@ -60,12 +60,12 @@
             <span>
                 <h4>Trading Rule:</h4>
                 <p>
-                    Buy more when we are already gain
+                    Buy more when we are already gained
                     @Html.TextBoxFor(m => m.TradingRule.BuyPercentageLimitation)%
                 </p>
                 <p>
                     Sell all when we are lost and currently at
-                    @Html.TextBoxFor(m => m.TradingRule.SellPercentageLimitation)% of cost of investment
+                    @Html.TextBoxFor(m => m.TradingRule.SellPercentageLimitation)% of cost of overall investment
                 </p>
                 <p>
                     Maximum amount to trade at once $
@@ -93,11 +93,11 @@
                 <h4>Symbol List </h4>
                 @Html.DropDownListFor(m => m.Symbol, selectListSymbols)
             <p>
-                Year List
+                Year
                 @Html.DropDownListFor(m => m.SettingDate.Year, selectListYears)
-                Month List
+                Month
                 @Html.DropDownListFor(m => m.SettingDate.Month, selectListMonths)
-                Date List
+                Date
                 @Html.DropDownListFor(m => m.SettingDate.Day, selectListDateOfMonth)
             </p>
             </p>

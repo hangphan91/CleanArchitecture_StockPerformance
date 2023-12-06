@@ -22,7 +22,7 @@
             var initialSetup = _entityEngine.GetInitialSetup();
             var buyPercentage = initialSetup.BuyPercentageLimitation;
 
-            if (aboutToTradePrice >= averagePrice * (decimal)buyPercentage)
+            if (aboutToTradePrice >= averagePrice * (decimal)buyPercentage/100)
                 return true;
 
             return false;
@@ -33,7 +33,7 @@
             //Sell stock when losing 7% overall
             var initialSetup = _entityEngine.GetInitialSetup();
             var sellPercentage = initialSetup.SellPercentageLimitation;
-            if (aboutToTradePrice <= averagePrice * (decimal)sellPercentage)
+            if (aboutToTradePrice <= averagePrice * (decimal)sellPercentage/100)
                 return true;
 
             return false;

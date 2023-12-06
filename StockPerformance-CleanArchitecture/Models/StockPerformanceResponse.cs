@@ -44,7 +44,7 @@ namespace StockPerformance_CleanArchitecture.Models
 
         public string DisplayStockPerformance()
         {
-            var toDisplay = $"Symbol {Symbol}, look back number of years: {StartDate}.";
+            var toDisplay = $"Performance report for {Symbol}, looking back from {StartDate.ToString()}.";
             toDisplay += SearchDetail.ToString();
             return toDisplay;
         }
@@ -57,7 +57,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 Symbol = summary.Symbol,
                 TotalBalanceAfterLoss = summary.TotalBalanceAfterLoss.RoundNumber(),
                 TotalDeposit = summary.TotalDeposit.RoundNumber(),
-                CurrentPrice = summary.CurrentPrice,
+                CurrentPrice = summary.CurrentPrice.RoundNumber(),
                 CurrentHoldingShare = summary.CurrentHoldingShare.RoundNumber(),
                 ProfitInDollar = summary.ProfitInDollar.RoundNumber(),
                 ProfitInPercentage = summary.ProfitInPercentage.RoundNumber(),

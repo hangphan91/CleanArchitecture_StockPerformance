@@ -3,8 +3,8 @@ using System.Text;
 
 namespace StockPerformance_CleanArchitecture.Models.Settings
 {
-	public class TradingRule
-	{
+    public class TradingRule
+    {
         public decimal PurchaseLimitation { get; set; }
         public decimal SellPercentageLimitation { get; set; }
         public decimal BuyPercentageLimitation { get; set; }
@@ -13,17 +13,17 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
         public decimal LossLimitation { get; set; }
         public int NumberOfTradeAMonth { get; set; }
         public TradingRule()
-		{
-		}
+        {
+        }
         public override string ToString()
         {
             var str = new StringBuilder();
-            str.AppendLine($"Purchase limitation: {PurchaseLimitation}," +
-                $" sell percentage limitation : {SellPercentageLimitation}" +
-                $" buy percentage limitation: {BuyPercentageLimitation}" +
-                $" lower range of trading date: {LowerRangeOfTradingDate}" +
-                $" higher range of trading date: {HigherRangeOfTradingDate}" +
-                $" number of trade a month is {NumberOfTradeAMonth}");
+            str.AppendLine("Trading rule as:");
+            str.AppendLine($"Each trade's purchase limitation is ${PurchaseLimitation}.");
+            str.AppendLine($"Sell when we are at {SellPercentageLimitation}% of total investment.");
+            str.AppendLine($"Buy when we are gaining {BuyPercentageLimitation}% overall.");
+            str.AppendLine($"We will trade between day {LowerRangeOfTradingDate} and {HigherRangeOfTradingDate}.");
+            str.AppendLine($"We will trade {NumberOfTradeAMonth} times monthly.");
             return str.ToString();
         }
 

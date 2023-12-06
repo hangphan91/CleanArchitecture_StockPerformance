@@ -54,7 +54,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
                 }).ToList();
 
             _entityEngine.AddSymbolSummaries(toInsert);
-            return response;
+            return response.Where(a => a.Date >= startingDate).ToList();
 
         }
     }

@@ -17,9 +17,9 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
         public override string ToString()
         {
             var str = new StringBuilder();
-            str.AppendLine($"First deposit date {FirstDepositDate}, second deposit date: {SecondDepositDate}");
-            str.AppendLine($"Number of Deposit Date {NumberOfDepositDate}");
-            str.AppendLine($"Repeated deposit amount: {DepositAmount}. Initial deposit amount: {InitialDepositAmount}");
+            str.AppendLine($" Deposit rule as:");
+            str.AppendLine($"We deposit on {FirstDepositDate} and {SecondDepositDate} of the month.");
+            str.AppendLine($" One time deposit ${InitialDepositAmount} and repeated deposit monthly ${DepositAmount}.");
             return str.ToString();
         }
 
