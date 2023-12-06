@@ -196,6 +196,9 @@ namespace StockPerformance_CleanArchitecture.Managers
                     .OrderByDescending(a => a.ProfitInDollar)
                     .ToList();
             }
+            advancedSearchResult.StockPerformanceResponses =
+                advancedSearchResult.StockPerformanceResponses.OrderBy(a => a.Symbol)
+            .ThenBy(a => a.SearchDetail.SettingDate.Year).ToList();
 
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =

@@ -30,14 +30,12 @@ namespace StockPerformance_CleanArchitecture.Helpers
             }
         }
 
-
         public static List<StockPerformanceResponse> GetAllCache()
         {
             if (_responses == null)
                 _responses = new ConcurrentBag<StockPerformanceResponse>();
-            return _responses.Select(a => a)
-                .OrderByDescending(a=>a.ProfitInDollar)
-                .ToList();
+            return _responses.OrderBy(a => a.Symbol)
+            .ThenBy(a => a.SearchDetail.SettingDate.Year).ToList();
         }
 
         internal static StockPerformanceResponse GetResponseFromCache(SearchDetail searchDetail)

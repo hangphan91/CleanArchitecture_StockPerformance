@@ -38,14 +38,13 @@
         Text = number.ToString(),
         Value = number.ToString(),
     }).ToList();
+
+    var searchingSymbols = Model.SearchDetails.Select(a => a.Symbol);
+    var queueText = searchingSymbols.Any()? $"Added {searchingSymbols.Count()} " +
+        $"searches for {string.Join(",", searchingSymbols.Distinct())}" :"";
 }
-<div>
-    Performance Queue @Model.SearchDetails.Count(),
-    for @string.Join(", ",
-Model.SearchDetails.Select(a => new
-{
-Date = $"{a.Symbol} from {a.SettingDate.Day}/{a.SettingDate.Month}/{a.SettingDate.Year}"
-}))
+<div >
+    <strong>@queueText</strong>
 </div>
 <div class="text-center">
     @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get, new { willPerformSearch = true }))
@@ -130,23 +129,18 @@ Date = $"{a.Symbol} from {a.SettingDate.Day}/{a.SettingDate.Month}/{a.SettingDat
     }
 
 </div>
-
-
 <div class="text-center">
-    <button>
-        @Html.ActionLink("Implement Searches", "AdvanceSearch", "StockPerformance")
-    </button>
+    <span class="text-center">
+        <button class="button">
+            @Html.ActionLink("Implement Searches", "AdvanceSearch", "StockPerformance")
+        </button>
+    </span>
+    <span class="text-center">
+        <button class="button">
+            @Html.ActionLink("Clear All Seaches", "AdvanceSearch", "Home", new { willClearAllSearch = true })
+        </button>
+    </span>
 
 </div>
-
-
-<div class="text-center">
-    <button>
-        @Html.ActionLink("Clear All Seaches", "AdvanceSearch", "Home", new { willClearAllSearch = true })
-    </button>
-
-</div>
-
-
 
 
