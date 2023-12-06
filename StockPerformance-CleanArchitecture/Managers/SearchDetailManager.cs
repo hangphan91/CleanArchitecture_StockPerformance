@@ -46,7 +46,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             var accessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
             var detail = SearchDetailHelper.GetCurrentSearchDetail(accessor);
 
-            if (willClearAllSearch || advanceSearch.StartDate.Day == 0 )
+            if (willClearAllSearch || advanceSearch.StartDate.Day == 0)
             {
                 advanceSearch.SearchDetail = detail;
                 return advanceSearch;
@@ -74,7 +74,6 @@ namespace StockPerformance_CleanArchitecture.Managers
                 advanceSearch.SearchDetail.SearchSetup.StartingYear = advanceSearch.StartDate.MapDateOnly();
                 advanceSearch.SearchDetail.SearchSetup.EndingYear = advanceSearch.EndDate.MapDateOnly();
             }
-
             var result = new AdvanceSearch
             {
                 Count = searchDetails.Count(),
@@ -85,6 +84,7 @@ namespace StockPerformance_CleanArchitecture.Managers
                 EndDate = advanceSearch.EndDate,
                 All = advanceSearch.All
             };
+
             return result;
         }
 
@@ -172,7 +172,7 @@ namespace StockPerformance_CleanArchitecture.Managers
         public SearchDetail SetInitialView(string symbol)
         {
             var currentSearchDetail = GetCurrentSearchDetail();
-            if (currentSearchDetail != null && !string.IsNullOrWhiteSpace(symbol) )
+            if (currentSearchDetail != null && !string.IsNullOrWhiteSpace(symbol))
                 currentSearchDetail.Symbol = symbol;
             return currentSearchDetail;
         }
@@ -203,6 +203,9 @@ namespace StockPerformance_CleanArchitecture.Managers
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =
                 new FusionChartsRazorSamples.Pages.ProfitChart(advancedSearchResult.StockPerformanceResponses);
+
+            ClearAdvanceSearch();
+
             return advancedSearchResult;
         }
 
