@@ -88,7 +88,7 @@ namespace EntityPersistence.DataAccessors
         {
             return new DepositRule
             {
-                DepositAmount = 100,
+                DepositAmount = 300,
                 FirstDepositDate = 1,
                 SecondDepositDate = 16,
                 NumberOfDepositDate = 2,
@@ -107,9 +107,9 @@ namespace EntityPersistence.DataAccessors
                 LowerRangeOfTradingDate = 1,
                 PurchaseLimitation = 1000,
                 Id = 0,
-                LossLimitation = 1000,
+                LossLimitation = 3000,
                 NumberOfTradeAMonth = 2,
-                SellAllWhenPriceDropAtPercentageSinceLastTrade = (decimal)0.2* 100,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = (decimal)0.5* 100,
             };
         }
     }

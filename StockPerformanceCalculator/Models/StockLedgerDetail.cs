@@ -22,6 +22,21 @@ namespace StockPerformanceCalculator.Models
         {
             return BoughtPrice * ShareCount;
         }
+
+        public string GetSellReasonText(SellReasonType sellReasonType)
+        {
+            switch (sellReasonType)
+            {
+                case SellReasonType.IsTooVolatile:
+                    return "Price Dropped Passed Limitation";
+                case SellReasonType.SellingDollarLimitationRule:
+                    return "Surpassed $ Selling Limitation Rule";
+                case SellReasonType.SellingPercentageRule:
+                    return "Surpassed % Selling Limitation Rule";
+                default:
+                    return "";
+            }
+        }
     }
 }
 
