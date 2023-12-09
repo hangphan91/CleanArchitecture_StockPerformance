@@ -12,6 +12,8 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
         public int HigherRangeOfTradingDate { get; set; }
         public decimal LossLimitation { get; set; }
         public int NumberOfTradeAMonth { get; set; }
+        public decimal SellAllWhenPriceDropAtPercentageSinceLastTrade { get; set; }
+
         public TradingRule()
         {
         }
@@ -21,9 +23,11 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
             str.AppendLine("Trading rule as:");
             str.AppendLine($"Each trade's purchase limitation is ${PurchaseLimitation}.");
             str.AppendLine($"Sell when we are at {SellPercentageLimitation}% of total investment.");
+            str.AppendLine($"Sell when we are losing ${LossLimitation} overall.");
+            str.AppendLine($"Sell when price is too volatile, dropped {SellAllWhenPriceDropAtPercentageSinceLastTrade}% since last visit.");
             str.AppendLine($"Buy when we are gaining {BuyPercentageLimitation}% overall.");
             str.AppendLine($"We will trade between day {LowerRangeOfTradingDate} and {HigherRangeOfTradingDate}.");
-            str.AppendLine($"We will trade {NumberOfTradeAMonth} times monthly.");
+            str.AppendLine($"We will trade {NumberOfTradeAMonth} times a month.");
             return str.ToString();
         }
 
@@ -38,7 +42,9 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
                 && tradingRule.LowerRangeOfTradingDate == LowerRangeOfTradingDate
                 && tradingRule.HigherRangeOfTradingDate == HigherRangeOfTradingDate
                 && tradingRule.LossLimitation == LossLimitation
-                && tradingRule.NumberOfTradeAMonth == NumberOfTradeAMonth;
+                && tradingRule.NumberOfTradeAMonth == NumberOfTradeAMonth
+                && tradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade
+                == SellAllWhenPriceDropAtPercentageSinceLastTrade;
         }
     }
 }

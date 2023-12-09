@@ -18,6 +18,8 @@ namespace StockPerformanceCalculator.Models.PerformanceCalculatorSetup
         public int NumberOfDepositDate { get; set; }
         public int DepositAmount { get; set; }
         public int InitialDepositAmount { get; set; }
+        public decimal SellAllWhenPriceDropAtPercentageSinceLastTrade { get; set; }
+
 
         public InitialPerformanceSetup()
 		{

@@ -11,6 +11,7 @@ namespace StockPerformanceCalculator.Models
         public decimal? SoldPrice { get; set; }
         public DateTime? SoldDate { get; set; }
         public PositionType PositionType { get; set; }
+        public SellReasonType SellReason { get; set; }
 
         public StockLedgerDetail()
         {

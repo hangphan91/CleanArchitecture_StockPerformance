@@ -89,7 +89,7 @@ namespace HP.PersonalStocks.Mgr.Helpers
 
         private static Fynance.Period GetPeriod(int year, Fynance.Period period)
         {
-            var yearNumber = DateTime.Now.Year - year;
+            var yearNumber = DateTime.Now.Year - year + 1;
             switch (yearNumber)
             {
                 case 1:

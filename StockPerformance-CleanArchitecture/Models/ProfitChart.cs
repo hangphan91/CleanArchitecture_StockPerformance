@@ -58,7 +58,7 @@ namespace FusionChartsRazorSamples.Pages
             // Set DataModel instance as the data source of the chart
             column.Data.Source = model;
             // Set Chart Title
-            column.Caption.Text = $"Profit by symbol based on search setting in %";
+            column.Caption.Text = $"Profit by symbol based on search setting in % by month";
             // Set chart sub title
 
             // column.SubCaption.Text = $"{minDate} - {maxDate}";
@@ -109,10 +109,11 @@ namespace FusionChartsRazorSamples.Pages
             // Set DataModel instance as the data source of the chart
             column.Data.Source = model;
             // Set Chart Title
-            column.Caption.Text = $"ProfitByYear for {Symbol}";
+            column.Caption.Text = $"Profit By Year for {Symbol}";
             // Set chart sub title
-            var maxDate = MonthlyProfits.Max(a => a.Month + "/" + a.Year);
-            var minDate = MonthlyProfits.Min(a => a.Month + "/" + a.Year);
+            var ordered = MonthlyProfits.OrderByDescending(a => a.Year).ThenByDescending(a => a.Month);
+            var maxDate = ordered.FirstOrDefault()?.Month + "/" + ordered.FirstOrDefault()?.Year;
+            var minDate = ordered.LastOrDefault()?.Month + "/" + ordered.LastOrDefault()?.Year;
             column.SubCaption.Text = $"{minDate} - {maxDate}";
             // hide chart Legend
             column.Legend.Show = false;

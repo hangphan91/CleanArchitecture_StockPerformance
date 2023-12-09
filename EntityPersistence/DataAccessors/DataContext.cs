@@ -109,6 +109,7 @@ namespace EntityPersistence.DataAccessors
                 Id = 0,
                 LossLimitation = 1000,
                 NumberOfTradeAMonth = 2,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = (decimal)0.2* 100,
             };
         }
     }

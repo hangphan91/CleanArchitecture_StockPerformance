@@ -79,6 +79,8 @@
                 <p>
                     Loss Limitation:
                     @Html.TextBoxFor(m => m.SearchDetail.TradingRule.LossLimitation)
+                    or price dropped
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade)% since last visit.
                 </p>
 
                 <p>

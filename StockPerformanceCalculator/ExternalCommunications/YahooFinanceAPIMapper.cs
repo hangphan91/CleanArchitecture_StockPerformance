@@ -39,13 +39,17 @@ namespace StockPerformanceCalculator.ExternalCommunications
 
         internal List<SymbolSummary> Map(Response result2, string symbol)
         {
-             var summaries = new List<SymbolSummary>();
+            var summaries = new List<SymbolSummary>();
+
+            if (result2 == null|| result2.data == null)
+                return summaries;
+
             foreach (var item in result2.data)
             {
                 summaries.Add(new SymbolSummary
                 {
                     ClosingPrice = (decimal)item.close,
-                    Date = DateTime.Parse( item.date),
+                    Date = DateTime.Parse(item.date),
                     Symbol = symbol,
                 });
             }

@@ -34,13 +34,15 @@ namespace StockPerformanceCalculator.Logic
             _stockLedger.HoldingLedgers.Add(detail);
         }
 
-        public void RemoveSoldLedgers(decimal currentSoldPrice, DateTime date)
+        public void RemoveSoldLedgers(decimal currentSoldPrice, DateTime date,
+            EntityDefinitions.SellReasonType sellReason)
         {
             var soldLedgers = _stockLedger.HoldingLedgers.Select(ledger => new StockLedgerDetail
             {
                 SoldPrice = currentSoldPrice,
                 ShareCount = ledger.ShareCount,
                 SoldDate = date,
+                SellReason = sellReason,
             });
 
             var closedLedgers = _stockLedger.BoughtLedgers
@@ -55,6 +57,7 @@ namespace StockPerformanceCalculator.Logic
                     ShareCount = bought.ShareCount,
                     SoldPrice = sold.SoldPrice,
                     SoldDate = sold.SoldDate,
+                    SellReason = sold.SellReason,
                 }).Distinct();
 
             _stockLedger.ClosedLedgers.AddRange(closedLedgers.ToList());

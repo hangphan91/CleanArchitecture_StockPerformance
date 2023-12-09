@@ -43,6 +43,7 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 SellPercentageLimitation = mapped.SellPercentageLimitation,
                 LossLimitation = mapped.LossLimitation,
                 NumberOfTradeAMonth = mapped.NumberOfTradeAMonth,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = mapped.SellAllWhenPriceDropAtPercentageSinceLastTrade,
             };
         }
     }

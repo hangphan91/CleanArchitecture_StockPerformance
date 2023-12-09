@@ -86,6 +86,8 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 PurchaseLimitation = searchInitialSetup.PurchaseLimitation,
                 LossLimitation = searchInitialSetup.LossLimitation,
                 NumberOfTradeAMonth = searchInitialSetup.NumberOfTradeAMonth,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = searchInitialSetup.SellAllWhenPriceDropAtPercentageSinceLastTrade,
+
             };
             var searchDetail = new SearchDetail
             {
@@ -119,6 +121,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 LossLimitation = tradingrule.LossLimitation,
                 InitialDepositAmount = depositRule.InitialDepositAmount,
                 NumberOfTradeAMonth = tradingrule.NumberOfTradeAMonth,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = tradingrule.SellAllWhenPriceDropAtPercentageSinceLastTrade,
             };
         }
 

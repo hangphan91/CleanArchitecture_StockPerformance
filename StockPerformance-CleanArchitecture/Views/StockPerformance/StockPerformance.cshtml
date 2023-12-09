@@ -99,6 +99,7 @@
                 <th>Bought Price</th>
                 <th>Sold Price</th>
                 <th>Position Type</th>
+                <th>Sell Reason</th>
             </tr>
             @foreach (var row in Model.StockLedgerDetails)
             {
@@ -109,6 +110,7 @@
                     <td>@row.BoughtPrice</td>
                     <td>@row.SoldPrice</td>
                     <td>@row.PositionType</td>
+                    <td>@row.SellReason</td>
                 </tr>
             }
         </table>

@@ -90,6 +90,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 ShareCount= a.ShareCount.RoundNumber(),
                 SoldPrice = a.SoldPrice?.RoundNumber(),
                 SoldDate = a.SoldDate,
+                SellReason = a.SellReason,
             }).OrderBy(a =>a.BoughtDate).ToList();
         }
 

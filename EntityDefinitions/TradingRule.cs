@@ -10,6 +10,7 @@ namespace EntityDefinitions
         public int HigherRangeOfTradingDate { get; set; }
         public decimal LossLimitation { get; set; }
         public int NumberOfTradeAMonth { get; set; }
+        public decimal SellAllWhenPriceDropAtPercentageSinceLastTrade { get; set; }
 
         public TradingRule()
 		{

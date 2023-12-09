@@ -31,6 +31,8 @@ namespace StockPerformanceCalculator.Logic.Mappers
                 LossLimitation = tradingRule.LossLimitation,
                 InitialDepositAmount = depositRule.InitialDepositAmount,
                 NumberOfTradeAMonth = tradingRule.NumberOfTradeAMonth,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = tradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade,
+
             };
         }
     }

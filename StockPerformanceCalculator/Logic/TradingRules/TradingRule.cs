@@ -14,6 +14,18 @@
             var initialSetup = _entityEngine.GetInitialSetup();
             return initialSetup.PurchaseLimitation;
         }
+
+        public bool IsTooVolatile(decimal currentPrice, decimal previousPrice)
+        {
+            var initialSetup = _entityEngine.GetInitialSetup();
+            var sellLimit = previousPrice * (1-(initialSetup.SellAllWhenPriceDropAtPercentageSinceLastTrade /100));
+
+            if (sellLimit > currentPrice )
+                return true;
+
+            return false;
+        }
+
         public bool IsValidForBuyingRule(decimal aboutToTradePrice, decimal averagePrice)
         {
             // Buy stock on the available date, then continue to buy
