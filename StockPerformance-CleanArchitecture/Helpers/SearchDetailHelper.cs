@@ -13,7 +13,9 @@ namespace StockPerformance_CleanArchitecture.Helpers
         private static string _symbol = "AAPL";
         private static DateDetail _startDate = new DateDetail();
         private static SearchDetail _searchDetail;
+        private static SearchDetail _initalSearchDetail;
         private static SearchInitialSetup _searchInitialSetup;
+        private static SearchInitialSetup _searchSetup;
         private static IEntityDefinitionsAccessor _entityDefinitionsAccessor;
         private static List<SearchDetail> _searchDetails = new List<SearchDetail>();
         private static StockPerformanceManager _stockPerformanceManager;
@@ -23,6 +25,12 @@ namespace StockPerformance_CleanArchitecture.Helpers
             _entityDefinitionsAccessor = entityDefinitionsAccessor;
             return GetCurrentSearchDetail();
         }
+
+        public static SearchDetail GetInitialSearchDetail()
+        {
+            return _initalSearchDetail;
+        }
+
         public static void SetCurrentSearchDetail(SearchDetail searchDetail)
         {
             _searchDetail = searchDetail;
@@ -36,6 +44,11 @@ namespace StockPerformance_CleanArchitecture.Helpers
         public static SearchInitialSetup GetSearchInitialSetup()
         {
             return _searchInitialSetup;
+        }
+
+        public static SearchInitialSetup GetCurrentSearchSetup()
+        {
+            return _searchSetup;
         }
 
         public static StockPerformanceManager GetStockPerformanceManager(DateDetail startDate, string symbol)
@@ -55,6 +68,9 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 var searchInitialSetup = performanceMangager.GetInitialSetup();
                 SearchDetail searchDetail = Map(searchInitialSetup);
                 _searchDetail = searchDetail;
+
+                if (_initalSearchDetail == null)
+                    _initalSearchDetail = _searchDetail;
             }
             _stockPerformanceManager = performanceMangager;
 
@@ -95,7 +111,9 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 DepositRule = initialDepositRule,
                 TradingRule = initialTradingRule,
             };
-            _searchInitialSetup = mappedInitialSetup;
+            if (_searchInitialSetup == null)
+                _searchInitialSetup = mappedInitialSetup;
+            _searchSetup = mappedInitialSetup;
             return searchDetail;
         }
 

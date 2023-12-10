@@ -1,4 +1,5 @@
-﻿using StockPerformance_CleanArchitecture.Helpers;
+﻿using FusionChartsRazorSamples.Pages;
+using StockPerformance_CleanArchitecture.Helpers;
 using StockPerformance_CleanArchitecture.Models;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformance_CleanArchitecture.Models.Settings;
@@ -19,20 +20,30 @@ namespace StockPerformance_CleanArchitecture.Managers
             return SearchDetailHelper.GetCurrentSearchDetail(_entityDefinitionsAccessor);
         }
 
-        private SearchInitialSetup GetSearchInitialSetup()
+        internal SearchDetail GetInitialSearchDetail()
+        {
+            return SearchDetailHelper.GetInitialSearchDetail();
+        }
+
+        private SearchInitialSetup GetCurrentSearchSetup()
+        {
+            return SearchDetailHelper.GetCurrentSearchSetup();
+        }
+
+        public SearchInitialSetup GetInitialSearchSetup()
         {
             return SearchDetailHelper.GetSearchInitialSetup();
         }
 
         internal void SetCurrentSearchDetail(SearchDetail searchDetail)
         {
-            searchDetail.SearchSetup = GetSearchInitialSetup();
+            searchDetail.SearchSetup = GetCurrentSearchSetup();
             SearchDetailHelper.SetCurrentSearchDetail(searchDetail);
         }
 
         internal void AddAdvanceSearchDetail(SearchDetail searchDetail)
         {
-            searchDetail.SearchSetup = GetSearchInitialSetup();
+            searchDetail.SearchSetup = GetCurrentSearchSetup();
             SearchDetailHelper.AddAdvanceSearchDetail(searchDetail);
         }
 
@@ -110,6 +121,7 @@ namespace StockPerformance_CleanArchitecture.Managers
         public async Task<StockPerformanceResponse> GetStockPerformanceResponse(
                     SearchDetail searchDetail)
         {
+
             var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
             if (cachedResponse != null)
                 return cachedResponse;
@@ -130,6 +142,9 @@ namespace StockPerformance_CleanArchitecture.Managers
             var summary = await performanceMangager.StartStockPerforamanceCalculation(mapped);
 
             response = response.Map(summary);
+            response.SymbolSummaries = performanceMangager.GetSymbolSummaries();
+            response.ProfitChart = new ProfitChart(response);
+           
             response.SearchDetail = searchDetail;
 
             CachedHelper.AddCache(response);
@@ -169,11 +184,16 @@ namespace StockPerformance_CleanArchitecture.Managers
             SearchDetailHelper.ClearSearchDetails();
         }
 
-        public SearchDetail SetInitialView(string symbol)
+        public SearchDetail SetInitialView(string symbol, bool useDefaultSetting)
         {
+
             var currentSearchDetail = GetCurrentSearchDetail();
             if (currentSearchDetail != null && !string.IsNullOrWhiteSpace(symbol))
                 currentSearchDetail.Symbol = symbol;
+
+            if (useDefaultSetting)
+                currentSearchDetail = GetInitialSearchDetail();
+
             return currentSearchDetail;
         }
 

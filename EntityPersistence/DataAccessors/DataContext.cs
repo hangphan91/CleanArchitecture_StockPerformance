@@ -49,8 +49,8 @@ namespace EntityPersistence.DataAccessors
             {
                 EndingSymbolId = lastSymbolId,
                 StartingSymbolId = firstSymbolId,
-                StartingYear = new DateOnly(2020, 1, 1),
-                EndingYear = new DateOnly(2023, 12, 1),
+                StartingYear = new DateOnly(2020, DateTime.Now.Month, DateTime.Now.Day),
+                EndingYear = new DateOnly(2023, DateTime.Now.Month, DateTime.Now.Day),
             };
         }
 
@@ -73,15 +73,14 @@ namespace EntityPersistence.DataAccessors
             };
 
             symbols.AddRange(growingIn2022To2023);
-            symbols = symbols.Distinct().ToList();
-
+            symbols = symbols.Select(a => a.ToUpper()).Distinct().ToList();
             var toSaveSymbols = symbols.Select(symbol => new Symbol
             {
                 TradingSymbol = symbol.ToUpper(),
                 Id = symbols.IndexOf(symbol),
             });
 
-            return toSaveSymbols;
+            return toSaveSymbols.Distinct().ToList();
         }
 
         private DepositRule SetDefaultDepositRule()

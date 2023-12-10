@@ -13,6 +13,7 @@ namespace StockPerformance_CleanArchitecture.Models
         public ProfitSummaryPercentage ProfitSummaryPercentage { get; set; }
         public List<DepositLedger> DepositLedgers { get; set; }
         public List<StockLedgerDetail> StockLedgerDetails { get; set; }
+        public List<SymbolSummary> SymbolSummaries { get; set; }
         public string ToDisplay { get; set; }
         public decimal TotalBalanceAfterLoss { get; set; } = 0;
         public decimal TotalDeposit { get; set; } = 0;
@@ -32,12 +33,14 @@ namespace StockPerformance_CleanArchitecture.Models
             DepositLedgers = new List<DepositLedger>();
             StockLedgerDetails = new List<StockLedgerDetail>();
             SearchDetail = new SearchDetail();
+            SymbolSummaries = new List<SymbolSummary>();
 
         }
         public StockPerformanceResponse(string symbol, DateDetail startDate)
         {
             ProfitSummaryPercentage = new ProfitSummaryPercentage();
             ProfitSummaryInDollar = new ProfitSummaryInDollar();
+            SymbolSummaries = new List<SymbolSummary>();
             Symbol = symbol;
             StartDate = startDate;
         }
@@ -64,6 +67,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 TotalBalanceHoldingInPosition = summary.TotalBalanceHoldingInPosition.RoundNumber(),
                 StockLedgerDetails = Map(summary.StockLedger),
                 DepositLedgers = summary.DepositLedgers,
+                SymbolSummaries = new List<SymbolSummary>(),
                 ProfitSummaryInDollar = new ProfitSummaryInDollar
                 {
                     MonthlyGrowthSpeeds = new List<MonthlyGrowthSpeed>(),
@@ -76,7 +80,7 @@ namespace StockPerformance_CleanArchitecture.Models
             };
             GetProfitInDollar(summary, response);
             GetProfitInPercentage(summary, response);
-            response.ProfitChart = new ProfitChart(response.ProfitSummaryInDollar.MonthlyProfits, summary.Symbol);
+           
             return response;
         }
 

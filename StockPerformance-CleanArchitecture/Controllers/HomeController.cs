@@ -18,9 +18,9 @@ public class HomeController : Controller
         _searchDetailManager = ManagerHelper.SearchDetailManager;
     }
 
-    public IActionResult Index(string symbol)
+    public IActionResult Index(string symbol, bool useDefaultSetting)
     {
-        var currentSearchDetail = _searchDetailManager.SetInitialView(symbol);
+        var currentSearchDetail = _searchDetailManager.SetInitialView(symbol,useDefaultSetting);
 
         return View(currentSearchDetail);
     }

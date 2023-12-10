@@ -9,8 +9,8 @@ namespace StockPerformance_CleanArchitecture.Models
         public int Count { get; set; }
         public List<string> Symbols { get; set; }
         public List<SearchDetail> SearchDetails { get; set; }
-        public SettingDate StartDate { get; set; } = new SettingDate(2020, 0,0);
-        public SettingDate EndDate { get; set; } = new SettingDate(2023, 12,1);
+        public SettingDate StartDate { get; set; } = new SettingDate(2020, DateTime.Now.Month, DateTime.Now.Day);
+        public SettingDate EndDate { get; set; } = new SettingDate(2023, DateTime.Now.Month, DateTime.Now.Day);
         public bool All { get; set; }
         public AdvanceSearch()
 		{

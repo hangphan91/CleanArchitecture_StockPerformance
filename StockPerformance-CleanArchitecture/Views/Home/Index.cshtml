@@ -42,6 +42,16 @@
         }).ToList();
 }
 
+<div>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { useDefaultSetting = true}))
+        {
+        <p>
+            <input type="submit" value="Use Default Setting" />
+        </p>
+    }
+
+</div>
+
 <div class="text-center">
     @using (Html.BeginForm("StockPerformanceFromSelectedDetail", "StockPerformance", FormMethod.Get))
     {

@@ -12,7 +12,7 @@
     var startingMonth = months.First();
     var endingMonth = months.Last();
     var searchDetail = Model.SearchDetail;
-
+    var showHistoricalChart = false;
 
 }
 <h1>@ViewData["Title"]</h1>
@@ -28,10 +28,9 @@
 </head>
 
 <body>
-    <form method="post">
-        <div>@Html.Raw(Model.ProfitChart.ChartJson)</div>
-        <br />
-    </form>
+
+    
+
 </body>
 </html>
 
@@ -52,7 +51,15 @@
         @endingMonth.Month/@endingMonth.Year (@months.Count() months)
     </h2>
 
+    <form method="post">
+        <div>@Html.Raw(Model.ProfitChart.CreateCombineChart())</div>
+        <br />
+    </form>
 
+    <form method="post" hidden="@showHistoricalChart">
+        <div>@Html.Raw(Model.ProfitChart.ChartJsonForStockHistory)</div>
+        <br />
+    </form>
 
     <p>
         <h3>Monthly Profit</h3>

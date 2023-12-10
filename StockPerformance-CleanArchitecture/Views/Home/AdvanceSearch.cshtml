@@ -40,12 +40,10 @@
     }).ToList();
 
     var searchingSymbols = Model.SearchDetails.Select(a => a.Symbol);
-    var queueText = searchingSymbols.Any()? $"Added {searchingSymbols.Count()} " +
-        $"searches for {string.Join(",", searchingSymbols.Distinct())}" :"";
+    var queueText = searchingSymbols.Any() ? $"Added {searchingSymbols.Count()} " +
+        $"searches for {string.Join(",", searchingSymbols.Distinct())}" : "";
 }
-<div >
-    <strong>@queueText</strong>
-</div>
+
 <div class="text-center">
     @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get, new { willPerformSearch = true }))
     {
@@ -114,15 +112,18 @@
             <p>
                 End Date
 
-                Year 
+                Year
                 @Html.DropDownListFor(m => m.EndDate.Year, selectListYears)
-                Month 
+                Month
                 @Html.DropDownListFor(m => m.EndDate.Month, selectListMonths)
-                Date 
+                Date
                 @Html.DropDownListFor(m => m.EndDate.Day, selectListDateOfMonth)
 
             </p>
             <p>
+            <p><strong style="color:green">@queueText</strong></p>
+            <p>
+
                 <input type="submit" value="Add Search" />
             </p>
 
@@ -131,8 +132,12 @@
     }
 
 </div>
+
 <div class="text-center">
+
     <span class="text-center">
+
+
         <button class="button">
             @Html.ActionLink("Implement Searches", "AdvanceSearch", "StockPerformance")
         </button>

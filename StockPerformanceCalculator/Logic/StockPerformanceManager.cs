@@ -28,6 +28,7 @@ namespace StockPerformanceCalculator.Logic
         private BalanceHoldingCalculator _balanceHoldingCalculator;
         private DepositRule _depositRule;
 
+        private List<SymbolSummary> _symbolSummaries;
 
         private string _symbol;
         private DateTime _startingDate;
@@ -58,9 +59,14 @@ namespace StockPerformanceCalculator.Logic
             _growthRateCalculator = new GrowthRateCalculator(_depositLedgerCalculator);
         }
 
+        public List<SymbolSummary> GetSymbolSummaries()
+        {
+            return _symbolSummaries;
+        }
+
         public async Task<StockPerformanceSummary> StartStockPerforamanceCalculation(InitialPerformanceSetup mapped)
         {
-            var stockSummaries = await _yahooFinanceCaller.GetStockHistory(_symbol, _startingDate);
+            _symbolSummaries = await _yahooFinanceCaller.GetStockHistory(_symbol, _startingDate);
             var newTradingRule = SearchDetailMapper.MapTradingRule(mapped);
             var newDepositRule = SearchDetailMapper.MapDepositRule(mapped);
             var symbolIds = _entityEngine.GetSymbolIds(mapped.Symbols);
@@ -70,7 +76,7 @@ namespace StockPerformanceCalculator.Logic
             StockPerformanceManagerHelper.SetTradingRule(newTradingRule);
             StockPerformanceManagerHelper.SetPerformanceSetup(newPerformanceSetup);
             _depositLedgerCalculator.SetUpDepositLeggerFromDate(_startingDate);
-            ImplementTradingStocks(stockSummaries);
+            ImplementTradingStocks(_symbolSummaries);
 
             var result = CalculateStockPerformance();
             var performanceInMonths = StockPerformanceSummaryMapper.Map(result.ProfitByMonths);

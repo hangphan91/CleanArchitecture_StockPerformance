@@ -30,8 +30,9 @@ namespace StockPerformance_CleanArchitecture.Controllers
             return View(response);
         }
 
-        public async Task<IActionResult> StockPerformanceFromSelectedDetail(SearchDetail searchDetail)
+        public async Task<IActionResult> StockPerformanceFromSelectedDetail(SearchDetail searchDetail, bool useDefaultSetting)
         {
+            
             var response = await _searchDetailManager.GetStockPerformanceResponse(searchDetail);
 
             return View("StockPerformance", response);

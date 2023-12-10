@@ -16,7 +16,7 @@ namespace StockPerformanceCalculatorUnitTests
             var year = 2020;
 			var context = new DataContext();
 			var accessor = new PerformanceDataAccessor(context);
-			var date = new DateDetail(2020, 1, 1);
+			var date = new DateDetail(2020, DateTime.Now.Month, DateTime.Now.Day);
             var manager = new MockStockPerformanceManager(symbol, date, accessor);
 
 			//Act
