@@ -10,6 +10,7 @@ namespace StockPerformance_CleanArchitecture.Managers
     public class SearchDetailManager
     {
         IEntityDefinitionsAccessor _entityDefinitionsAccessor;
+        private bool IsFirstAdvancedSearch = true;
         public SearchDetailManager()
         {
             _entityDefinitionsAccessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
@@ -48,7 +49,7 @@ namespace StockPerformance_CleanArchitecture.Managers
         }
 
         public AdvanceSearch UpdateAdvanceSearch(AdvanceSearch advanceSearch,
-            bool willClearAllSearch, bool willPerformSearch)
+            bool willClearAllSearch)
         {
             if (willClearAllSearch)
                 ClearAdvanceSearch();
@@ -62,29 +63,29 @@ namespace StockPerformance_CleanArchitecture.Managers
                 advanceSearch.SearchDetail = detail;
                 return advanceSearch;
             }
-
-            for (int year = advanceSearch.StartDate.Year; year <= advanceSearch.EndDate.Year; year++)
-            {
-                var month = advanceSearch.StartDate.Month;
-                var day = advanceSearch.StartDate.Day;
-                advanceSearch.SearchDetail.SettingDate = new SettingDate(year, month, day);
-                var searchDetail = new SearchDetail
+            if (!IsFirstAdvancedSearch)
+                for (int year = advanceSearch.StartDate.Year; year <= advanceSearch.EndDate.Year; year++)
                 {
-                    DepositRule = advanceSearch.SearchDetail.DepositRule,
-                    SearchSetup = advanceSearch.SearchDetail.SearchSetup,
-                    Symbol = advanceSearch.SearchDetail.Symbol,
-                    TradingRule = advanceSearch.SearchDetail.TradingRule,
-                    SettingDate = advanceSearch.SearchDetail.SettingDate,
+                    var month = advanceSearch.StartDate.Month;
+                    var day = advanceSearch.StartDate.Day;
+                    advanceSearch.SearchDetail.SettingDate = new SettingDate(year, month, day);
+                    var searchDetail = new SearchDetail
+                    {
+                        DepositRule = advanceSearch.SearchDetail.DepositRule,
+                        SearchSetup = advanceSearch.SearchDetail.SearchSetup,
+                        Symbol = advanceSearch.SearchDetail.Symbol,
+                        TradingRule = advanceSearch.SearchDetail.TradingRule,
+                        SettingDate = advanceSearch.SearchDetail.SettingDate,
 
-                };
-                AddAdvanceSearchDetail(searchDetail);
+                    };
+                    AddAdvanceSearchDetail(searchDetail);
 
-                advanceSearch.Symbols = detail.SearchSetup.Symbols.Select(a => a).ToList();
-                advanceSearch.SearchDetail.SearchSetup.Symbols = advanceSearch.Symbols;
-                advanceSearch.Count = searchDetails.Count();
-                advanceSearch.SearchDetail.SearchSetup.StartingYear = advanceSearch.StartDate.MapDateOnly();
-                advanceSearch.SearchDetail.SearchSetup.EndingYear = advanceSearch.EndDate.MapDateOnly();
-            }
+                    advanceSearch.Symbols = detail.SearchSetup.Symbols.Select(a => a).ToList();
+                    advanceSearch.SearchDetail.SearchSetup.Symbols = advanceSearch.Symbols;
+                    advanceSearch.Count = searchDetails.Count();
+                    advanceSearch.SearchDetail.SearchSetup.StartingYear = advanceSearch.StartDate.MapDateOnly();
+                    advanceSearch.SearchDetail.SearchSetup.EndingYear = advanceSearch.EndDate.MapDateOnly();
+                }
             var result = new AdvanceSearch
             {
                 Count = searchDetails.Count(),
@@ -93,9 +94,10 @@ namespace StockPerformance_CleanArchitecture.Managers
                 SearchDetails = searchDetails.Select(a => a).ToList(),
                 StartDate = advanceSearch.StartDate,
                 EndDate = advanceSearch.EndDate,
-                All = advanceSearch.All
+                WillPerformSearch = advanceSearch.WillPerformSearch
             };
 
+            IsFirstAdvancedSearch = false;
             return result;
         }
 
@@ -144,7 +146,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             response = response.Map(summary);
             response.SymbolSummaries = performanceMangager.GetSymbolSummaries();
             response.ProfitChart = new ProfitChart(response);
-           
+
             response.SearchDetail = searchDetail;
 
             CachedHelper.AddCache(response);
@@ -174,6 +176,11 @@ namespace StockPerformance_CleanArchitecture.Managers
             return SearchDetailHelper.GetSearchDetails();
         }
 
+        internal List<SearchDetail> GetSearchDetailsForAll()
+        {
+            return SearchDetailHelper.GetSearchDetailsForAll();
+        }
+
         internal void SetSearchDetail(SearchDetail searchDetail)
         {
             SetCurrentSearchDetail(searchDetail);
@@ -197,11 +204,46 @@ namespace StockPerformance_CleanArchitecture.Managers
             return currentSearchDetail;
         }
 
-        public async Task<StockPerformanceHistory> PerformAdvanceSearch()
+        public async Task<StockPerformanceHistory> PerformAdvanceSearch(bool searchAll)
         {
+            if (searchAll)
+                return await PerformAdvanceSearchForAll();
+
             var advancedSearchResult = new StockPerformanceHistory();
 
             foreach (var searchDetail in GetSearchDetails())
+            {
+                var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
+                if (cachedResponse != null)
+                {
+                    advancedSearchResult.StockPerformanceResponses.Add(cachedResponse);
+                    continue;
+                }
+                var response = await GetStockPerformanceResponse(searchDetail);
+                advancedSearchResult.StockPerformanceResponses.Add(response);
+                advancedSearchResult.StockPerformanceResponses =
+                    advancedSearchResult.StockPerformanceResponses
+                    .OrderByDescending(a => a.ProfitInDollar)
+                    .ToList();
+            }
+            advancedSearchResult.StockPerformanceResponses =
+                advancedSearchResult.StockPerformanceResponses.OrderBy(a => a.Symbol)
+            .ThenBy(a => a.SearchDetail.SettingDate.Year).ToList();
+
+            CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
+            advancedSearchResult.ProfitChart =
+                new FusionChartsRazorSamples.Pages.ProfitChart(advancedSearchResult.StockPerformanceResponses);
+
+            ClearAdvanceSearch();
+
+            return advancedSearchResult;
+        }
+
+        public async Task<StockPerformanceHistory> PerformAdvanceSearchForAll()
+        {
+            var advancedSearchResult = new StockPerformanceHistory();
+
+            foreach (var searchDetail in GetSearchDetailsForAll())
             {
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
                 if (cachedResponse != null)

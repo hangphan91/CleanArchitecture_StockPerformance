@@ -44,9 +44,17 @@ namespace StockPerformance_CleanArchitecture.Controllers
             return View(history);
         }
 
-        public async Task<IActionResult> AdvanceSearch()
+        public async Task<IActionResult> AdvanceSearch(bool searchAll)
         {
-            var advancedSearchResult = await _searchDetailManager.PerformAdvanceSearch();
+            var advancedSearchResult = await _searchDetailManager.PerformAdvanceSearch(searchAll);
+
+            return View(advancedSearchResult);
+        }
+
+
+        public async Task<IActionResult> SeachAll()
+        {
+            var advancedSearchResult = await _searchDetailManager.PerformAdvanceSearchForAll();
 
             return View(advancedSearchResult);
         }

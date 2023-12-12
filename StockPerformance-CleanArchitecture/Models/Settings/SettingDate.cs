@@ -38,7 +38,7 @@ namespace StockPerformance_CleanArchitecture.Models.Settings
 
         public override string ToString()
         {
-            return $"{Day}/{Month}/{Year}";
+            return $"{Month}/{Day}/{Year}";
         }
 
         internal bool IsSame(SettingDate settingDate)

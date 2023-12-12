@@ -47,8 +47,25 @@ namespace StockPerformance_CleanArchitecture.Models
 
         public string DisplayStockPerformance()
         {
-            var toDisplay = $"Performance report for {Symbol}, looking back from {StartDate.ToString()}.";
-            toDisplay += SearchDetail.ToString();
+
+            var toDisplay = $"The performance report for CPRT, reflecting on the period from {StartDate.ToString()}" +
+                $" indicates a total deposit of ${TotalDeposit} and " +
+                $"a total holding in position of ${TotalBalanceHoldingInPosition}." +
+                $" The deposit rule involved an initial one-time deposit of ${SearchDetail.DepositRule.InitialDepositAmount} " +
+                $"and a monthly repeated deposit of ${SearchDetail.DepositRule.DepositAmount}," +
+                $" made on the 1st and 16th of each month." +
+                $" The trading rule specified a purchase limitation of {SearchDetail.TradingRule.PurchaseLimitation} per trade," +
+                $" with conditions to sell when the total investment reached {SearchDetail.TradingRule.SellPercentageLimitation}%," +
+                $" when the overall loss amounted to ${SearchDetail.TradingRule.LossLimitation}, or when the price dropped " +
+                $"by {SearchDetail.TradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade}% " +
+                $"since the last visit. It also included a buy condition" +
+                $" when the overall gain reached {SearchDetail.TradingRule.BuyPercentageLimitation}%. The trading was limited" +
+                $" to between the {SearchDetail.TradingRule.LowerRangeOfTradingDate} and " +
+                $"{SearchDetail.TradingRule.HigherRangeOfTradingDate} day of the month, " +
+                $"with a maximum of {SearchDetail.TradingRule.NumberOfTradeAMonth} " +
+                $"trades per month. The current stock price is ${CurrentPrice}, and the " +
+                $"current holding share is {CurrentHoldingShare}.";
+
             return toDisplay;
         }
 

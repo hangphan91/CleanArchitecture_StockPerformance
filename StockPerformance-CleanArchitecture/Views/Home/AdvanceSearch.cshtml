@@ -42,6 +42,7 @@
     var searchingSymbols = Model.SearchDetails.Select(a => a.Symbol);
     var queueText = searchingSymbols.Any() ? $"Added {searchingSymbols.Count()} " +
         $"searches for {string.Join(",", searchingSymbols.Distinct())}" : "";
+    Model.WillPerformSearch = false;
 }
 
 <div class="text-center">
@@ -123,8 +124,7 @@
             <p>
             <p><strong style="color:green">@queueText</strong></p>
             <p>
-
-                <input type="submit" value="Add Search" />
+                <input type="submit" value="Add Search" style="background-color:skyblue" />
             </p>
 
         </fieldset>
@@ -138,15 +138,29 @@
     <span class="text-center">
 
 
-        <button class="button">
+        <button class="button" style="background-color:lightblue">
             @Html.ActionLink("Implement Searches", "AdvanceSearch", "StockPerformance")
         </button>
     </span>
     <span class="text-center">
-        <button class="button">
+        <button class="button" style="background-color:lightblue">
             @Html.ActionLink("Clear All Seaches", "AdvanceSearch", "Home", new { willClearAllSearch = true })
         </button>
     </span>
+    <div class="text-center">
+        <button class="button" style="background-color:lightblue">
+            @Html.ActionLink("Use Default Setting", "AdvanceSearch", "Home", new { useDefaultSetting = true })
+        </button>
+
+    </div>
+
+    <span class="text-center">
+
+        <button class="button" style="background-color:lightgreen">
+            @Html.ActionLink("Search For All Symbol", "AdvanceSearch", "StockPerformance", new { searchAll = true })
+        </button>
+    </span>
+
 
 </div>
 

@@ -13,12 +13,14 @@
     var endingMonth = months.Last();
     var searchDetail = Model.SearchDetail;
     var showHistoricalChart = false;
-
+    var text = @Model.ProfitInPercentage > 0 ? "increase." : "decrease.";
+    var overallPerformance = $"The profit over the period from " +
+          $"{@Model.SearchDetail.SearchSetup.StartingYear} to {@Model.SearchDetail.SearchSetup.EndingYear}" +
+          $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text}";
 }
 <h1>@ViewData["Title"]</h1>
 <!DOCTYPE html>
 
-<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
@@ -27,30 +29,18 @@
     <title>ColumnChart</title>
 </head>
 
-<body>
-
-    
-
-</body>
 </html>
 
-<div class="text-center">
+<body>
+    <div class="text-center">
 
-    <p>
-        @Model.DisplayStockPerformance()
-    </p>
-    <p>
-        Total deposit: $@Model.TotalDeposit
-        Total holding in position: $@Model.TotalBalanceHoldingInPosition
-        Current stock price: $@Model.CurrentPrice
-        Current holding share: @Model.CurrentHoldingShare
-    </p>
-    <h2>
-        Profit: $ @profit (@profitPercentage %) from
-        @startingMonth.Month/@startingMonth.Year to
-        @endingMonth.Month/@endingMonth.Year (@months.Count() months)
-    </h2>
-
+        <p>
+            @Model.DisplayStockPerformance()
+        </p>
+        <h3>
+            @overallPerformance
+        </h3>
+    </div>
     <form method="post">
         <div>@Html.Raw(Model.ProfitChart.CreateCombineChart())</div>
         <br />
@@ -60,82 +50,83 @@
         <div>@Html.Raw(Model.ProfitChart.ChartJsonForStockHistory)</div>
         <br />
     </form>
+    <div>
+        <p>
+            <h3>Monthly Profit</h3>
 
-    <p>
-        <h3>Monthly Profit</h3>
-
-        <table class="table table-bordered table-responsive table-hover">
-            <tr>
-                <th>Month</th>
-                <th>Year</th>
-                <th>Profit</th>
-                <th>Metric</th>
-            </tr>
-            @foreach (var row in Model.ProfitSummaryInDollar.MonthlyProfits)
-            {
+            <table class="table table-bordered table-responsive table-hover">
                 <tr>
-                    <td>@row.Month</td>
-                    <td>@row.Year</td>
-                    <td>@row.Amount</td>
-                    <td>$</td>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Profit</th>
+                    <th>Metric</th>
                 </tr>
-            }
-        </table>
-        <h3>Yearly Profit</h3>
+                @foreach (var row in Model.ProfitSummaryInDollar.MonthlyProfits)
+                {
+                    <tr>
+                        <td>@row.Month</td>
+                        <td>@row.Year</td>
+                        <td>@row.Amount</td>
+                        <td>$</td>
+                    </tr>
+                }
+            </table>
+            <h3>Yearly Profit</h3>
 
-        <table class="table table-bordered table-responsive table-hover">
-            <tr>
-                <th>Year</th>
-                <th>Profit</th>
-            </tr>
-            @foreach (var row in Model.ProfitSummaryInDollar.YearlyProfits)
-            {
+            <table class="table table-bordered table-responsive table-hover">
                 <tr>
-                    <td>@row.Year</td>
-                    <td>@row.Amount</td>
+                    <th>Year</th>
+                    <th>Profit</th>
                 </tr>
-            }
-        </table>
+                @foreach (var row in Model.ProfitSummaryInDollar.YearlyProfits)
+                {
+                    <tr>
+                        <td>@row.Year</td>
+                        <td>@row.Amount</td>
+                    </tr>
+                }
+            </table>
 
-        <h3> Stock Ledgers</h3>
-        <table class="table table-bordered table-responsive table-hover">
-            <tr>
-                <th>Bought Date</th>
-                <th>Sold Date</th>
-                <th>ShareCount</th>
-                <th>Bought Price</th>
-                <th>Sold Price</th>
-                <th>Position Type</th>
-                <th>Sell Reason</th>
-            </tr>
-            @foreach (var row in Model.StockLedgerDetails)
-            {
+            <h3> Stock Ledgers</h3>
+            <table class="table table-bordered table-responsive table-hover">
                 <tr>
-                    <td>@row.BoughtDate</td>
-                    <td>@row.SoldDate</td>
-                    <td>@row.ShareCount</td>
-                    <td>@row.BoughtPrice</td>
-                    <td>@row.SoldPrice</td>
-                    <td>@row.PositionType</td>
-                    <td>@row.GetSellReasonText(row.SellReason)</td>
+                    <th>Bought Date</th>
+                    <th>Sold Date</th>
+                    <th>ShareCount</th>
+                    <th>Bought Price</th>
+                    <th>Sold Price</th>
+                    <th>Position Type</th>
+                    <th>Sell Reason</th>
                 </tr>
-            }
-        </table>
-        <h3>Deposit Ledgers</h3>
-        <table class="table table-bordered table-responsive table-hover">
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-            </tr>
-            @foreach (var row in Model.DepositLedgers)
-            {
+                @foreach (var row in Model.StockLedgerDetails)
+                {
+                    <tr>
+                        <td>@row.BoughtDate</td>
+                        <td>@row.SoldDate</td>
+                        <td>@row.ShareCount</td>
+                        <td>@row.BoughtPrice</td>
+                        <td>@row.SoldPrice</td>
+                        <td>@row.PositionType</td>
+                        <td>@row.GetSellReasonText(row.SellReason)</td>
+                    </tr>
+                }
+            </table>
+            <h3>Deposit Ledgers</h3>
+            <table class="table table-bordered table-responsive table-hover">
                 <tr>
-                    <td>@row.Date</td>
-                    <td>@row.Amount</td>
+                    <th>Date</th>
+                    <th>Amount</th>
                 </tr>
-            }
-        </table>
+                @foreach (var row in Model.DepositLedgers)
+                {
+                    <tr>
+                        <td>@row.Date</td>
+                        <td>@row.Amount</td>
+                    </tr>
+                }
+            </table>
 
-    </p>
+        </p>
 
-</div>
+    </div>
+</body>

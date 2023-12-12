@@ -28,7 +28,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         public static SearchDetail GetInitialSearchDetail()
         {
-            return _initalSearchDetail;
+            return Map(Map(_initalSearchDetail));
         }
 
         public static void SetCurrentSearchDetail(SearchDetail searchDetail)
@@ -146,6 +146,40 @@ namespace StockPerformance_CleanArchitecture.Helpers
         internal static List<SearchDetail> GetSearchDetails()
         {
             return _searchDetails;
+        }
+
+        internal static List<SearchDetail> GetSearchDetailsForAll()
+        {
+            var current = _searchDetails.FirstOrDefault();
+
+            if (current == null)
+                return new List<SearchDetail>();
+
+            var starting = current.SearchSetup.StartingYear.Year;
+            var ending = _searchDetails.First().SearchSetup.EndingYear.Year;
+            var all = new List<SearchDetail>();
+            for (int i = starting; i < ending; i++)
+            {
+                var searchSetup = new SearchInitialSetup
+                {
+                    StartingYear = new DateOnly(i, current.SearchSetup.StartingYear.Month,
+                    current.SearchSetup.StartingYear.Day),
+                    EndingYear = current.SearchSetup.EndingYear,
+                    Symbols = current.SearchSetup.Symbols,
+                };
+                var eachSearchDetailList = _searchSetup.Symbols.Select(SymbolSummary => new SearchDetail
+                {
+                    DepositRule =  current.DepositRule,
+                    SearchSetup = searchSetup,
+                    SettingDate = current.SettingDate,
+                    Symbol =  SymbolSummary,
+                    TradingRule = current.TradingRule,
+                });
+                all.AddRange(eachSearchDetailList);
+            }
+
+            return all;
+
         }
 
         internal static void ClearSearchDetails()

@@ -32,9 +32,16 @@ public class HomeController : Controller
     }
 
     public IActionResult AdvanceSearch(AdvanceSearch advanceSearch,
-        bool willClearAllSearch, bool willPerformSearch)
+        bool willClearAllSearch, bool willPerformSearch, bool useDefaultSetting)
     {
-       var result = _searchDetailManager.UpdateAdvanceSearch(advanceSearch, willClearAllSearch, willPerformSearch);
+        if (useDefaultSetting)
+        {
+            advanceSearch.SearchDetail = _searchDetailManager.SetInitialView("AAPL", useDefaultSetting);
+           
+        }
+
+        var result = _searchDetailManager.UpdateAdvanceSearch(advanceSearch,
+            willClearAllSearch);
        
         return View(result);
     }
