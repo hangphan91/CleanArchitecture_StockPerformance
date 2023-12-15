@@ -1,7 +1,7 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model StockPerformance_CleanArchitecture.Models.StockPerformanceResponse
 @{
-    ViewData["Title"] = "Stock Performance";
+    ViewData["Title"] = $"Stock Performance for {Model.Symbol}";
     var profit = Model.ProfitInDollar;
     var profitPercentage = Model.ProfitInPercentage;
 
@@ -18,38 +18,29 @@
           $"{@Model.SearchDetail.SearchSetup.StartingYear} to {@Model.SearchDetail.SearchSetup.EndingYear}" +
           $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text}";
 }
-<h1>@ViewData["Title"]</h1>
-<!DOCTYPE html>
-
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
-
-    <script src="//cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
-    <title>ColumnChart</title>
-</head>
-
-</html>
+<h3>@ViewData["Title"]</h3>
 
 <body>
     <div class="text-center">
 
-        <p>
-            @Model.DisplayStockPerformance()
-        </p>
-        <h3>
-            @overallPerformance
-        </h3>
-    </div>
-    <form method="post">
-        <div>@Html.Raw(Model.ProfitChart.CreateCombineChart())</div>
-        <br />
-    </form>
+        <p @Html.Raw(Model.DisplayStockPerformance().Replace(Environment.NewLine, "<br />"))
 
-    <form method="post" hidden="@showHistoricalChart">
-        <div>@Html.Raw(Model.ProfitChart.ChartJsonForStockHistory)</div>
-        <br />
-    </form>
+        </p>
+        <h4>
+            @overallPerformance
+        </h4>
+    </div>
+    <divclass ="text-center">
+        <form method="post" class="text-center">
+            <div>@Html.Raw(Model.ProfitChart.CreateCombineChart())</div>
+            <br />
+        </form>
+
+        <form method="post" hidden="@showHistoricalChart" class="text-center">
+            <div>@Html.Raw(Model.ProfitChart.ChartJsonForStockHistory)</div>
+            <br />
+        </form>
+    </divclass>
     <div>
         <p>
             <h3>Monthly Profit</h3>

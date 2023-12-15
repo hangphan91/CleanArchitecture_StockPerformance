@@ -7,12 +7,15 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/StockPerformance_CleanArchitecture.styles.css" asp-append-version="true" />
+    <meta name="viewport" content="width=device-width" />
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Stock Performance Dashboad</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Dashboad</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,19 +29,20 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Symbol">Symbol</a>
                         </li>
                         <!-- <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="StockPerformance" asp-action="Index">Stock Performance</a>
-    </li>
-       -->
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="StockPerformance" asp-action="StockPerformanceHistory">Stock Performance History</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="StockPerformance" asp-action="Index">Stock Performance</a>
                         </li>
+                           -->
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdvanceSearch">Advanced Search</a>
                         </li>
                         <!--<li class="nav-item">
-         <a class="nav-link text-dark" asp-area="" asp-controller="StockPerformance" asp-action="AdvanceSearch">Advanced Search Result</a>
-     </li>
-        -->
+                            <a class="nav-link text-dark" asp-area="" asp-controller="StockPerformance" asp-action="AdvanceSearch">Advanced Search Result</a>
+                        </li>
+                           -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="StockPerformance" asp-action="StockPerformanceHistory">Search History</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -52,7 +56,17 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - Stock Performance by HP
+            &copy; 2023 - Stock Performance by HP.
+            <div>Please contact us by email at stockperformance2023@gmail.com</div>
+        </div>
+        <div class="container">
+            <i style="font-size:x-small">
+                Disclaimer:
+                The information provided on this website is for educational and informational purposes only. It should not be considered as a recommendation to buy, sell, or trade any security. All investment and trading activities involve risk, and users should conduct their own research and/or consult with a qualified investment professional before making any investment decisions.
+                We do not guarantee the accuracy, completeness, or timeliness of the information presented. Past performance is not indicative of future results. Users should be aware of the risks involved in stock trading and are encouraged to consider their risk tolerance before making any investment decisions.
+                It is important to note that the individuals associated with this website may have positions in the securities mentioned and may trade them for their own accounts. However, we do not receive any form of compensation from specific securities. Any action taken by users based on the information provided is at their own risk, and we shall not be liable for any losses or damages incurred.
+                By using this website, you acknowledge that you have read and understood this disclaimer. If you do not agree with any part of this disclaimer, please do not use our website.
+            </i>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

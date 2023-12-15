@@ -42,7 +42,6 @@
         }).ToList();
 }
 
-
 <div class="text-center">
     @using (Html.BeginForm("StockPerformanceFromSelectedDetail", "StockPerformance", FormMethod.Get))
     {
@@ -105,7 +104,7 @@
             </p>
             </p>
             <p>
-                <input type="submit" value="Submit" style="background-color:skyblue"/>
+                <input type="submit" value="Submit" />
             </p>
 
         </fieldset>
@@ -114,8 +113,8 @@
 
 </div>
 <div class="text-center">
-    <button class="button" style="background-color:lightblue">
-        @Html.ActionLink("Use Default Setting", "Index", "Home", new  { useDefaultSetting = true })
+    <button class="button">
+        @Html.ActionLink("Use Default Setting", "Index", "Home", new { useDefaultSetting = true })
     </button>
 
 </div>

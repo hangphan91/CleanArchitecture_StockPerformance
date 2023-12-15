@@ -48,22 +48,25 @@ namespace StockPerformance_CleanArchitecture.Models
         public string DisplayStockPerformance()
         {
 
-            var toDisplay = $"The performance report for CPRT, reflecting on the period from {StartDate.ToString()}" +
+            var toDisplay = $"The performance report for {Symbol}, reflecting on the period from {StartDate}" +
                 $" indicates a total deposit of ${TotalDeposit} and " +
-                $"a total holding in position of ${TotalBalanceHoldingInPosition}." +
+                $"a total holding in position of ${TotalBalanceHoldingInPosition}." + Environment.NewLine +
                 $" The deposit rule involved an initial one-time deposit of ${SearchDetail.DepositRule.InitialDepositAmount} " +
                 $"and a monthly repeated deposit of ${SearchDetail.DepositRule.DepositAmount}," +
-                $" made on the 1st and 16th of each month." +
+                $" made on the {SearchDetail.DepositRule.FirstDepositDate}and " +
+                $"{SearchDetail.DepositRule.SecondDepositDate} of each month." + Environment.NewLine +
                 $" The trading rule specified a purchase limitation of {SearchDetail.TradingRule.PurchaseLimitation} per trade," +
                 $" with conditions to sell when the total investment reached {SearchDetail.TradingRule.SellPercentageLimitation}%," +
                 $" when the overall loss amounted to ${SearchDetail.TradingRule.LossLimitation}, or when the price dropped " +
                 $"by {SearchDetail.TradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade}% " +
                 $"since the last visit. It also included a buy condition" +
-                $" when the overall gain reached {SearchDetail.TradingRule.BuyPercentageLimitation}%. The trading was limited" +
+                $" when the overall gain reached {SearchDetail.TradingRule.BuyPercentageLimitation}%. " + Environment.NewLine +
+                $"The trading was limited" +
                 $" to between the {SearchDetail.TradingRule.LowerRangeOfTradingDate} and " +
                 $"{SearchDetail.TradingRule.HigherRangeOfTradingDate} day of the month, " +
                 $"with a maximum of {SearchDetail.TradingRule.NumberOfTradeAMonth} " +
-                $"trades per month. The current stock price is ${CurrentPrice}, and the " +
+                $"trades per month. " + Environment.NewLine +
+                $"The current stock price is ${CurrentPrice}, and the " +
                 $"current holding share is {CurrentHoldingShare}.";
 
             return toDisplay;
@@ -97,7 +100,7 @@ namespace StockPerformance_CleanArchitecture.Models
             };
             GetProfitInDollar(summary, response);
             GetProfitInPercentage(summary, response);
-           
+
             return response;
         }
 
@@ -108,11 +111,11 @@ namespace StockPerformance_CleanArchitecture.Models
                 BoughtDate = a.BoughtDate,
                 PositionType = a.PositionType,
                 BoughtPrice = a.BoughtPrice.RoundNumber(),
-                ShareCount= a.ShareCount.RoundNumber(),
+                ShareCount = a.ShareCount.RoundNumber(),
                 SoldPrice = a.SoldPrice?.RoundNumber(),
                 SoldDate = a.SoldDate,
                 SellReason = a.SellReason,
-            }).OrderBy(a =>a.BoughtDate).ToList();
+            }).OrderBy(a => a.BoughtDate).ToList();
         }
 
         private static void GetProfitInDollar(StockPerformanceSummary summary, StockPerformanceResponse response)

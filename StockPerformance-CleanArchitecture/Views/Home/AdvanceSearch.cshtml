@@ -124,7 +124,7 @@
             <p>
             <p><strong style="color:green">@queueText</strong></p>
             <p>
-                <input type="submit" value="Add Search" style="background-color:skyblue" />
+                <input type="submit" value="Add Search" />
             </p>
 
         </fieldset>
@@ -138,30 +138,15 @@
     <span class="text-center">
 
 
-        <button class="button" style="background-color:lightblue">
+        <button class="button">
             @Html.ActionLink("Implement Searches", "AdvanceSearch", "StockPerformance")
         </button>
     </span>
     <span class="text-center">
-        <button class="button" style="background-color:lightblue">
+        <button class="button">
             @Html.ActionLink("Clear All Seaches", "AdvanceSearch", "Home", new { willClearAllSearch = true })
         </button>
     </span>
-    <div class="text-center">
-        <button class="button" style="background-color:lightblue">
-            @Html.ActionLink("Use Default Setting", "AdvanceSearch", "Home", new { useDefaultSetting = true })
-        </button>
-
-    </div>
-
-    <span class="text-center">
-
-        <button class="button" style="background-color:lightgreen">
-            @Html.ActionLink("Search For All Symbol", "AdvanceSearch", "StockPerformance", new { searchAll = true })
-        </button>
-    </span>
-
-
 </div>
 
 

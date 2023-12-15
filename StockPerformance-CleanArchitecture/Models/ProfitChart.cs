@@ -65,8 +65,8 @@ namespace FusionChartsRazorSamples.Pages
             // Instantiate Column Chart
             Charts.ColumnChart column = new Charts.ColumnChart("stock_price_history");
             // Set Chart's width and height
-            column.Width.Pixel(700);
-            column.Height.Pixel(400);
+            column.Width.Pixel(800);
+            column.Height.Pixel(500);
             // Set DataModel instance as the data source of the chart
             column.Data.Source = model;
             // Set Chart Title
@@ -114,7 +114,7 @@ namespace FusionChartsRazorSamples.Pages
             // Instantiate Column Chart
             Charts.ColumnChart column = new Charts.ColumnChart("profit_chart_by_symbol");
             // Set Chart's width and height
-            column.Width.Pixel(700);
+            column.Width.Pixel(800);
             column.Height.Pixel(400);
             // Set DataModel instance as the data source of the chart
             column.Data.Source = model;
@@ -165,8 +165,8 @@ namespace FusionChartsRazorSamples.Pages
             // Instantiate Column Chart
             Charts.ColumnChart column = new Charts.ColumnChart("profit_chart_monthly");
             // Set Chart's width and height
-            column.Width.Pixel(700);
-            column.Height.Pixel(400);
+            column.Width.Pixel(800);
+            column.Height.Pixel(500);
             // Set DataModel instance as the data source of the chart
             column.Data.Source = model;
             // Set Chart Title

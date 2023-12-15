@@ -62,7 +62,9 @@ namespace EntityPersistence.DataAccessors
                     "aapl", "bac", "DOCU", "lly" , "ma", "nvo", "pbr", "alsn", "ares",
                     "GIC", "bwmx", "rs" , "spok", "arcb", "jbht", "googl", "nvda",
                     "msft", "lkncy", "vrt", "cmt", "stvn", "anet", "onto", "MLM",
-                    "vmc","acls", "alv","avgo","matx"
+                    "vmc","acls", "alv","avgo","matx", "syk", "amat", "ibm", "intu",
+                    "tmus", "lin", "mcd","acn", "v", "orcl", "pgr", "pdd", "arch", "sym",
+                    "celh", "tgls","kbh", "cop"
                  };
             var growingIn2022To2023 = new List<string>
             {
@@ -101,12 +103,12 @@ namespace EntityPersistence.DataAccessors
             return new TradingRule
             {
                 BuyPercentageLimitation = (decimal)1.07*100,
-                SellPercentageLimitation = (decimal)0.94*100,
+                SellPercentageLimitation = (decimal)0.80*100,
                 HigherRangeOfTradingDate = 31,
                 LowerRangeOfTradingDate = 1,
                 PurchaseLimitation = 1000,
                 Id = 0,
-                LossLimitation = 3000,
+                LossLimitation = 30000,
                 NumberOfTradeAMonth = 2,
                 SellAllWhenPriceDropAtPercentageSinceLastTrade = (decimal)0.5* 100,
             };
