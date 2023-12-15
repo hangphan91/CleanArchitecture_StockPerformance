@@ -14,9 +14,9 @@
     var searchDetail = Model.SearchDetail;
     var showHistoricalChart = false;
     var text = @Model.ProfitInPercentage > 0 ? "increase." : "decrease.";
-    var overallPerformance = $"The profit over the period from " +
-          $"{@Model.SearchDetail.SearchSetup.StartingYear} to {@Model.SearchDetail.SearchSetup.EndingYear}" +
-          $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text}";
+    var dateText = $"{@Model.SearchDetail.SettingDate} to {@Model.SearchDetail.SearchSetup.EndingYear}";
+    var overallPerformance = $"The profit over the period from " + dateText  +
+  $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text}";
 }
 <h3>@ViewData["Title"]</h3>
 
