@@ -34,7 +34,7 @@
 
             <tr>
                 <th>
-                    @Html.ActionLink(row.Symbol, "StockPerformance", "StockPerformance", new { searchDetail = row.SearchDetail })
+                    @Html.ActionLink(row.Symbol, "StockPerformance", "StockPerformance", new { json = row.SearchDetail.ToJson() })
                 </th>
                 <th>@row.ProfitInPercentage</th>
                 <th>@row.ProfitInDollar</th>

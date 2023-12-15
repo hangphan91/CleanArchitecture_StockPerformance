@@ -19,8 +19,9 @@ namespace StockPerformance_CleanArchitecture.Controllers
             _searchDetailManager = ManagerHelper.SearchDetailManager;
         }
 
-        public async Task<IActionResult> StockPerformance(string json, SearchDetail? searchDetail)
-        {           
+        public async Task<IActionResult> StockPerformance(string json)
+        {
+            SearchDetail? searchDetail = null;
 
             if (!string.IsNullOrWhiteSpace(json))
                 searchDetail = JsonSerializer.Deserialize<SearchDetail>(json);
