@@ -37,13 +37,19 @@ public class HomeController : Controller
         if (useDefaultSetting)
         {
             advanceSearch.SearchDetail = _searchDetailManager.SetInitialView("AAPL", useDefaultSetting);
-           
+
         }
 
         var result = _searchDetailManager.UpdateAdvanceSearch(advanceSearch,
             willClearAllSearch);
-       
+
         return View(result);
+
+    }
+
+    public IActionResult HowToUse()
+    {
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
