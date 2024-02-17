@@ -14,7 +14,9 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 _responses = new ConcurrentBag<StockPerformanceResponse>();
 
             if (GetResponseFromCache(response.SearchDetail) == null)
+            {
                 _responses.Add(response);
+            }
         }
 
 

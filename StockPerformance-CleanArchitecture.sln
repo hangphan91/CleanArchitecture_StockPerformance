@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformance-CleanArchi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceCalculator", "StockPerformanceCalculator\StockPerformanceCalculator.csproj", "{075F1E9E-4936-4EA2-A5E3-755A3C416D80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceCalculatorUnitTests", "StockPerformanceCalculatorUnitTests\StockPerformanceCalculatorUnitTests.csproj", "{12D4DCAF-D211-4C76-8834-14B0B27B590B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "StockPerformanceCalculatorUnitTests\UnitTests.csproj", "{12D4DCAF-D211-4C76-8834-14B0B27B590B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityDefinitions", "EntityDefinitions\EntityDefinitions.csproj", "{95B30E48-0965-4F47-96A2-FE64213BD7BF}"
 EndProject

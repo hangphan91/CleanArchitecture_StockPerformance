@@ -7,22 +7,24 @@ namespace StockPerformance_CleanArchitecture.Formatters
 	{
         public static StringBuilder FormatResultToDisplay(ProfitSummary profitSummary)
         {
-            var result = new StringBuilder();           
+            var result = new StringBuilder(); 
+           
+            var metric = profitSummary.Metric == Models.ProfitDetails.MetricType.InPercentage ? "%": "$";
 
-            profitSummary.MonthlyProfits.ForEach(mProfit => result.AppendLine(mProfit.DisplayProfit()));
-            profitSummary.YearlyProfits.ForEach(yProfit => result.AppendLine(yProfit.DisplayProfit()));
-
-            profitSummary.MonthlyGrowthSpeeds.ForEach(mGrowthSpeed => result.AppendLine(mGrowthSpeed.DisplayGrowthSpeed()));
-            profitSummary.YearlyGrowthSpeeds.ForEach(yGrowthSpeed => result.AppendLine(yGrowthSpeed.DisplayGrowthSpeed()));
-
-
-            result.AppendLine($"Total monthly profit: {profitSummary.TotalMonthlyProfit}");
-            result.AppendLine($"Total yearly profit: {profitSummary.TotalYearlyProfit}");
-
-            result.AppendLine($"Average monthly growth rate: {profitSummary.AverageMonthlyGrowthSpeed}");
-            result.AppendLine($"Arverage yearly growth rate: {profitSummary.AverageYearlyGrowthSpeed}");
+            result.AppendLine($"Total profit: {profitSummary.TotalYearlyProfit} {metric}");
+            result.AppendLine($"Average monthly growth rate: {profitSummary.AverageMonthlyGrowthSpeed.RoundNumber()} {metric}");
+            result.AppendLine($"Arverage yearly growth rate: {profitSummary.AverageYearlyGrowthSpeed.RoundNumber()} {metric}");
             return result;
         }
+
+        public static decimal RoundNumber(this decimal? number)
+        {
+            if (number == null)
+                return 0;
+
+            return Math.Round(number.Value, 2);
+        }
+
 
         public static decimal RoundNumber(this decimal number)
         {

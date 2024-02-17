@@ -72,6 +72,16 @@ namespace StockPerformance_CleanArchitecture.Models
             return toDisplay;
         }
 
+        public string Conclusion()
+        {
+            var text = ProfitInPercentage > 0 ? "increase." : "decrease.";
+            var dateText = $"{SearchDetail.SettingDate} to {SearchDetail.SearchSetup.EndingYear}";
+            var overallPerformance = $"The profit over the period from " + dateText +
+          $" was ${ProfitInDollar}, representing a {ProfitInPercentage}% {text}";
+
+            return overallPerformance;
+        }
+
         internal StockPerformanceResponse Map(StockPerformanceSummary summary)
         {
             var response = new StockPerformanceResponse

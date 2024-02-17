@@ -11,9 +11,11 @@ namespace StockPerformance_CleanArchitecture.Managers
     {
         IEntityDefinitionsAccessor _entityDefinitionsAccessor;
         private bool IsFirstAdvancedSearch = true;
+        SendEmailTimer _timer;
         public SearchDetailManager()
         {
             _entityDefinitionsAccessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
+            _timer = new SendEmailTimer();
         }
 
         internal SearchDetail GetCurrentSearchDetail()
@@ -150,6 +152,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             response.SearchDetail = searchDetail;
 
             CachedHelper.AddCache(response);
+            _timer.AddResponse(response, _entityDefinitionsAccessor.GetEmails());
             return response;
         }
 

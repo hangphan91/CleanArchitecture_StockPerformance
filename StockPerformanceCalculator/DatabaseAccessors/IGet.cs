@@ -11,6 +11,7 @@ namespace StockPerformanceCalculator.DatabaseAccessors
         public List<string> GetSymbolsBetweenIds(long startingId, long endingId);
         EntityDefinitions.PerformanceSetup GetPerformanceSetup();
 		public List<string> GetSavedSymbols(List<string> symbols);
+		public List<EntityDefinitions.Email> GetEmails();
 	}
 }
 

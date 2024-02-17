@@ -11,7 +11,7 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         }
         public override string DisplayProfitSummary()
         {
-            return $"{Metric}. {base.DisplayProfitSummary()}";
+            return $"{base.DisplayProfitSummary()}";
         }
     }
 }

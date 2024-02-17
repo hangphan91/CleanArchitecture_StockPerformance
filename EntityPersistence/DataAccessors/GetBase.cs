@@ -64,6 +64,11 @@ namespace EntityPersistence.DataAccessors
                 .Select(s => s.TradingSymbol)
                 .ToList();
         }
+
+        public List<Email> GetEmails()
+        {
+            return _dataContext.Emails;
+        }
     }
 }
 

@@ -14,6 +14,7 @@ namespace EntityPersistence.DataAccessors
         public List<PerformanceSetup> PerformanceSetups { get; set; }
         public List<Position> Positions { get; set; }
         public List<Deposit> Deposits { get; set; }
+        public List<Email> Emails { get; set; }
 
         public DataContext()
         {
@@ -27,6 +28,7 @@ namespace EntityPersistence.DataAccessors
             PerformanceByMonths = new List<PerformanceByMonth>();
             Positions = new List<Position>();
             Deposits = new List<Deposit>();
+            Emails = new List<Email>();
 
             var tradingRule = SetDefaultTradingRule();
             var symbols = SetDefaultSymbolList();
@@ -41,6 +43,18 @@ namespace EntityPersistence.DataAccessors
 
             var performanceSetup = SetDefaultPerformanceSetup(lastSymbolId, firstSymbolId);
             PerformanceSetups.Add(performanceSetup);
+
+            Emails.AddRange(GetEmailAddresses());
+        }
+
+        private List<Email> GetEmailAddresses()
+        {
+            return new List<Email>
+            {
+                new Email{Id = 0, EmailAddress = "hang200280@yahoo.com", FistName = "Hang"},
+                new Email{Id = 0, EmailAddress = "funnyluv122@gmail.com", FistName = "Hang"},
+                new Email{Id = 0, EmailAddress = "stockperformance2023@gmail.com", FistName = "Love"},
+            };
         }
 
         private PerformanceSetup SetDefaultPerformanceSetup(long lastSymbolId, long firstSymbolId)
@@ -100,15 +114,15 @@ namespace EntityPersistence.DataAccessors
         {
             return new TradingRule
             {
-                BuyPercentageLimitation = (decimal)1.07*100,
-                SellPercentageLimitation = (decimal)0.94*100,
+                BuyPercentageLimitation = (decimal)1.07 * 100,
+                SellPercentageLimitation = (decimal)0.94 * 100,
                 HigherRangeOfTradingDate = 31,
                 LowerRangeOfTradingDate = 1,
                 PurchaseLimitation = 1000,
                 Id = 0,
                 LossLimitation = 3000,
                 NumberOfTradeAMonth = 2,
-                SellAllWhenPriceDropAtPercentageSinceLastTrade = (decimal)0.5* 100,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = (decimal)0.5 * 100,
             };
         }
     }

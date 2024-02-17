@@ -54,6 +54,11 @@ namespace EntityPersistence.DataAccessors
             return _getBase.GetTradingRule();
         }
 
+        public List<Email> GetEmails()
+        {
+            return _getBase.GetEmails();
+        }
+
         public long Insert(TradingRule tradingRule)
         {
             return _insertBase.Insert(tradingRule);
