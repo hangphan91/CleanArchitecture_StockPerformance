@@ -47,7 +47,7 @@ namespace StockPerformance_CleanArchitecture.Models
 
         public string DisplayStockPerformance()
         {
-
+            var totalValue = (CurrentPrice * CurrentHoldingShare).RoundNumber();
             var toDisplay = $"The performance report for {Symbol}, reflecting on the period from {StartDate}" +
                 $" indicates a total deposit of ${TotalDeposit} and " +
                 $"a total holding in position of ${TotalBalanceHoldingInPosition}." + Environment.NewLine +
@@ -67,7 +67,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 $"with a maximum of {SearchDetail.TradingRule.NumberOfTradeAMonth} " +
                 $"trades per month. " + Environment.NewLine +
                 $"The current stock price is ${CurrentPrice}, and the " +
-                $"current holding share is {CurrentHoldingShare}.";
+                $"current holding share is {CurrentHoldingShare}. Total value is ${totalValue}.";
 
             return toDisplay;
         }

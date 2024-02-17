@@ -49,8 +49,8 @@ namespace EntityPersistence.DataAccessors
             {
                 EndingSymbolId = lastSymbolId,
                 StartingSymbolId = firstSymbolId,
-                StartingYear = new DateOnly(2020, DateTime.Now.Month, DateTime.Now.Day),
-                EndingYear = new DateOnly(2023, DateTime.Now.Month, DateTime.Now.Day),
+                StartingYear = new DateOnly(DateTime.Now.AddYears(-4).Year, DateTime.Now.Month, DateTime.Now.Day),
+                EndingYear = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
             };
         }
 
