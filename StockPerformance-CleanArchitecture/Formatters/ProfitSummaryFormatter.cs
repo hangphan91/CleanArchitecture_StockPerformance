@@ -11,7 +11,7 @@ namespace StockPerformance_CleanArchitecture.Formatters
            
             var metric = profitSummary.Metric == Models.ProfitDetails.MetricType.InPercentage ? "%": "$";
 
-            result.AppendLine($"Total profit: {profitSummary.TotalYearlyProfit} {metric}");
+            result.AppendLine($"Total profit: ${profitSummary.TotalYearlyProfit}");
             result.AppendLine($"Average monthly growth rate: {profitSummary.AverageMonthlyGrowthSpeed.RoundNumber()} {metric}");
             result.AppendLine($"Arverage yearly growth rate: {profitSummary.AverageYearlyGrowthSpeed.RoundNumber()} {metric}");
             return result;

@@ -27,7 +27,11 @@ namespace StockPerformance_CleanArchitecture.Managers
                 stockPerformanceResponses.All(a => a.Symbol != response.Symbol))
                 stockPerformanceResponses.Add(response);
 
-            toSendEmails.ForEach(a => emails.Add(a));
+            toSendEmails.ForEach(a =>
+            {
+                if (!emails.Any(e => e.EmailAddress == a.EmailAddress))
+                    emails.Add(a);
+            });
         }
 
         private void SetTimer()
@@ -42,8 +46,8 @@ namespace StockPerformance_CleanArchitecture.Managers
 
         private void OnTimedEventStart(Object source, ElapsedEventArgs e)
         {
-            var responses = stockPerformanceResponses.Select(a => a).ToList();
-            var emailsTosend = emails.Select(a => a).ToList();
+            var responses = stockPerformanceResponses.Select(a => a).Distinct().ToList();
+            var emailsTosend = emails.Select(a => a).Distinct().ToList();
             // uhaphan only send email at 5 am and on week day
             var isWeekDay = !(DateTime.Now.DayOfWeek == DayOfWeek.Saturday ||
                 DateTime.Now.DayOfWeek == DayOfWeek.Sunday);
