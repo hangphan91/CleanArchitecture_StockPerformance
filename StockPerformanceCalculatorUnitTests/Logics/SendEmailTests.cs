@@ -52,6 +52,15 @@ namespace UnitTests.Logics
                         MAXMonthlyProfit = (decimal)1.33333,
                         MAXYearlyProfit = (decimal)13.32323
                     },
+                },
+                new StockPerformanceResponse
+                {
+                    StartDate = new DateDetail(2022, 11, 20),
+                    Symbol = "ARCB",
+                    ProfitSummaryPercentage = new ProfitSummaryPercentage{
+                        MAXMonthlyProfit = (decimal)1.33333,
+                        MAXYearlyProfit = (decimal)13.32323
+                    },
                 }
             };
 

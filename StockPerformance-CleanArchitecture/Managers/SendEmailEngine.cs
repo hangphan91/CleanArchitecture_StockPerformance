@@ -35,7 +35,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             return success;
         }
 
-        public static void GenerateEmail(List<StockPerformanceResponse> dictionary,
+        public static void GenerateEmail(List<StockPerformanceResponse> list,
             EntityDefinitions.Email email, out MailMessage emailMessage, out bool success)
         {
             var htmlHead = "<!DOCTYPE html>\n<html>\n<head>\n  <title></title>\n  <meta charset=\"UTF-8\">\n</head>\n<body>";
@@ -55,14 +55,13 @@ namespace StockPerformance_CleanArchitecture.Managers
                             $"  <th>Link</th> " +
                             $" </tr> ";
             var tableRowsMessage = "";
-            foreach (var item in dictionary)
+            foreach (var item in list)
             {
                 if (item == null)
                     continue;
 
                 item.ProfitSummaryPercentage?.SetTotalProfit();
                 var link = $"https://stockperformance.azurewebsites.net/?symbol={item.Symbol}";
-                tableRowsMessage += tableRowsMessage;
                 tableRowsMessage += $"  <tr> ";
                 tableRowsMessage += $"  <th>{item.Symbol}</th>   ";
                 tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MAXYearlyProfit?.RoundNumber().ToString()}</th> ";
