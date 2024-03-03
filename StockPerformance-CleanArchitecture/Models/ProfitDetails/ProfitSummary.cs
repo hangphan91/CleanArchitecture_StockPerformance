@@ -49,11 +49,11 @@ namespace StockPerformance_CleanArchitecture.ProfitDetails
         {
             try
             {
-                MAXMonthlyProfit = MonthlyProfits?.Max(mProfit => mProfit.Amount);
-                MAXYearlyProfit = YearlyProfits?.Max(yProfit => yProfit.Amount);
+                MAXMonthlyProfit = MonthlyGrowthSpeeds?.Max(mProfit => mProfit.Rate);
+                MAXYearlyProfit = YearlyGrowthSpeeds?.Max(yProfit => yProfit.Rate);
 
-                MINMonthlyProfit = MonthlyProfits?.Min(mProfit => mProfit.Amount);
-                MINYearlyProfit = YearlyProfits?.Min(yProfit => yProfit.Amount);
+                MINMonthlyProfit = MonthlyGrowthSpeeds?.Min(mProfit => mProfit.Rate);
+                MINYearlyProfit = YearlyGrowthSpeeds?.Min(yProfit => yProfit.Rate);
 
                 AverageMonthlyGrowthSpeed = MonthlyGrowthSpeeds?.Average(mGrowth => mGrowth.Rate);
                 AverageYearlyGrowthSpeed = YearlyGrowthSpeeds?.Average(yGrowth => yGrowth.Rate);
