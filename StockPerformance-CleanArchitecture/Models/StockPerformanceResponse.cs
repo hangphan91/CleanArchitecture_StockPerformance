@@ -2,6 +2,7 @@
 using StockPerformance_CleanArchitecture.Formatters;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformanceCalculator.Models;
+using Utilities;
 
 namespace StockPerformance_CleanArchitecture.Models
 {

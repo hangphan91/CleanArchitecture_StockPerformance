@@ -16,8 +16,10 @@ namespace StockPerformance_CleanArchitecture.ProfitDetails
         public List<MonthlyGrowthSpeed> MonthlyGrowthSpeeds { get; set; }
         public List<YearlyGrowthSpeed> YearlyGrowthSpeeds { get; set; }
 
-        public decimal? TotalYearlyProfit { get; set; }
-        public decimal? TotalMonthlyProfit { get; set; }
+        public decimal? MAXYearlyProfit { get; set; }
+        public decimal? MAXMonthlyProfit { get; set; }
+        public decimal? MINYearlyProfit { get; set; }
+        public decimal? MINMonthlyProfit { get; set; }
 
         public decimal? AverageMonthlyGrowthSpeed { get; set; }
         public decimal? AverageYearlyGrowthSpeed { get; set; }
@@ -47,8 +49,11 @@ namespace StockPerformance_CleanArchitecture.ProfitDetails
         {
             try
             {
-                TotalMonthlyProfit = MonthlyProfits?.Sum(mProfit => mProfit.Amount);
-                TotalYearlyProfit = YearlyProfits?.Sum(yProfit => yProfit.Amount);
+                MAXMonthlyProfit = MonthlyProfits?.Max(mProfit => mProfit.Amount);
+                MAXYearlyProfit = YearlyProfits?.Max(yProfit => yProfit.Amount);
+
+                MINMonthlyProfit = MonthlyProfits?.Min(mProfit => mProfit.Amount);
+                MINYearlyProfit = YearlyProfits?.Min(yProfit => yProfit.Amount);
 
                 AverageMonthlyGrowthSpeed = MonthlyGrowthSpeeds?.Average(mGrowth => mGrowth.Rate);
                 AverageYearlyGrowthSpeed = YearlyGrowthSpeeds?.Average(yGrowth => yGrowth.Rate);

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using StockPerformance_CleanArchitecture.Models;
+using Utilities;
 
 namespace StockPerformance_CleanArchitecture.Managers
 {
@@ -12,7 +13,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             foreach (var email in emailsTosend)
             {
                 bool success;
-                GenerateEmail(responses, email, out var emailMessage, out success);
+                GenerateEmail(responses.Distinct().ToList(), email, out var emailMessage, out success);
                 SendEmail(emailMessage);
             }
         }
@@ -43,12 +44,13 @@ namespace StockPerformance_CleanArchitecture.Managers
             var tableColumnsMessage =
                             $" <tr> " +
                             $"  <th>Symbol</th>   " +
-                            $"  <th>Yearly Profit</th> " +
-                            $"  <th>Monthly Profit</th> " +
+                            $"  <th>Max Yearly Profit %</th> " +
+                            $"  <th>Max Monthly Profit %</th> " +
+                            $"  <th>Min Yearly Profit %</th> " +
+                            $"  <th>Min Monthly Profit %</th> " +
                             $"  <th>Average Yearly Growth</th> " +
                             $"  <th>Average Monthly Growth</th> " +
                             $"  <th>Profit %</th> " +
-                            $"  <th>Profit $</th> " +
                             $"  <th>Time Frame $</th> " +
                             $"  <th>Link</th> " +
                             $" </tr> ";
@@ -63,16 +65,17 @@ namespace StockPerformance_CleanArchitecture.Managers
                 tableRowsMessage += tableRowsMessage;
                 tableRowsMessage += $"  <tr> ";
                 tableRowsMessage += $"  <th>{item.Symbol}</th>   ";
-                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.TotalYearlyProfit?.ToString()}</th> ";
-                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.TotalMonthlyProfit?.ToString()}</th> ";
+                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MAXYearlyProfit?.RoundNumber().ToString()}</th> ";
+                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MAXMonthlyProfit?.RoundNumber().ToString()}</th> ";
+                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MINYearlyProfit?.RoundNumber().ToString()}</th> ";
+                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MINMonthlyProfit?.RoundNumber().ToString()}</th> ";
                 var yearlyGrowth = item.ProfitSummaryPercentage?.YearlyGrowthSpeeds;
                 var monthlyGrowth = item.ProfitSummaryPercentage?.MonthlyGrowthSpeeds;
                 var yearlyGrowthAvg = yearlyGrowth?.Count != 0 ? yearlyGrowth?.Average(a => a.Rate) : 0;
-                var monthlyGrowthAvg = monthlyGrowth?.Count != 0 ? monthlyGrowth?.Average(a => a.Rate) : 0;
-                tableRowsMessage += $"  <th>{yearlyGrowthAvg}</th> ";
-                tableRowsMessage += $"  <th>{monthlyGrowthAvg}</th> ";
-                tableRowsMessage += $"  <th>{item.ProfitInPercentage}</th> ";
-                tableRowsMessage += $"  <th>{item.ProfitInDollar}</th> ";
+                var monthlyGrowthAvg = monthlyGrowth?.Count != 0 ? monthlyGrowth?.Average(a => a.Rate): 0;
+                tableRowsMessage += $"  <th>{yearlyGrowthAvg.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{monthlyGrowthAvg.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{item.ProfitInPercentage.RoundNumber()}</th> ";
                 tableRowsMessage += $"  <th>{item.SearchDetail?.SettingDate} to {item.SearchDetail?.SearchSetup?.EndingYear}</th> ";
                 tableRowsMessage += $"  <th> <a href={link}>{item.Symbol}</a></th>";
                 tableRowsMessage += $" </tr> ";
