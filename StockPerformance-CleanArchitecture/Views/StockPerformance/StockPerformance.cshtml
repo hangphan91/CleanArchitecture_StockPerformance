@@ -17,6 +17,8 @@
     var dateText = $"{@Model.SearchDetail.SettingDate} to {@Model.SearchDetail.SearchSetup.EndingYear}";
     var overallPerformance = $"The profit over the period from " + dateText  +
   $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text}";
+
+    Model.ProfitSummaryPercentage.DisplayProfitSummary();
 }
 <h3>@ViewData["Title"]</h3>
 

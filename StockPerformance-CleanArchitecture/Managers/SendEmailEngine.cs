@@ -48,8 +48,8 @@ namespace StockPerformance_CleanArchitecture.Managers
                             $"  <th>Max Monthly Profit %</th> " +
                             $"  <th>Min Yearly Profit %</th> " +
                             $"  <th>Min Monthly Profit %</th> " +
-                            $"  <th>Average Yearly Growth</th> " +
-                            $"  <th>Average Monthly Growth</th> " +
+                            $"  <th>Average Yearly Profit %</th> " +
+                            $"  <th>Average Monthly Profit %</th> " +
                             $"  <th>Profit %</th> " +
                             $"  <th>Time Frame $</th> " +
                             $"  <th>Link</th> " +
@@ -62,18 +62,22 @@ namespace StockPerformance_CleanArchitecture.Managers
 
                 item.ProfitSummaryPercentage?.SetTotalProfit();
                 var link = $"https://stockperformance.azurewebsites.net/?symbol={item.Symbol}";
+
+                var yearlyAVGGrowth = item.ProfitSummaryPercentage?.AVGYearlyProfit;
+                var monthlyAVGGrowth = item.ProfitSummaryPercentage?.AVGMonthlyProfit;
+                var yearlyMinGrowth = item.ProfitSummaryPercentage?.MINYearlyProfit;
+                var monthlyMinGrowth = item.ProfitSummaryPercentage?.MINMonthlyProfit;
+                var yearlyMaxGrowth = item.ProfitSummaryPercentage?.MAXYearlyProfit;
+                var monthlyMaxGrowth = item.ProfitSummaryPercentage?.MAXMonthlyProfit;
+
                 tableRowsMessage += $"  <tr> ";
                 tableRowsMessage += $"  <th>{item.Symbol}</th>   ";
-                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MAXYearlyProfit?.RoundNumber().ToString()}</th> ";
-                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MAXMonthlyProfit?.RoundNumber().ToString()}</th> ";
-                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MINYearlyProfit?.RoundNumber().ToString()}</th> ";
-                tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.MINMonthlyProfit?.RoundNumber().ToString()}</th> ";
-                var yearlyGrowth = item.ProfitSummaryPercentage?.YearlyGrowthSpeeds;
-                var monthlyGrowth = item.ProfitSummaryPercentage?.MonthlyGrowthSpeeds;
-                var yearlyGrowthAvg = yearlyGrowth?.Count != 0 ? yearlyGrowth?.Average(a => a.Rate) : 0;
-                var monthlyGrowthAvg = monthlyGrowth?.Count != 0 ? monthlyGrowth?.Average(a => a.Rate): 0;
-                tableRowsMessage += $"  <th>{yearlyGrowthAvg.RoundNumber()}</th> ";
-                tableRowsMessage += $"  <th>{monthlyGrowthAvg.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{yearlyMaxGrowth.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{monthlyMaxGrowth.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{yearlyMinGrowth.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{monthlyMinGrowth.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{yearlyAVGGrowth.RoundNumber()}</th> ";
+                tableRowsMessage += $"  <th>{monthlyAVGGrowth.RoundNumber()}</th> ";
                 tableRowsMessage += $"  <th>{item.ProfitInPercentage.RoundNumber()}</th> ";
                 tableRowsMessage += $"  <th>{item.SearchDetail?.SettingDate} to {item.SearchDetail?.SearchSetup?.EndingYear}</th> ";
                 tableRowsMessage += $"  <th> <a href={link}>{item.Symbol}</a></th>";

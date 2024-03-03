@@ -173,7 +173,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 .ForEach(profit => response.ProfitSummaryPercentage.MonthlyProfits
                 .Add(new MonthlyProfit
                 {
-                    Amount = GetPercentage(100, profit.Amount),
+                    Amount = GetPercentage(GetTotalDepositUptoDate(response, profit), profit.Amount),
                     Month = profit.Month,
                     Year = profit.Year,
                 }));
@@ -182,7 +182,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 .ForEach(profit => response.ProfitSummaryPercentage.YearlyProfits
                 .Add(new YearlyProfit
                 {
-                    Amount = GetPercentage(100, profit.Amount),
+                    Amount = GetPercentage(GetTotalDepositUptoDate(response, profit), profit.Amount),
                     Year = profit.Year,
                 }));
 
@@ -190,7 +190,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 .ForEach(profit => response.ProfitSummaryPercentage.MonthlyGrowthSpeeds
                 .Add(new MonthlyGrowthSpeed
                 {
-                    Rate = GetPercentage(100, profit.Rate),
+                    Rate = GetPercentage(GetTotalDepositUptoDate(response, profit), profit.Rate),
                     Month = profit.Month,
                     Year = profit.Year,
                 }));
@@ -199,13 +199,45 @@ namespace StockPerformance_CleanArchitecture.Models
                 .ForEach(profit => response.ProfitSummaryPercentage.YearlyGrowthSpeeds
                 .Add(new YearlyGrowthSpeed
                 {
-                    Rate = GetPercentage(100, profit.Rate),
+                    Rate = GetPercentage(GetTotalDepositUptoDate(response, profit), profit.Rate),
                     Year = profit.Year,
                 }));
         }
 
+        private static decimal GetTotalDepositUptoDate(StockPerformanceResponse response, StockPerformanceCalculator.Models.GrowthSpeeds.GrowthSpeedByMonth profit)
+        {
+            return response.DepositLedgers
+                                .Where(a => a.Date < (new DateOnly(profit.Year, profit.Month, 1)).ToDateTime(default).AddMonths(1).AddDays(-1))
+                                .Sum(a => a.Amount);
+        }
+
+        private static decimal GetTotalDepositUptoDate(StockPerformanceResponse response, ProfitByMonth profit)
+        {
+            return response.DepositLedgers
+                                .Where(a => a.Date < (new DateOnly(profit.Year, profit.Month, 1)).ToDateTime(default).AddMonths(1).AddDays(-1))
+                                .Sum(a => a.Amount);
+        }
+
+        private static decimal GetTotalDepositUptoDate(StockPerformanceResponse response, ProfitByYear profit)
+        {
+            return response.DepositLedgers
+                                .Where(a => a.Date < (new DateOnly(profit.Year, 12, 1)).ToDateTime(default).AddMonths(1).AddDays(-1))
+                                .Sum(a => a.Amount);
+        }
+
+        private static decimal GetTotalDepositUptoDate(StockPerformanceResponse response,
+            StockPerformanceCalculator.Models.GrowthSpeeds.GrowthSpeedByYear profit)
+        {
+            return response.DepositLedgers
+                                .Where(a => a.Date < (new DateOnly(profit.Year, 12, 1)).ToDateTime(default).AddMonths(1).AddDays(-1))
+                                .Sum(a => a.Amount);
+        }
+
         public static decimal GetPercentage(decimal totalDeposit, decimal amount)
         {
+            if (totalDeposit == 0)
+                return 0;
+
             return (amount * 100 / totalDeposit).RoundNumber();
         }
     }
