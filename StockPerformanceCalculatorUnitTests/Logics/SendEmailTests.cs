@@ -37,6 +37,29 @@ namespace UnitTests.Logics
             success = SendEmailEngine.SendEmail(emailMessage);
             Assert.AreEqual(success, true);
         }
+
+        [TestMethod]
+        public void SendEmails()
+        {
+
+            var dictionary = new List<StockPerformanceResponse>
+            {
+                new StockPerformanceResponse
+                {
+                    StartDate = new DateDetail(2022, 11, 20),
+                    Symbol = "AAPL",
+                    ProfitSummaryPercentage = new ProfitSummaryPercentage(),
+
+                }
+            };
+
+            EntityDefinitions.Email email = new EntityDefinitions.Email
+            {
+                EmailAddress = "funnyluv122@gmail.com",
+                FistName = "Amor"
+            };
+            SendEmailEngine.CreateAndSendEmail(dictionary, new List<EntityDefinitions.Email> { email });
+        }
     }
 }
 

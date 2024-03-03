@@ -9,16 +9,12 @@ namespace StockPerformance_CleanArchitecture.Managers
         public static void CreateAndSendEmail(List<StockPerformanceResponse> responses,
             List<EntityDefinitions.Email> emailsTosend)
         {
-            MailMessage emailMessage = new MailMessage();
-
             foreach (var email in emailsTosend)
             {
                 bool success;
-                GenerateEmail(responses, email, out emailMessage, out success);
+                GenerateEmail(responses, email, out var emailMessage, out success);
+                SendEmail(emailMessage);
             }
-
-            SendEmail(emailMessage);
-
         }
 
         public static bool SendEmail(MailMessage emailMessage)
@@ -39,12 +35,12 @@ namespace StockPerformance_CleanArchitecture.Managers
         }
 
         public static void GenerateEmail(List<StockPerformanceResponse> dictionary,
-            EntityDefinitions.Email email,out MailMessage emailMessage, out bool success)
+            EntityDefinitions.Email email, out MailMessage emailMessage, out bool success)
         {
             var htmlHead = "<!DOCTYPE html>\n<html>\n<head>\n  <title></title>\n  <meta charset=\"UTF-8\">\n</head>\n<body>";
-            var textTable = htmlHead + $"<table> ";
+            var tableStartHtml = htmlHead + $"<table> ";
 
-            var tableColumnsMessage = 
+            var tableColumnsMessage =
                             $" <tr> " +
                             $"  <th>Symbol</th>   " +
                             $"  <th>Yearly Profit</th> " +
@@ -71,8 +67,8 @@ namespace StockPerformance_CleanArchitecture.Managers
                 tableRowsMessage += $"  <th>{item.ProfitSummaryPercentage?.TotalMonthlyProfit?.ToString()}</th> ";
                 var yearlyGrowth = item.ProfitSummaryPercentage?.YearlyGrowthSpeeds;
                 var monthlyGrowth = item.ProfitSummaryPercentage?.MonthlyGrowthSpeeds;
-                var yearlyGrowthAvg = yearlyGrowth?.Count != 0? yearlyGrowth?.Average(a => a.Rate) : 0;
-                var monthlyGrowthAvg = monthlyGrowth?.Count != 0? monthlyGrowth?.Average(a => a.Rate) : 0;
+                var yearlyGrowthAvg = yearlyGrowth?.Count != 0 ? yearlyGrowth?.Average(a => a.Rate) : 0;
+                var monthlyGrowthAvg = monthlyGrowth?.Count != 0 ? monthlyGrowth?.Average(a => a.Rate) : 0;
                 tableRowsMessage += $"  <th>{yearlyGrowthAvg}</th> ";
                 tableRowsMessage += $"  <th>{monthlyGrowthAvg}</th> ";
                 tableRowsMessage += $"  <th>{item.ProfitInPercentage}</th> ";
@@ -82,7 +78,7 @@ namespace StockPerformance_CleanArchitecture.Managers
                 tableRowsMessage += $" </tr> ";
             }
 
-            var tableMessage = textTable + tableColumnsMessage + tableRowsMessage + $"</table>";
+            var tableMessage = tableStartHtml + tableColumnsMessage + tableRowsMessage + $"</table>";
 
             var emailStartMessage = $@"Dear {email.FistName}, " +
                 $"\n This is your stock performance reports for {DateTime.Now.ToLongDateString()}." +
@@ -94,7 +90,7 @@ namespace StockPerformance_CleanArchitecture.Managers
                         "stockperformance2023@gmail.com",
                         email.EmailAddress,
                         $"Stock Performance Report on {DateTime.Now.ToLongDateString()}",
-                        body:fullMessage);
+                        body: fullMessage);
 
             emailMessage.IsBodyHtml = true;
 
