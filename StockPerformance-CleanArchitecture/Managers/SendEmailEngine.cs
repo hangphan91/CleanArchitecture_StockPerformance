@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using OoplesFinance.YahooFinanceAPI.Models;
 using StockPerformance_CleanArchitecture.Models;
 using Utilities;
 
@@ -43,16 +44,16 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             var tableColumnsMessage =
                             $" <tr> " +
-                            $"  <th>Symbol</th>   " +
+                            $"  <th>Symbol</th> " +
+                            $"  <th>Start Date $</th> " +
+                            $"  <th>End Date $</th> " +
                             $"  <th>Max Yearly Profit %</th> " +
                             $"  <th>Max Monthly Profit %</th> " +
                             $"  <th>Min Yearly Profit %</th> " +
                             $"  <th>Min Monthly Profit %</th> " +
                             $"  <th>Average Yearly Profit %</th> " +
                             $"  <th>Average Monthly Profit %</th> " +
-                            $"  <th>Profit %</th> " +
-                            $"  <th>Time Frame $</th> " +
-                            $"  <th>Link</th> " +
+                            $"  <th>Total Profit %</th> " +
                             $" </tr> ";
             var tableRowsMessage = "";
             foreach (var item in list)
@@ -71,7 +72,9 @@ namespace StockPerformance_CleanArchitecture.Managers
                 var monthlyMaxGrowth = item.ProfitSummaryPercentage?.MAXMonthlyProfit;
 
                 tableRowsMessage += $"  <tr> ";
-                tableRowsMessage += $"  <th>{item.Symbol}</th>   ";
+                tableRowsMessage += $"  <th> <a href={link}>{item.Symbol}</a></th>";
+                tableRowsMessage += $"  <th>{item.SearchDetail?.SettingDate}</th> ";
+                tableRowsMessage += $"  <th>{ item.SearchDetail?.SearchSetup?.EndingYear}</th> ";
                 tableRowsMessage += $"  <th>{yearlyMaxGrowth.RoundNumber()}</th> ";
                 tableRowsMessage += $"  <th>{monthlyMaxGrowth.RoundNumber()}</th> ";
                 tableRowsMessage += $"  <th>{yearlyMinGrowth.RoundNumber()}</th> ";
@@ -79,18 +82,19 @@ namespace StockPerformance_CleanArchitecture.Managers
                 tableRowsMessage += $"  <th>{yearlyAVGGrowth.RoundNumber()}</th> ";
                 tableRowsMessage += $"  <th>{monthlyAVGGrowth.RoundNumber()}</th> ";
                 tableRowsMessage += $"  <th>{item.ProfitInPercentage.RoundNumber()}</th> ";
-                tableRowsMessage += $"  <th>{item.SearchDetail?.SettingDate} to {item.SearchDetail?.SearchSetup?.EndingYear}</th> ";
-                tableRowsMessage += $"  <th> <a href={link}>{item.Symbol}</a></th>";
                 tableRowsMessage += $" </tr> ";
             }
 
             var tableMessage = tableStartHtml + tableColumnsMessage + tableRowsMessage + $"</table>";
 
             var emailStartMessage = $@"Dear {email.FistName}, " +
-                $"\n This is your stock performance reports for {DateTime.Now.ToLongDateString()}." +
-                $"\n Based on our analysis, these are growing stocks in recent years:";
+                $"<br>These are the stock performance reports for {DateTime.Now.ToLongDateString()}. " +
+                $"Our analysis highlights the following stocks that have shown growth in recent years:";
 
-            var fullMessage = htmlHead + emailStartMessage + tableMessage + "\n</body>\n</html>";
+            var url = "https://stockperformance.azurewebsites.net";
+            var emailEndSentence = $"<br>Thanks,<br> StockPerformance<br><br>Visit us at: <a href={url}>Stock Perfomance Site</a> ";
+
+            var fullMessage = htmlHead + emailStartMessage + tableMessage  + emailEndSentence + "\n</body>\n</html>";
 
             emailMessage = new MailMessage(
                         "stockperformance2023@gmail.com",
