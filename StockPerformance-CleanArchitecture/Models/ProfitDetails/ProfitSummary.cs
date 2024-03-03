@@ -47,12 +47,11 @@ namespace StockPerformance_CleanArchitecture.ProfitDetails
         {
             try
             {
+                TotalMonthlyProfit = MonthlyProfits?.Sum(mProfit => mProfit.Amount);
+                TotalYearlyProfit = YearlyProfits?.Sum(yProfit => yProfit.Amount);
 
-                TotalMonthlyProfit = MonthlyProfits.Sum(mProfit => mProfit.Amount);
-                TotalYearlyProfit = YearlyProfits.Sum(yProfit => yProfit.Amount);
-
-                AverageMonthlyGrowthSpeed = MonthlyGrowthSpeeds.Average(mGrowth => mGrowth.Rate);
-                AverageYearlyGrowthSpeed = YearlyGrowthSpeeds.Average(yGrowth => yGrowth.Rate);
+                AverageMonthlyGrowthSpeed = MonthlyGrowthSpeeds?.Average(mGrowth => mGrowth.Rate);
+                AverageYearlyGrowthSpeed = YearlyGrowthSpeeds?.Average(yGrowth => yGrowth.Rate);
             }
             catch (Exception ex)
             {
