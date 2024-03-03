@@ -7,13 +7,13 @@ public static class Extensions
         if (number == null)
             return 0;
 
-        return Math.Round(number.Value, 2);
+        return Math.Round(number.Value, 4);
     }
 
 
     public static decimal RoundNumber(this decimal number)
     {
-        return Math.Round(number, 2);
+        return Math.Round(number, 4);
     }
 }
 
