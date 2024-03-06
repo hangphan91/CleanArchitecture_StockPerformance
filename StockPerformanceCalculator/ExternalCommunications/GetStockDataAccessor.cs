@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Net.Http.Headers;
 using NodaTime;
 using YahooQuotesApi;
-using System.Text.Json;
 using OoplesFinance.YahooFinanceAPI;
 using OoplesFinance.YahooFinanceAPI.Enums;
 using OoplesFinance.YahooFinanceAPI.Models;
 using Fynance;
+using Newtonsoft.Json;
+using System;
 
 namespace HP.PersonalStocks.Mgr.Helpers
 {
@@ -17,6 +18,45 @@ namespace HP.PersonalStocks.Mgr.Helpers
         {
             CurrentSticker = currentTicker;
             _startingDate = startingDate;
+        }
+
+
+        public async Task<RapiAPiResponse> GetHistoricalDataRapicAPI()
+        {
+            var now = DateTime.Now;
+            var year = _startingDate.Year;
+            var month = _startingDate.Month;
+            var day = _startingDate.Day;
+
+            var a = "symbol=" +CurrentSticker +"&";
+            var b = "dateStart="+ year + "-" + month.ToString("D2") + "-" + day.ToString("D2") + "&";
+            var c = "dateEnd=" + now.Year + "-" + now.Month.ToString("D2") + "-" + now.Day.ToString("D2") + "&";
+
+            string QUERY_URL = "https://apistocks.p.rapidapi.com/weekly?" + a + b + c;
+
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(QUERY_URL),
+                Headers =
+                        {
+                            { "X-RapidAPI-Key", "66ca04f1b2msh6e01f8b0fc4767ep1caaaejsn889b168ca42a" },
+                            { "X-RapidAPI-Host", "apistocks.p.rapidapi.com" },
+                        },
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                var myDeserializedClass = JsonConvert.DeserializeObject<RapiAPiResponse>(body);
+                if (myDeserializedClass == null)
+                    throw new Exception("Failed to retrieve data");
+
+                return myDeserializedClass;
+            }
+
+            throw new Exception("Failed to retrieve data");
         }
 
         public async Task<Security?> GetHistoricalQuotesInfoAsyncFromYahoo()
@@ -33,7 +73,6 @@ namespace HP.PersonalStocks.Mgr.Helpers
 
                 var result = await quotes.GetAsync(CurrentSticker, Histories.PriceHistory);
 
-                
                 return result;
             }
             catch (Exception ex)
@@ -129,9 +168,9 @@ namespace HP.PersonalStocks.Mgr.Helpers
                 var day = _startingDate.Day;
                 string QUERY_URL = $"http://api.marketstack.com/v1/eod?access_key={apiKey}" +
                     $"&symbols={CurrentSticker}&" +
-                    $"date_from={year}-{month}-{day.ToString("D2")}&" +
-                    $"date_to={now.Year}-{now.Month}-{now.Day.ToString("D2")}" +
-                    $"limit=1000";
+                    $"date_from={year}-{month.ToString("D2")}-{day.ToString("D2")}&" +
+                    $"date_to={now.Year}-{now.Month.ToString("D2")}-{now.Day.ToString("D2")}&" +
+                    $"limit=5000";
                 using (HttpClient client = new HttpClient())
                 {
 
@@ -180,4 +219,45 @@ namespace HP.PersonalStocks.Mgr.Helpers
         public List<Datum> data { get; set; }
     }
 
+    public class Metadata
+    {
+        [JsonProperty("symbol")]
+        public string Symbol;
+
+        [JsonProperty("interval")]
+        public string Interval;
+
+        [JsonProperty("timezone")]
+        public string Timezone;
+    }
+
+    public class Result
+    {
+        [JsonProperty("date")]
+        public string Date;
+
+        [JsonProperty("open")]
+        public double Open;
+
+        [JsonProperty("close")]
+        public double Close;
+
+        [JsonProperty("high")]
+        public double High;
+
+        [JsonProperty("low")]
+        public double Low;
+
+        [JsonProperty("adjClose")]
+        public double AdjClose;
+    }
+
+    public class RapiAPiResponse
+    {
+        [JsonProperty("metadata")]
+        public Metadata Metadata;
+
+        [JsonProperty("results")]
+        public List<Result> Results;
+    }
 }

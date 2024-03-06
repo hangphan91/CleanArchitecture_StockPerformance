@@ -46,6 +46,11 @@ namespace StockPerformance_CleanArchitecture.Models
             StartDate = startDate;
         }
 
+        public string DisplayPerformanceResultTable()
+        {
+            return PerformanceResultFormatter.GetTableMessage(new List<StockPerformanceResponse> { this});
+        }
+
         public string DisplayStockPerformance()
         {
             var totalValue = (CurrentPrice * CurrentHoldingShare).RoundNumber();

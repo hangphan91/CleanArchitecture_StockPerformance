@@ -6,8 +6,7 @@
     System.Web.HttpUtility.HtmlEncode("'" + a.Symbol + ":" + a.StartDate.Month + "/" + a.StartDate.Year + "'")).ToArray();
     var data = Model.StockPerformanceResponses.Select(a =>
     System.Web.HttpUtility.HtmlEncode(a.ProfitInDollar)).ToArray();
-
-
+    var resultTable = Model.DisplayPerformanceResult();
 }
 <h1>@ViewData["Title"]</h1>
 <body>
@@ -23,9 +22,15 @@
     </button>
 
 </span>
-<div class="text-center">
-    <table class="table table-bordered table-responsive table-hover">
-        <tr>
+<div>
+    <h3>Perfomrance Result:</h3>
+    @Html.Raw(resultTable)
+
+@{ /*
+         </div>
+            <div class="text-center">
+            <table class="table table-bordered table-responsive table-hover">
+            <tr>
             <th>Symbol</th>
             <th>Profit In Percentage</th>
             <th>Profit In $</th>
@@ -33,10 +38,10 @@
             <th>End Date</th>
             <th>Created Time</th>
             <th>Number of trade a month</th>
-        </tr>
-        @foreach (var row in Model.StockPerformanceResponses)
+            </tr>
+            @foreach (var row in Model.StockPerformanceResponses)
 
-        {
+            {
             <tr>
                 <th>
                     @Html.ActionLink(row.Symbol, "StockPerformance", "StockPerformance", new { json = row.SearchDetail.ToJson()})
@@ -48,7 +53,7 @@
                 <th>@row.CreatedTime</th>
                 <th>@row.SearchDetail.TradingRule.NumberOfTradeAMonth</th>
             </tr>
-        }
-    </table>
-
-</div>
+            }
+            </table>
+            </div>*/
+   } 

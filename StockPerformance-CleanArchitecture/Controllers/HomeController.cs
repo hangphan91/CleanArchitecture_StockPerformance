@@ -18,9 +18,9 @@ public class HomeController : Controller
         _searchDetailManager = ManagerHelper.SearchDetailManager;
     }
 
-    public IActionResult Index(string symbol, bool useDefaultSetting)
+    public IActionResult Index(string symbol,  bool useDefaultSetting, int startYear = 2020)
     {
-        var currentSearchDetail = _searchDetailManager.SetInitialView(symbol,useDefaultSetting);
+        var currentSearchDetail = _searchDetailManager.SetInitialView(symbol, startYear, useDefaultSetting);
 
         return View(currentSearchDetail);
     }
@@ -36,7 +36,7 @@ public class HomeController : Controller
     {
         if (useDefaultSetting)
         {
-            advanceSearch.SearchDetail = _searchDetailManager.SetInitialView("AAPL", useDefaultSetting);
+            advanceSearch.SearchDetail = _searchDetailManager.SetInitialView("AAPL", 2020, useDefaultSetting);
 
         }
 

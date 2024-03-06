@@ -1,5 +1,6 @@
 ﻿using System;
 using FusionChartsRazorSamples.Pages;
+using StockPerformance_CleanArchitecture.Formatters;
 
 namespace StockPerformance_CleanArchitecture.Models
 {
@@ -12,6 +13,11 @@ namespace StockPerformance_CleanArchitecture.Models
 		{
 			StockPerformanceResponses = new List<StockPerformanceResponse>();
 		}
+
+		public string DisplayPerformanceResult()
+		{
+			return PerformanceResultFormatter.GetTableMessage(StockPerformanceResponses);
+        }
 	}
 }
 

@@ -33,13 +33,39 @@ namespace StockPerformanceCalculator.ExternalCommunications
 
             try
             {
-                var result = await dataAccessor.GetHistoricalQuotesInfoAsyncFromYahoo3();
+
+                var result = await dataAccessor.GetHistoricalDataRapicAPI();
                 response = new YahooFinanceAPIMapper().Map(result, symbol);
             }
-            catch (Exception ex)
+            catch (Exception ex0)
             {
-                var result2 = await dataAccessor.GetHistoricalQuotesInfoAsyncFromMarketStack();
-                response = new YahooFinanceAPIMapper().Map(result2, symbol);
+                try
+                {
+                    var result = await dataAccessor.GetHistoricalQuotesInfoAsyncFromYahoo3();
+                    response = new YahooFinanceAPIMapper().Map(result, symbol);
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        var result2 = await dataAccessor.GetHistoricalQuotesInfoAsyncFromMarketStack();
+                        response = new YahooFinanceAPIMapper().Map(result2, symbol);
+
+                    }
+                    catch (Exception ex2)
+                    {
+                        try
+                        {
+                            var result2 = await dataAccessor.GetHistoricalQuotesInfoAsyncFromYahoo();
+                            response = new YahooFinanceAPIMapper().Map(result2);
+                        }
+                        catch (Exception ex3)
+                        {
+                            var result2 = await dataAccessor.GetHistoricalQuotesInfoAsyncFromYahoo2();
+                            response = new YahooFinanceAPIMapper().Map(result2, symbol);
+                        }
+                    }
+                }
             }
 
             _currentPrice = response.OrderByDescending(a =>a.Date).FirstOrDefault()?.ClosingPrice ?? 0;

@@ -46,7 +46,7 @@ namespace UnitTests.Logics
             {
                 new StockPerformanceResponse
                 {
-                    StartDate = new DateDetail(2022, 11, 20),
+                    StartDate = new DateDetail(2021, 11, 20),
                     Symbol = "AAPL",
                     ProfitSummaryPercentage = new ProfitSummaryPercentage{
                         MAXMonthlyProfit = (decimal)1.33333,

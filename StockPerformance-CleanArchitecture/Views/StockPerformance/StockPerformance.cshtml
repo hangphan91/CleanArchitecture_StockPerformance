@@ -19,6 +19,7 @@
   $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text}";
 
     Model.ProfitSummaryPercentage.DisplayProfitSummary();
+    var resultTable = Model.DisplayPerformanceResultTable();
 }
 <h3>@ViewData["Title"]</h3>
 
@@ -31,6 +32,11 @@
         <h4>
             @overallPerformance
         </h4>
+
+        <div>
+            <h3>Performance Result:</h3>
+            @Html.Raw(resultTable)
+        </div>
     </div>
     <divclass ="text-center">
         <form method="post" class="text-center">
@@ -43,6 +49,7 @@
             <br />
         </form>
     </divclass>
+
     <div>
         <p>
             <h3>Monthly Profit</h3>

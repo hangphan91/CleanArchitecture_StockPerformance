@@ -53,7 +53,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
                     Symbol = symbol,
                 });
             }
-            return summaries;
+            return summaries.OrderBy(a => a.Date).ToList();
         }
 
         internal List<SymbolSummary> Map(List<HistoricalData> result, string symbol)
@@ -84,6 +84,23 @@ namespace StockPerformanceCalculator.ExternalCommunications
                 });
             }
             return summaries;
+        }
+
+        internal List<SymbolSummary> Map(RapiAPiResponse result, string symbol)
+        {
+            var summaries = new List<SymbolSummary>();
+            foreach (var item in result.Results)
+            {
+                DateTime.TryParse(item.Date, out var date);
+
+                summaries.Add(new SymbolSummary
+                {
+                    ClosingPrice = (decimal)item.Close,
+                    Date = date,
+                    Symbol = symbol,
+                });
+            }
+            return summaries.OrderBy(a => a.Date).ToList();
         }
     }
 }

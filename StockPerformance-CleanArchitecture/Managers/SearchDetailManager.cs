@@ -194,13 +194,15 @@ namespace StockPerformance_CleanArchitecture.Managers
             SearchDetailHelper.ClearSearchDetails();
         }
 
-        public SearchDetail SetInitialView(string symbol, bool useDefaultSetting)
+        public SearchDetail SetInitialView(string symbol, int startYear, bool useDefaultSetting)
         {
 
             var currentSearchDetail = GetCurrentSearchDetail();
             if (currentSearchDetail != null && !string.IsNullOrWhiteSpace(symbol))
+            {
                 currentSearchDetail.Symbol = symbol;
-
+                currentSearchDetail.SettingDate.Year = startYear;
+            }
             if (useDefaultSetting)
                 currentSearchDetail = GetInitialSearchDetail();
 
