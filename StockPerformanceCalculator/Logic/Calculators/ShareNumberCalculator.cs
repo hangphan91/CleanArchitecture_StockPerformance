@@ -11,6 +11,9 @@
 
         internal decimal CountShare(decimal currentPrice, decimal tradingCash)
         {
+            if (currentPrice == 0)
+                return (decimal)0;
+
             var shareCount = tradingCash / currentPrice;
             return shareCount;
         }

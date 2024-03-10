@@ -15,6 +15,7 @@ namespace EntityPersistence.DataAccessors
         public List<Position> Positions { get; set; }
         public List<Deposit> Deposits { get; set; }
         public List<Email> Emails { get; set; }
+        public List<SearchDetail> SearchDetails { get; set; }
 
         public DataContext()
         {
@@ -29,22 +30,47 @@ namespace EntityPersistence.DataAccessors
             Positions = new List<Position>();
             Deposits = new List<Deposit>();
             Emails = new List<Email>();
-
-            var tradingRule = SetDefaultTradingRule();
+            SearchDetails = new List<SearchDetail>();
             var symbols = SetDefaultSymbolList();
-            var depositRule = SetDefaultDepositRule();
+            Symbols.AddRange(symbols);
+
+            for (int i = 0; i < 6; i++)
+            {
+                SetSearchDetail(i==0);
+            }
+
+            Emails.AddRange(GetEmailAddresses());
+        }
+
+        private void SetSearchDetail(bool isDefault)
+        {
+            var tradingRule = GetRandomTradingRule(isDefault);
+            var depositRule = GetRandomDepositRule(isDefault);
 
             DepositRules.Add(depositRule);
             TradingRules.Add(tradingRule);
-            Symbols.AddRange(symbols);
 
             var lastSymbolId = Symbols.Last().Id;
             var firstSymbolId = Symbols.First().Id;
 
-            var performanceSetup = SetDefaultPerformanceSetup(lastSymbolId, firstSymbolId);
+            var performanceSetup = GetRandomPerformanceSetup(lastSymbolId, firstSymbolId, isDefault);
             PerformanceSetups.Add(performanceSetup);
+            var rand = new Random();
+            var randSymbolId = (long) rand.Next((int)firstSymbolId, (int)lastSymbolId);
+            SearchDetails.Add(GetSearchDetails(depositRule, tradingRule, randSymbolId, performanceSetup.Id, isDefault));
+        }
 
-            Emails.AddRange(GetEmailAddresses());
+        private SearchDetail GetSearchDetails(DepositRule depositRule,
+            TradingRule tradingRule, long symbolId, long performanceSetupId, bool isDefault)
+        {
+            return new SearchDetail
+            {
+                DepositRuleId = depositRule.Id,
+                TradingRuleId = tradingRule.Id,
+                Name =  isDefault ? "Default Setting" :"Saved Setting" + symbolId.ToString(),
+                SymbolId = symbolId,
+                PerformanceSetupId = performanceSetupId,
+            };
         }
 
         private List<Email> GetEmailAddresses()
@@ -57,7 +83,7 @@ namespace EntityPersistence.DataAccessors
             };
         }
 
-        private PerformanceSetup SetDefaultPerformanceSetup(long lastSymbolId, long firstSymbolId)
+        private PerformanceSetup GetDefaultPerformanceSetup(long lastSymbolId, long firstSymbolId)
         {
             return new PerformanceSetup
             {
@@ -65,6 +91,28 @@ namespace EntityPersistence.DataAccessors
                 StartingSymbolId = firstSymbolId,
                 StartingYear = new DateOnly(DateTime.Now.AddYears(-4).Year, DateTime.Now.Month, DateTime.Now.Day),
                 EndingYear = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
+                Id = 1,
+            };
+        }
+
+        private PerformanceSetup GetRandomPerformanceSetup(long lastSymbolId, long firstSymbolId, bool isDefault)
+        {
+            if (isDefault)
+                return GetDefaultPerformanceSetup(lastSymbolId,firstSymbolId);
+
+            var rand = new Random();
+
+            var randYear = rand.Next(2018, DateTime.Now.Year);
+            var randMonth = rand.Next(1, 12);
+            var randDay = rand.Next(1,28);
+            var randDate = new DateOnly(randYear, randMonth, randDay).AddDays(rand.Next(1, 100));
+            return new PerformanceSetup
+            {
+                EndingSymbolId = lastSymbolId,
+                StartingSymbolId = firstSymbolId,
+                StartingYear = randDate ,
+                EndingYear = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
+                Id = rand.Next(1,1000),
             };
         }
 
@@ -97,7 +145,7 @@ namespace EntityPersistence.DataAccessors
             return toSaveSymbols.Distinct().ToList();
         }
 
-        private DepositRule SetDefaultDepositRule()
+        private DepositRule GetDefaultDepositRule()
         {
             return new DepositRule
             {
@@ -110,12 +158,30 @@ namespace EntityPersistence.DataAccessors
             };
         }
 
-        private static TradingRule SetDefaultTradingRule()
+        private DepositRule GetRandomDepositRule(bool isDefault)
+        {
+            if (isDefault)
+                return GetDefaultDepositRule();
+
+            var rand = new Random();
+
+            return new DepositRule
+            {
+                DepositAmount = rand.Next(1,5)*100,
+                FirstDepositDate = 1,
+                SecondDepositDate = 16,
+                NumberOfDepositDate = 2,
+                Id = rand.Next(1,1000),
+                InitialDepositAmount = rand.Next(1,10)*1000,
+            };
+        }
+
+        private static TradingRule GetDefaultTradingRule()
         {
             return new TradingRule
             {
-                BuyPercentageLimitation = (decimal)1.00 * 100,
-                SellPercentageLimitation = (decimal)0.80 * 100,
+                BuyPercentageLimitation = (decimal)0,
+                SellPercentageLimitation = (decimal)20,
                 HigherRangeOfTradingDate = 31,
                 LowerRangeOfTradingDate = 1,
                 PurchaseLimitation = 1000,
@@ -123,6 +189,35 @@ namespace EntityPersistence.DataAccessors
                 LossLimitation = 3000,
                 NumberOfTradeAMonth = 2,
                 SellAllWhenPriceDropAtPercentageSinceLastTrade = (decimal)0.5 * 100,
+            };
+        }
+
+        private static TradingRule GetRandomTradingRule(bool isDefault)
+        {
+            if (isDefault)
+                return GetDefaultTradingRule();
+
+            var rand = new Random();
+            var randBuyNumber = (decimal)rand.Next(0, 20);
+            var randSellNumber = (decimal)rand.Next(0, 20);
+            var randTradeDateHigh = rand.Next(15, 30);
+            var randTradeDateLow = rand.Next(1, 14);
+
+            var randPurchaseLimit = rand.Next(1, 5) * 500;
+            var randLostLimit = rand.Next(1, 4) * randPurchaseLimit;
+            var randNumberOfTrade = rand.Next(1, 2);
+            var randSellAll = ((decimal)rand.Next(1, 10)) * 10;
+            return new TradingRule
+            {
+                BuyPercentageLimitation = randBuyNumber,
+                SellPercentageLimitation = randSellNumber,
+                HigherRangeOfTradingDate = randTradeDateHigh,
+                LowerRangeOfTradingDate = randTradeDateLow,
+                PurchaseLimitation = randPurchaseLimit,
+                Id = rand.Next(1,1000),
+                LossLimitation = randLostLimit,
+                NumberOfTradeAMonth = randNumberOfTrade,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = randSellAll,
             };
         }
     }

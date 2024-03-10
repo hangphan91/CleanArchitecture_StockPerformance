@@ -87,11 +87,14 @@ namespace StockPerformanceCalculator.Logic
             if (_tradingRule.IsValidForBuyingRule(aboutToTradePrice, _averagePrice)
                 && availableCash > 0)
             {
-                _averagePrice = (currentPrice * shareCount + _averagePrice * _totalShareCount) /
-                    (_totalShareCount + shareCount);
-                _totalShareCount += shareCount;
+                if (_totalShareCount + shareCount != 0)
+                {
+                    _averagePrice = (currentPrice * shareCount + _averagePrice * _totalShareCount) /
+                        (_totalShareCount + shareCount);
+                    _totalShareCount += shareCount;
 
-                Buy(stockLedgerDetail);
+                    Buy(stockLedgerDetail);
+                }
             }
 
             _previousTradingPrice = aboutToTradePrice;

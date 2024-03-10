@@ -40,7 +40,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             EntityDefinitions.Email email, out MailMessage emailMessage, out bool success)
         {
             var htmlHead = "<!DOCTYPE html>\n<html>\n<head>\n  <title></title>\n  <meta charset=\"UTF-8\">\n</head>\n<body>";
-            string tableMessage = PerformanceResultFormatter.GetTableMessage(list);
+            string tableMessage = PerformanceResultFormatter.GetStockPerformanceResponseTableHTML(list);
 
             var emailStartMessage = $@"Dear {email.FistName}, " +
                 $"<br>These are the stock performance reports for {DateTime.Now.ToLongDateString()}. " +

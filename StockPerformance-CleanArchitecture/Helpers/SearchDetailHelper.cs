@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformance_CleanArchitecture.Models.Settings;
 using StockPerformanceCalculator.DatabaseAccessors;
@@ -17,7 +18,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
         private static SearchInitialSetup _searchInitialSetup;
         private static SearchInitialSetup _searchSetup;
         private static IEntityDefinitionsAccessor _entityDefinitionsAccessor;
-        private static List<SearchDetail> _searchDetails = new List<SearchDetail>();
+        private static ConcurrentBag<SearchDetail> _searchDetails = new ConcurrentBag<SearchDetail>();
         private static StockPerformanceManager _stockPerformanceManager;
 
         public static SearchDetail GetCurrentSearchDetail(IEntityDefinitionsAccessor entityDefinitionsAccessor)
@@ -110,6 +111,12 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 SearchSetup = mappedInitialSetup,
                 DepositRule = initialDepositRule,
                 TradingRule = initialTradingRule,
+                Name = "Default Set up",
+                SettingDate = new SettingDate
+                (mappedInitialSetup.StartingYear.Year,
+                mappedInitialSetup.StartingYear.Month,
+                mappedInitialSetup.StartingYear.Day),
+                SearchDetails = _searchDetails.Select(a=> a).ToList(),
             };
             if (_searchInitialSetup == null)
                 _searchInitialSetup = mappedInitialSetup;
@@ -145,7 +152,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         internal static List<SearchDetail> GetSearchDetails()
         {
-            return _searchDetails;
+            return _searchDetails.Select(a => a).ToList();
         }
 
         internal static List<SearchDetail> GetSearchDetailsForAll()
@@ -174,6 +181,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                     SettingDate = current.SettingDate,
                     Symbol =  SymbolSummary,
                     TradingRule = current.TradingRule,
+                    Name = current.Name,
                 });
                 all.AddRange(eachSearchDetailList);
             }

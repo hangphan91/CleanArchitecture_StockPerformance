@@ -27,6 +27,14 @@ namespace EntityPersistence.DataAccessors
             return depositRule.Id;
         }
 
+        public long Insert(Symbol symbol)
+        {
+            SetId(symbol, _dataContext.Symbols.Select(a => a.Id));
+
+            _dataContext.Symbols.Add(symbol);
+            return symbol.Id; 
+        }
+
         public long Insert(PerformanceSummary performance)
         {
             SetId(performance, _dataContext.DepositRules.Select(a => a.Id));
@@ -174,6 +182,29 @@ namespace EntityPersistence.DataAccessors
 
             _dataContext.PerformanceIdHubs.Add(performanceIdHub);
             return performanceIdHub.Id;
+        }
+
+        public long Insert(DepositRule depositRule, TradingRule tradingRule,
+            Symbol symbol, PerformanceSetup setup, string name)
+        {
+            var depositRuleID = Insert(depositRule);
+            var tradingRuleID = Insert(tradingRule);
+            var symbolID = Insert(symbol);
+            var setupId = Insert(setup);
+            var searchDetail = new SearchDetail
+            {
+                TradingRuleId = tradingRuleID,
+                DepositRuleId = depositRuleID,
+                SymbolId = symbolID,
+                PerformanceSetupId = setupId,
+                Name = name
+            };
+
+            if (_dataContext.SearchDetails.Any())
+                SetId(searchDetail, _dataContext.SearchDetails.Select(a => a.Id));
+
+            _dataContext.SearchDetails.Add(searchDetail);
+            return searchDetail.Id;
         }
     }
 }

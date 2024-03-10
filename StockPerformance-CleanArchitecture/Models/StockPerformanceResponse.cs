@@ -1,4 +1,5 @@
-﻿using FusionChartsRazorSamples.Pages;
+﻿using Exporter;
+using FusionChartsRazorSamples.Pages;
 using StockPerformance_CleanArchitecture.Formatters;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformanceCalculator.Models;
@@ -48,34 +49,32 @@ namespace StockPerformance_CleanArchitecture.Models
 
         public string DisplayPerformanceResultTable()
         {
-            return PerformanceResultFormatter.GetTableMessage(new List<StockPerformanceResponse> { this});
+            return PerformanceResultFormatter.GetStockPerformanceResponseTableHTML(new List<StockPerformanceResponse> { this});
         }
 
-        public string DisplayStockPerformance()
+        public string DisplayStockPerformanceSetting()
         {
-            var totalValue = (CurrentPrice * CurrentHoldingShare).RoundNumber();
-            var toDisplay = $"The performance report for {Symbol}, reflecting on the period from {StartDate}" +
-                $" indicates a total deposit of ${TotalDeposit} and " +
-                $"a total holding in position of ${TotalBalanceHoldingInPosition}." + Environment.NewLine +
-                $" The deposit rule involved an initial one-time deposit of ${SearchDetail.DepositRule.InitialDepositAmount} " +
-                $"and a monthly repeated deposit of ${SearchDetail.DepositRule.DepositAmount}," +
-                $" made on the {SearchDetail.DepositRule.FirstDepositDate}and " +
-                $"{SearchDetail.DepositRule.SecondDepositDate} of each month." + Environment.NewLine +
-                $" The trading rule specified a purchase limitation of {SearchDetail.TradingRule.PurchaseLimitation} per trade," +
-                $" with conditions to sell when the total investment reached {SearchDetail.TradingRule.SellPercentageLimitation}%," +
-                $" when the overall loss amounted to ${SearchDetail.TradingRule.LossLimitation}, or when the price dropped " +
-                $"by {SearchDetail.TradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade}% " +
-                $"since the last visit. It also included a buy condition" +
-                $" when the overall gain reached {SearchDetail.TradingRule.BuyPercentageLimitation}%. " + Environment.NewLine +
-                $"The trading was limited" +
-                $" to between the {SearchDetail.TradingRule.LowerRangeOfTradingDate} and " +
-                $"{SearchDetail.TradingRule.HigherRangeOfTradingDate} day of the month, " +
-                $"with a maximum of {SearchDetail.TradingRule.NumberOfTradeAMonth} " +
-                $"trades per month. " + Environment.NewLine +
-                $"The current stock price is ${CurrentPrice}, and the " +
-                $"current holding share is {CurrentHoldingShare}. Total value is ${totalValue}.";
+            return PerformanceResultFormatter.GetSettingTableHTML(this.SearchDetail);
+        }
 
-            return toDisplay;
+        public string GetAllHTMLs()
+        {
+            return PerformanceResultFormatter.GetAllHTMLs(this);
+        }
+
+        public string GetSaveFilePerformanceResultTable()
+        {
+            return PerformanceResultFormatter.ExportDataTableToExcelFormatAndGetFile(new List<StockPerformanceResponse> { this });
+        }
+
+        public string GetSaveFilePerformanceResultTableForAll()
+        {
+            return PerformanceResultFormatter.ExportDataTableToExcelFormatAndGetFile(this);
+        }
+
+        public string GetSaveFileStockPerformanceSetting()
+        {
+            return PerformanceResultFormatter.ExportDataTableToExcelFormatAndGetFile(this.SearchDetail);
         }
 
         public string Conclusion()

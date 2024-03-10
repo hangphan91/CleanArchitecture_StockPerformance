@@ -1,9 +1,11 @@
-﻿using FusionChartsRazorSamples.Pages;
+﻿using System.Collections.Generic;
+using FusionChartsRazorSamples.Pages;
 using StockPerformance_CleanArchitecture.Helpers;
 using StockPerformance_CleanArchitecture.Models;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformance_CleanArchitecture.Models.Settings;
 using StockPerformanceCalculator.DatabaseAccessors;
+using StockPerformanceCalculator.Logic;
 
 namespace StockPerformance_CleanArchitecture.Managers
 {
@@ -125,12 +127,17 @@ namespace StockPerformance_CleanArchitecture.Managers
         public async Task<StockPerformanceResponse> GetStockPerformanceResponse(
                     SearchDetail searchDetail)
         {
+            if (searchDetail.SaveCurrentSetting)
+                SaveSearchDetail(searchDetail);
 
             var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
             if (cachedResponse != null)
                 return cachedResponse;
 
             var currentSearchDetail = GetCurrentSearchDetail();
+            var allSearchDetails = GetAllSearchDetails();
+            currentSearchDetail.SearchDetails = allSearchDetails;
+
             if (searchDetail == null || string.IsNullOrWhiteSpace(searchDetail.Symbol))
                 searchDetail = currentSearchDetail;
             SetCurrentSearchDetail(searchDetail);
@@ -194,8 +201,15 @@ namespace StockPerformance_CleanArchitecture.Managers
             SearchDetailHelper.ClearSearchDetails();
         }
 
-        public SearchDetail SetInitialView(string symbol, int startYear, bool useDefaultSetting)
+        public SearchDetail SetInitialView(string symbol, int startYear, bool useDefaultSetting, string name)
         {
+            var toView = GetAllSearchDetails();
+            var match = toView.FirstOrDefault(a => a.Name.Equals(name));
+            if (!string.IsNullOrWhiteSpace(name) && match != null)
+            {
+                match.SearchDetails = toView;
+                return match;
+            }
 
             var currentSearchDetail = GetCurrentSearchDetail();
             if (currentSearchDetail != null && !string.IsNullOrWhiteSpace(symbol))
@@ -205,6 +219,9 @@ namespace StockPerformance_CleanArchitecture.Managers
             }
             if (useDefaultSetting)
                 currentSearchDetail = GetInitialSearchDetail();
+
+            if(currentSearchDetail != null)
+                currentSearchDetail.SearchDetails = toView;
 
             return currentSearchDetail;
         }
@@ -237,7 +254,7 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =
-                new FusionChartsRazorSamples.Pages.ProfitChart(advancedSearchResult.StockPerformanceResponses);
+                new ProfitChart(advancedSearchResult.StockPerformanceResponses);
 
             ClearAdvanceSearch();
 
@@ -269,7 +286,7 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =
-                new FusionChartsRazorSamples.Pages.ProfitChart(advancedSearchResult.StockPerformanceResponses);
+                new ProfitChart(advancedSearchResult.StockPerformanceResponses);
 
             ClearAdvanceSearch();
 
@@ -282,11 +299,103 @@ namespace StockPerformance_CleanArchitecture.Managers
             var history = new StockPerformanceHistory
             {
                 StockPerformanceResponses = responses,
-                ProfitChart = new FusionChartsRazorSamples.Pages.ProfitChart(responses)
+                ProfitChart = new ProfitChart(responses)
             };
             return history;
         }
 
+        internal void SaveSearchDetail(SearchDetail toSave)
+        {
+            if (toSave == null || toSave.DepositRule == null || toSave.TradingRule == null
+                || toSave.SearchSetup == null)
+                return;
+
+            var symbols = _entityDefinitionsAccessor.GetAllSavedSymbols();
+            var symbolIds = _entityDefinitionsAccessor.GetSymbolIds(symbols);
+
+            var depositRule = new EntityDefinitions.DepositRule
+            {
+                DepositAmount = toSave.DepositRule.DepositAmount,
+                FirstDepositDate = toSave.DepositRule.FirstDepositDate,
+                InitialDepositAmount = toSave.DepositRule.InitialDepositAmount,
+                NumberOfDepositDate = toSave.DepositRule.NumberOfDepositDate,
+                SecondDepositDate = toSave.DepositRule.SecondDepositDate,
+            };
+            var tradingRule = new EntityDefinitions.TradingRule
+            {
+                LossLimitation = toSave.TradingRule.LossLimitation,
+                NumberOfTradeAMonth = toSave.TradingRule.NumberOfTradeAMonth,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = toSave.TradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade,
+                BuyPercentageLimitation = toSave.TradingRule.BuyPercentageLimitation,
+                HigherRangeOfTradingDate = toSave.TradingRule.HigherRangeOfTradingDate,
+                LowerRangeOfTradingDate = toSave.TradingRule.LowerRangeOfTradingDate,
+                PurchaseLimitation = toSave.TradingRule.PurchaseLimitation,
+                SellPercentageLimitation = toSave.TradingRule.SellPercentageLimitation
+            };
+            var setup = new EntityDefinitions.PerformanceSetup
+            {
+                StartingYear = toSave.SearchSetup.StartingYear,
+                EndingYear = toSave.SearchSetup.EndingYear,
+                StartingSymbolId = symbolIds.Min(),
+                EndingSymbolId = symbolIds.Max(),
+            };
+
+            var symbol = new EntityDefinitions.Symbol
+            {
+                TradingSymbol = toSave.Symbol,
+
+            };
+            _entityDefinitionsAccessor.Insert(depositRule, tradingRule, symbol, setup, toSave.Name); 
+        }
+
+        internal List<SearchDetail> GetAllSearchDetails()
+        {
+            var list = new List<SearchDetail>();
+            var details =_entityDefinitionsAccessor.GetSearchDetails();
+
+            foreach (var item in details)
+            {
+                list.Add(new SearchDetail
+                {
+                    DepositRule = new DepositRule
+                    {
+                        DepositAmount = item.Item1.DepositAmount,
+                        InitialDepositAmount = item.Item1.InitialDepositAmount,
+                        FirstDepositDate = item.Item1.FirstDepositDate,
+                        NumberOfDepositDate = item.Item1.NumberOfDepositDate,
+                        SecondDepositDate = item.Item1.SecondDepositDate,
+                    },
+                    TradingRule = new TradingRule
+                    {
+                        NumberOfTradeAMonth = item.Item2.NumberOfTradeAMonth,
+                        SellAllWhenPriceDropAtPercentageSinceLastTrade = item.Item2.SellAllWhenPriceDropAtPercentageSinceLastTrade,
+                        BuyPercentageLimitation = item.Item2.BuyPercentageLimitation,
+                        HigherRangeOfTradingDate = item.Item2.HigherRangeOfTradingDate,
+                        LossLimitation = item.Item2.LossLimitation,
+                        LowerRangeOfTradingDate = item.Item2.LowerRangeOfTradingDate,
+                        SellPercentageLimitation = item.Item2.SellPercentageLimitation,
+                        PurchaseLimitation = item.Item2.PurchaseLimitation,
+                    },
+                    SearchSetup = new SearchInitialSetup
+                    {
+
+                        StartingYear = item.Item4.StartingYear,
+                        EndingYear = item.Item4.EndingYear,
+                        Symbols = _entityDefinitionsAccessor.GetSymbolsBetweenIds(item.Item4.StartingSymbolId,
+                        item.Item4.EndingSymbolId)
+                    },
+                    Symbol = item.Item3.TradingSymbol,
+                    SettingDate = new SettingDate
+                    {
+                        Day = item.Item4.StartingYear.Day,
+                        Month = item.Item4.StartingYear.Month,
+                        Year = item.Item4.StartingYear.Year,
+                    },
+                    Name = item.Item5
+                }); 
+            }
+            return list;
+        }
     }
 
 }

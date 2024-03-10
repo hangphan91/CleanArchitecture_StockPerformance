@@ -34,6 +34,12 @@ namespace EntityPersistence.DataAccessors
             return _getBase.GetSavedSymbols(symbols);
         }
 
+        public List<string> GetAllSavedSymbols()
+        {
+            return _getBase.GetAllSavedSymbols();
+        }
+
+
         public long GetSymbolId(string symbol)
         {
             return _getBase.GetSymbolId(symbol);
@@ -107,6 +113,20 @@ namespace EntityPersistence.DataAccessors
         public List<long> Insert(List<Deposit> deposits)
         {
             return _insertBase.Insert(deposits);
+        }
+
+        public List<Tuple<DepositRule,
+                    TradingRule,
+                    Symbol,
+                    PerformanceSetup, string>> GetSearchDetails()
+        {
+            return _getBase.GetSearchDetails();
+        }
+
+        public long Insert(DepositRule depositRule, TradingRule tradingRule,
+            Symbol symbol, PerformanceSetup setup, string name)
+        {
+            return _insertBase.Insert(depositRule, tradingRule, symbol, setup, name);
         }
     }
 }

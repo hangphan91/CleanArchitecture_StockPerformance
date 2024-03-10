@@ -18,13 +18,32 @@ public class HomeController : Controller
         _searchDetailManager = ManagerHelper.SearchDetailManager;
     }
 
-    public IActionResult Index(string symbol,  bool useDefaultSetting, int startYear = 2020)
+    public IActionResult Index(string symbol,  bool useDefaultSetting,
+        int startYear = 2020, string Name = null)
     {
-        var currentSearchDetail = _searchDetailManager.SetInitialView(symbol, startYear, useDefaultSetting);
-
+        var currentSearchDetail = _searchDetailManager.SetInitialView(symbol, startYear, useDefaultSetting, Name);
+     
         return View(currentSearchDetail);
     }
 
+    [HttpGet]
+    public IActionResult SaveSearchDetailSetup(SearchDetail searchDetail, bool useDefault = true)
+    {
+        if (searchDetail?.SearchDetails?.Any()==false)
+        {
+            var currentSearchSetup = _searchDetailManager.GetInitialSearchDetail();
+            return View(currentSearchSetup);
+        }
+        _searchDetailManager.SaveSearchDetail(searchDetail);
+        return View(searchDetail);
+    }
+    [HttpGet]
+
+    public IActionResult GetAllSearchDetailSetup()
+    {
+        var toView = _searchDetailManager.GetAllSearchDetails();
+        return View(toView);
+    }
     public IActionResult Symbol(SearchInitialSetup searchSetup)
     {
         searchSetup = _searchDetailManager.AddSymbol(searchSetup);
@@ -36,7 +55,7 @@ public class HomeController : Controller
     {
         if (useDefaultSetting)
         {
-            advanceSearch.SearchDetail = _searchDetailManager.SetInitialView("AAPL", 2020, useDefaultSetting);
+            advanceSearch.SearchDetail = _searchDetailManager.SetInitialView("AAPL", 2020, useDefaultSetting, "");
 
         }
 

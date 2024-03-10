@@ -14,6 +14,8 @@ namespace StockPerformanceCalculator.DatabaseAccessors
         public List<long> Insert(List<PerformanceByMonth> performanceByMonths);
         public List<long> Insert(List<Position> positions);
         public List<long> Insert(List<Deposit> positions);
+        public long Insert(DepositRule depositRule, TradingRule tradingRule,
+            Symbol symbol, PerformanceSetup setup, string name);
     }
 }
 

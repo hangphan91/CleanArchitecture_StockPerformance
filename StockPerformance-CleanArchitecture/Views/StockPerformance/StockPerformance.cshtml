@@ -15,118 +15,39 @@
     var showHistoricalChart = false;
     var text = @Model.ProfitInPercentage > 0 ? "increase." : "decrease.";
     var dateText = $"{@Model.SearchDetail.SettingDate} to {@Model.SearchDetail.SearchSetup.EndingYear}";
-    var overallPerformance = $"The profit over the period from " + dateText  +
-  $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text}";
+    var overallPerformance = $"The profit over the period from " + dateText +
+  $" was ${@Model.ProfitInDollar}, representing a {@Model.ProfitInPercentage}% {text} in profit.";
 
-    Model.ProfitSummaryPercentage.DisplayProfitSummary();
-    var resultTable = Model.DisplayPerformanceResultTable();
-}
-<h3>@ViewData["Title"]</h3>
+    var conclusion = Model.Conclusion();
+    var result = Model.DisplayPerformanceResultTable();
+    var html = Model.GetAllHTMLs();
+    }
 
-<body>
-    <div class="text-center">
-
-        <p @Html.Raw(Model.DisplayStockPerformance().Replace(Environment.NewLine, "<br />"))
-
-        </p>
-        <h4>
-            @overallPerformance
-        </h4>
-
-        <div>
-            <h3>Performance Result:</h3>
-            @Html.Raw(resultTable)
+    <p style="float: right;">
+        @Html.ActionLink("Export to Excel", "OnPostDownloadFile", "StockPerformance")
+    </p>
+    <body>
+        <div class="text-center">
+            <h3>@ViewData["Title"]</h3>
+            <h4>
+                @conclusion
+            </h4>
         </div>
-    </div>
-    <divclass ="text-center">
-        <form method="post" class="text-center">
-            <div>@Html.Raw(Model.ProfitChart.CreateCombineChart())</div>
-            <br />
-        </form>
+        <div class="text-center">
+            <div> @Html.Raw(result) </div>
+        </div>
+        <div class="text-center">
+            <form method="post" class="text-center">
+                <div>@Html.Raw(Model.ProfitChart.CreateCombineChart())</div>
+                <br />
+            </form>
 
-        <form method="post" hidden="@showHistoricalChart" class="text-center">
-            <div>@Html.Raw(Model.ProfitChart.ChartJsonForStockHistory)</div>
-            <br />
-        </form>
-    </divclass>
-
-    <div>
-        <p>
-            <h3>Monthly Profit</h3>
-
-            <table class="table table-bordered table-responsive table-hover">
-                <tr>
-                    <th>Month</th>
-                    <th>Year</th>
-                    <th>Profit</th>
-                    <th>Metric</th>
-                </tr>
-                @foreach (var row in Model.ProfitSummaryInDollar.MonthlyProfits)
-                {
-                    <tr>
-                        <td>@row.Month</td>
-                        <td>@row.Year</td>
-                        <td>@row.Amount</td>
-                        <td>$</td>
-                    </tr>
-                }
-            </table>
-            <h3>Yearly Profit</h3>
-
-            <table class="table table-bordered table-responsive table-hover">
-                <tr>
-                    <th>Year</th>
-                    <th>Profit</th>
-                </tr>
-                @foreach (var row in Model.ProfitSummaryInDollar.YearlyProfits)
-                {
-                    <tr>
-                        <td>@row.Year</td>
-                        <td>@row.Amount</td>
-                    </tr>
-                }
-            </table>
-
-            <h3> Stock Ledgers</h3>
-            <table class="table table-bordered table-responsive table-hover">
-                <tr>
-                    <th>Bought Date</th>
-                    <th>Sold Date</th>
-                    <th>ShareCount</th>
-                    <th>Bought Price</th>
-                    <th>Sold Price</th>
-                    <th>Position Type</th>
-                    <th>Sell Reason</th>
-                </tr>
-                @foreach (var row in Model.StockLedgerDetails)
-                {
-                    <tr>
-                        <td>@row.BoughtDate</td>
-                        <td>@row.SoldDate</td>
-                        <td>@row.ShareCount</td>
-                        <td>@row.BoughtPrice</td>
-                        <td>@row.SoldPrice</td>
-                        <td>@row.PositionType</td>
-                        <td>@row.GetSellReasonText(row.SellReason)</td>
-                    </tr>
-                }
-            </table>
-            <h3>Deposit Ledgers</h3>
-            <table class="table table-bordered table-responsive table-hover">
-                <tr>
-                    <th>Date</th>
-                    <th>Amount</th>
-                </tr>
-                @foreach (var row in Model.DepositLedgers)
-                {
-                    <tr>
-                        <td>@row.Date</td>
-                        <td>@row.Amount</td>
-                    </tr>
-                }
-            </table>
-
-        </p>
-
-    </div>
-</body>
+            <form method="post" hidden="@showHistoricalChart" class="text-center">
+                <div>@Html.Raw(Model.ProfitChart.ChartJsonForStockHistory)</div>
+                <br />
+            </form>
+        </div>
+        <div class="text-center">
+            <div> @Html.Raw(html) </div>
+        </div>
+    </body>
