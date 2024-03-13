@@ -134,7 +134,15 @@ namespace EntityPersistence.DataAccessors
                 "sap", "arcb"
             };
 
+            var growingIn2020To2024 = new List<string>
+            {
+                "SAP", "ALV", "CELH", "HCA", "CADE", "SBR",
+                "FERG", "EP", "ARCH", "EG", "RGA",
+            };
+
             symbols.AddRange(growingIn2022To2023);
+            symbols.AddRange(growingIn2020To2024);
+
             symbols = symbols.Select(a => a.ToUpper()).Distinct().ToList();
             var toSaveSymbols = symbols.Select(symbol => new Symbol
             {
