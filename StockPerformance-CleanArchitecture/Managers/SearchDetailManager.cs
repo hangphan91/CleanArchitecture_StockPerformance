@@ -52,13 +52,30 @@ namespace StockPerformance_CleanArchitecture.Managers
             SearchDetailHelper.AddAdvanceSearchDetail(searchDetail);
         }
 
-        public AdvanceSearch UpdateAdvanceSearch(AdvanceSearch advanceSearch,
+        public AdvanceSearch AddAdvanceSearch(AdvanceSearch advanceSearch,
             bool willClearAllSearch)
         {
-            if (willClearAllSearch)
-                ClearAdvanceSearch();
+            string name = advanceSearch.SearchDetail.Name;
 
-            var searchDetails = GetSearchDetails();
+            var toView = GetAllSavedSearchDetails();
+            var match = toView.FirstOrDefault(a =>
+            {
+                return a.Name.Equals(name);
+            });
+            if (!string.IsNullOrWhiteSpace(name) && match != null)
+            {
+                match.SavedSearchDetails = toView;
+                advanceSearch.SearchDetail = match;
+                return advanceSearch;
+            }
+
+            if (willClearAllSearch)
+            {
+                ClearAdvanceSearch();
+                advanceSearch.SearchDetail.SavedSearchDetails = toView;
+            }
+
+            var searchDetails = GetActiveSearchDetails();
             var accessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
             var detail = SearchDetailHelper.GetCurrentSearchDetail(accessor);
 
@@ -67,41 +84,45 @@ namespace StockPerformance_CleanArchitecture.Managers
                 advanceSearch.SearchDetail = detail;
                 return advanceSearch;
             }
-            if (!IsFirstAdvancedSearch)
-                for (int year = advanceSearch.StartDate.Year; year <= advanceSearch.EndDate.Year; year++)
+
+            foreach (var symbol in advanceSearch.Symbols)
+            {
+
+                var month = advanceSearch.StartDate.Month;
+                var day = advanceSearch.StartDate.Day;
+                advanceSearch.SearchDetail.SettingDate = advanceSearch.StartDate;
+                var searchDetail = new SearchDetail
                 {
-                    var month = advanceSearch.StartDate.Month;
-                    var day = advanceSearch.StartDate.Day;
-                    advanceSearch.SearchDetail.SettingDate = new SettingDate(year, month, day);
-                    var searchDetail = new SearchDetail
-                    {
-                        DepositRule = advanceSearch.SearchDetail.DepositRule,
-                        SearchSetup = advanceSearch.SearchDetail.SearchSetup,
-                        Symbol = advanceSearch.SearchDetail.Symbol,
-                        TradingRule = advanceSearch.SearchDetail.TradingRule,
-                        SettingDate = advanceSearch.SearchDetail.SettingDate,
+                    DepositRule = advanceSearch.SearchDetail.DepositRule,
+                    SearchSetup = advanceSearch.SearchDetail.SearchSetup,
+                    Symbol = symbol,
+                    TradingRule = advanceSearch.SearchDetail.TradingRule,
+                    SettingDate = advanceSearch.SearchDetail.SettingDate,
+                    ActiveSelectedSearchDetails = GetActiveSearchDetails(),
+                    SavedSearchDetails = toView,
+                };
+                AddAdvanceSearchDetail(searchDetail);
+            }
 
-                    };
-                    AddAdvanceSearchDetail(searchDetail);
+            advanceSearch.Symbols = _entityDefinitionsAccessor.GetAllSavedSymbols();
+            advanceSearch.SearchDetail.SearchSetup.Symbols = advanceSearch.Symbols;
+            advanceSearch.Count = searchDetails.Count();
+            advanceSearch.SearchDetail.SearchSetup.StartingYear = advanceSearch.StartDate.MapDateOnly();
+            advanceSearch.SearchDetail.SearchSetup.EndingYear = advanceSearch.EndDate.MapDateOnly();
+            advanceSearch.SearchDetail.ActiveSelectedSearchDetails = GetActiveSearchDetails();
+            advanceSearch.SearchDetail.SavedSearchDetails = toView;
 
-                    advanceSearch.Symbols = detail.SearchSetup.Symbols.Select(a => a).ToList();
-                    advanceSearch.SearchDetail.SearchSetup.Symbols = advanceSearch.Symbols;
-                    advanceSearch.Count = searchDetails.Count();
-                    advanceSearch.SearchDetail.SearchSetup.StartingYear = advanceSearch.StartDate.MapDateOnly();
-                    advanceSearch.SearchDetail.SearchSetup.EndingYear = advanceSearch.EndDate.MapDateOnly();
-                }
+
             var result = new AdvanceSearch
             {
                 Count = searchDetails.Count(),
                 SearchDetail = advanceSearch.SearchDetail,
-                Symbols = advanceSearch.SearchDetails.Select(a => a.Symbol).ToList(),
-                SearchDetails = searchDetails.Select(a => a).ToList(),
+                Symbols = advanceSearch.SearchDetail.SavedSearchDetails.Select(a => a.Symbol).ToList(),
                 StartDate = advanceSearch.StartDate,
                 EndDate = advanceSearch.EndDate,
-                WillPerformSearch = advanceSearch.WillPerformSearch
+                WillPerformSearch = advanceSearch.WillPerformSearch,
             };
 
-            IsFirstAdvancedSearch = false;
             return result;
         }
 
@@ -135,8 +156,8 @@ namespace StockPerformance_CleanArchitecture.Managers
                 return cachedResponse;
 
             var currentSearchDetail = GetCurrentSearchDetail();
-            var allSearchDetails = GetAllSearchDetails();
-            currentSearchDetail.SearchDetails = allSearchDetails;
+            var allSearchDetails = GetAllSavedSearchDetails();
+            currentSearchDetail.ActiveSelectedSearchDetails = allSearchDetails;
 
             if (searchDetail == null || string.IsNullOrWhiteSpace(searchDetail.Symbol))
                 searchDetail = currentSearchDetail;
@@ -181,7 +202,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             searchSetup.Symbols.AddRange(symbols.OrderBy(a => a));
         }
 
-        internal List<SearchDetail> GetSearchDetails()
+        internal List<SearchDetail> GetActiveSearchDetails()
         {
             return SearchDetailHelper.GetSearchDetails();
         }
@@ -198,16 +219,17 @@ namespace StockPerformance_CleanArchitecture.Managers
 
         internal void ClearAdvanceSearch()
         {
-            SearchDetailHelper.ClearSearchDetails();
+            SearchDetailHelper.ClearSelectedAllSearches();
+            SearchDetailHelper.ResetInitialSearch();
         }
 
         public SearchDetail SetInitialView(string symbol, int startYear, bool useDefaultSetting, string name)
         {
-            var toView = GetAllSearchDetails();
+            var toView = GetAllSavedSearchDetails();
             var match = toView.FirstOrDefault(a => a.Name.Equals(name));
             if (!string.IsNullOrWhiteSpace(name) && match != null)
             {
-                match.SearchDetails = toView;
+                match.ActiveSelectedSearchDetails = toView;
                 return match;
             }
 
@@ -220,8 +242,8 @@ namespace StockPerformance_CleanArchitecture.Managers
             if (useDefaultSetting)
                 currentSearchDetail = GetInitialSearchDetail();
 
-            if(currentSearchDetail != null)
-                currentSearchDetail.SearchDetails = toView;
+            if (currentSearchDetail != null)
+                currentSearchDetail.ActiveSelectedSearchDetails = toView;
 
             return currentSearchDetail;
         }
@@ -233,7 +255,7 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             var advancedSearchResult = new StockPerformanceHistory();
 
-            foreach (var searchDetail in GetSearchDetails())
+            foreach (var searchDetail in GetActiveSearchDetails())
             {
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
                 if (cachedResponse != null)
@@ -345,56 +367,12 @@ namespace StockPerformance_CleanArchitecture.Managers
                 TradingSymbol = toSave.Symbol,
 
             };
-            _entityDefinitionsAccessor.Insert(depositRule, tradingRule, symbol, setup, toSave.Name); 
+            _entityDefinitionsAccessor.Insert(depositRule, tradingRule, symbol, setup, toSave.Name);
         }
 
-        internal List<SearchDetail> GetAllSearchDetails()
+        internal List<SearchDetail> GetAllSavedSearchDetails()
         {
-            var list = new List<SearchDetail>();
-            var details =_entityDefinitionsAccessor.GetSearchDetails();
-
-            foreach (var item in details)
-            {
-                list.Add(new SearchDetail
-                {
-                    DepositRule = new DepositRule
-                    {
-                        DepositAmount = item.Item1.DepositAmount,
-                        InitialDepositAmount = item.Item1.InitialDepositAmount,
-                        FirstDepositDate = item.Item1.FirstDepositDate,
-                        NumberOfDepositDate = item.Item1.NumberOfDepositDate,
-                        SecondDepositDate = item.Item1.SecondDepositDate,
-                    },
-                    TradingRule = new TradingRule
-                    {
-                        NumberOfTradeAMonth = item.Item2.NumberOfTradeAMonth,
-                        SellAllWhenPriceDropAtPercentageSinceLastTrade = item.Item2.SellAllWhenPriceDropAtPercentageSinceLastTrade,
-                        BuyPercentageLimitation = item.Item2.BuyPercentageLimitation,
-                        HigherRangeOfTradingDate = item.Item2.HigherRangeOfTradingDate,
-                        LossLimitation = item.Item2.LossLimitation,
-                        LowerRangeOfTradingDate = item.Item2.LowerRangeOfTradingDate,
-                        SellPercentageLimitation = item.Item2.SellPercentageLimitation,
-                        PurchaseLimitation = item.Item2.PurchaseLimitation,
-                    },
-                    SearchSetup = new SearchInitialSetup
-                    {
-
-                        StartingYear = item.Item4.StartingYear,
-                        EndingYear = item.Item4.EndingYear,
-                        Symbols = _entityDefinitionsAccessor.GetSymbolsBetweenIds(item.Item4.StartingSymbolId,
-                        item.Item4.EndingSymbolId)
-                    },
-                    Symbol = item.Item3.TradingSymbol,
-                    SettingDate = new SettingDate
-                    {
-                        Day = item.Item4.StartingYear.Day,
-                        Month = item.Item4.StartingYear.Month,
-                        Year = item.Item4.StartingYear.Year,
-                    },
-                    Name = item.Item5
-                }); 
-            }
-            return list;
+           return SearchDetailHelper.GetAllSearchDetails(_entityDefinitionsAccessor);
         }
     }
 

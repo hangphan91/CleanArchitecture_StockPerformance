@@ -8,8 +8,8 @@
         .ToList();
 
     var selectListSaveName = Model.SearchDetail.SavedSearchDetails
-   .Select(detail => new SelectListItem { Text = detail.Name, Value = detail.Name })
-   .ToList();
+.Select(detail => new SelectListItem { Text = detail.Name, Value = detail.Name })
+.ToList();
 
     var count = Model.SearchDetail.SearchSetup.EndingYear.Year - Model.SearchDetail.SearchSetup.StartingYear.Year + 1;
     var selectListYears = Enumerable.Range(2000, DateTime.Now.Year + 1 - 2000)
@@ -48,6 +48,7 @@
         $"searches for {string.Join(",", searchingSymbols.Distinct())}" : "";
     Model.WillPerformSearch = false;
 }
+
 <div class="text-center">
     @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get))
     {
@@ -61,6 +62,7 @@
 
     @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get, new { willPerformSearch = true }))
     {
+
         <fieldset>
             <span>
                 @Html.LabelFor(m => m.SearchDetail.Name, Model.SearchDetail.Name)
@@ -111,10 +113,11 @@
 
             </span>
             <p>
-
                 <h4>Symbol List </h4>
+                SelectListItem
                 @Html.ListBoxFor(m => m.Symbols, selectListSymbols)
-            <p>
+
+            </p>
             <p>
                 Start Date
 
@@ -126,7 +129,6 @@
                 @Html.DropDownListFor(m => m.StartDate.Day, selectListDateOfMonth)
 
             </p>
-
             <p>
             <p><strong style="color:green">@queueText</strong></p>
             <p>

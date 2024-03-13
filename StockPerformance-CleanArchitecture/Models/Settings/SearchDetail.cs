@@ -14,13 +14,16 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         public string Symbol { get; set; }
         public SettingDate SettingDate { get; set; }
         public bool SaveCurrentSetting { get; set; }
-        public List<SearchDetail> SearchDetails { get; set; }
+        public List<SearchDetail> ActiveSelectedSearchDetails { get; set; }
+        public List<SearchDetail> SavedSearchDetails { get; set; }
+
         public SearchDetail()
         {
             SearchSetup = new SearchInitialSetup();
             DepositRule = new DepositRule();
             TradingRule = new TradingRule();
-            SearchDetails = new List<SearchDetail>();
+            ActiveSelectedSearchDetails = new List<SearchDetail>();
+            SavedSearchDetails = new List<SearchDetail>();
             Symbol = "AAPL";
             var now = DateTime.Now;
             SettingDate = new SettingDate(2020, now.Month, now.Day);

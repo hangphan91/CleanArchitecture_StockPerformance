@@ -18,22 +18,26 @@ public class HomeController : Controller
         _searchDetailManager = ManagerHelper.SearchDetailManager;
     }
 
-    public IActionResult Index(string symbol,  bool useDefaultSetting,
+    public IActionResult Index(string symbol, bool useDefaultSetting,
         int startYear = 2020, string Name = null)
     {
         var currentSearchDetail = _searchDetailManager.SetInitialView(symbol, startYear, useDefaultSetting, Name);
-     
+
         return View(currentSearchDetail);
     }
 
     [HttpGet]
-    public IActionResult SaveSearchDetailSetup(SearchDetail searchDetail, bool useDefault = true)
+    public IActionResult SaveSearchDetailSetup(SearchDetail searchDetail)
     {
-        if (searchDetail?.SearchDetails?.Any()==false)
-        {
-            var currentSearchSetup = _searchDetailManager.GetInitialSearchDetail();
-            return View(currentSearchSetup);
-        }
+        var currentSearchSetup = _searchDetailManager.GetInitialSearchDetail();
+        currentSearchSetup.ActiveSelectedSearchDetails = _searchDetailManager.GetActiveSearchDetails();
+        return View(currentSearchSetup);
+
+    }
+    [HttpGet]
+
+    public IActionResult SaveCustomizedSearchDetailSetup(SearchDetail searchDetail)
+    {
         _searchDetailManager.SaveSearchDetail(searchDetail);
         return View(searchDetail);
     }
@@ -41,7 +45,7 @@ public class HomeController : Controller
 
     public IActionResult GetAllSearchDetailSetup()
     {
-        var toView = _searchDetailManager.GetAllSearchDetails();
+        var toView = _searchDetailManager.GetAllSavedSearchDetails();
         return View(toView);
     }
     public IActionResult Symbol(SearchInitialSetup searchSetup)
@@ -51,18 +55,22 @@ public class HomeController : Controller
     }
 
     public IActionResult AdvanceSearch(AdvanceSearch advanceSearch,
-        bool willClearAllSearch, bool willPerformSearch, bool useDefaultSetting)
+        bool willClearAllSearch)
     {
-        if (useDefaultSetting)
-        {
-            advanceSearch.SearchDetail = _searchDetailManager.SetInitialView("AAPL", 2020, useDefaultSetting, "");
-
-        }
-
-        var result = _searchDetailManager.UpdateAdvanceSearch(advanceSearch,
+        var result = _searchDetailManager.AddAdvanceSearch(advanceSearch,
             willClearAllSearch);
 
         return View(result);
+
+    }
+
+    public IActionResult DefaultAdvanceSearch()
+    {
+        var result =_searchDetailManager.GetInitialSearchDetail();
+        result.ActiveSelectedSearchDetails = _searchDetailManager.GetActiveSearchDetails();
+        result.SavedSearchDetails = _searchDetailManager.GetAllSavedSearchDetails();
+
+        return View(new AdvanceSearch { SearchDetail = result});
 
     }
 

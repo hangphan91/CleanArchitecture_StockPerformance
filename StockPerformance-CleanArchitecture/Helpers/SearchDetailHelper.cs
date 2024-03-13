@@ -18,17 +18,25 @@ namespace StockPerformance_CleanArchitecture.Helpers
         private static SearchInitialSetup _searchInitialSetup;
         private static SearchInitialSetup _searchSetup;
         private static IEntityDefinitionsAccessor _entityDefinitionsAccessor;
-        private static ConcurrentBag<SearchDetail> _searchDetails = new ConcurrentBag<SearchDetail>();
+        private static ConcurrentBag<SearchDetail> _savedSearchDetailsSeeting = new ConcurrentBag<SearchDetail>();
+        private static ConcurrentBag<SearchDetail> _activeSearchDetailsSeeting = new ConcurrentBag<SearchDetail>();
+
         private static StockPerformanceManager _stockPerformanceManager;
 
         public static SearchDetail GetCurrentSearchDetail(IEntityDefinitionsAccessor entityDefinitionsAccessor)
         {
             _entityDefinitionsAccessor = entityDefinitionsAccessor;
+            GetAllSearchDetails(entityDefinitionsAccessor);
             return GetCurrentSearchDetail();
         }
 
         public static SearchDetail GetInitialSearchDetail()
         {
+            if (_initalSearchDetail == null)
+            {
+                var toView = GetAllSearchDetails(_entityDefinitionsAccessor);
+                _initalSearchDetail = toView.First();
+            }
             return Map(Map(_initalSearchDetail));
         }
 
@@ -39,7 +47,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         public static void AddAdvanceSearchDetail(SearchDetail searchDetail)
         {
-            _searchDetails.Add(searchDetail);
+            _activeSearchDetailsSeeting.Add(searchDetail);
         }
 
         public static SearchInitialSetup GetSearchInitialSetup()
@@ -66,15 +74,13 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
             if (_searchDetail == null)
             {
-                var searchInitialSetup = performanceMangager.GetInitialSetup();
-                SearchDetail searchDetail = Map(searchInitialSetup);
-                _searchDetail = searchDetail;
+                _searchDetail = GetInitialSearchDetail();
 
                 if (_initalSearchDetail == null)
                     _initalSearchDetail = _searchDetail;
             }
             _stockPerformanceManager = performanceMangager;
-
+            _searchDetail.ActiveSelectedSearchDetails = GetAllSearchDetails(_entityDefinitionsAccessor);
             return _searchDetail;
         }
 
@@ -116,7 +122,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 (mappedInitialSetup.StartingYear.Year,
                 mappedInitialSetup.StartingYear.Month,
                 mappedInitialSetup.StartingYear.Day),
-                SearchDetails = _searchDetails.Select(a=> a).ToList(),
+                ActiveSelectedSearchDetails = _savedSearchDetailsSeeting.Select(a => a).ToList(),
             };
             if (_searchInitialSetup == null)
                 _searchInitialSetup = mappedInitialSetup;
@@ -152,18 +158,18 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         internal static List<SearchDetail> GetSearchDetails()
         {
-            return _searchDetails.Select(a => a).ToList();
+            return _activeSearchDetailsSeeting.Select(a => a).ToList();
         }
 
         internal static List<SearchDetail> GetSearchDetailsForAll()
         {
-            var current = _searchDetails.FirstOrDefault();
+            var current = _savedSearchDetailsSeeting.FirstOrDefault();
 
             if (current == null)
-                return new List<SearchDetail>();
+                current = GetAllSearchDetails(_entityDefinitionsAccessor).First();
 
             var starting = current.SearchSetup.StartingYear.Year;
-            var ending = _searchDetails.First().SearchSetup.EndingYear.Year;
+            var ending = _savedSearchDetailsSeeting.First().SearchSetup.EndingYear.Year;
             var all = new List<SearchDetail>();
             for (int i = starting; i < ending; i++)
             {
@@ -176,10 +182,10 @@ namespace StockPerformance_CleanArchitecture.Helpers
                 };
                 var eachSearchDetailList = _searchSetup.Symbols.Select(SymbolSummary => new SearchDetail
                 {
-                    DepositRule =  current.DepositRule,
+                    DepositRule = current.DepositRule,
                     SearchSetup = searchSetup,
                     SettingDate = current.SettingDate,
-                    Symbol =  SymbolSummary,
+                    Symbol = SymbolSummary,
                     TradingRule = current.TradingRule,
                     Name = current.Name,
                 });
@@ -190,9 +196,79 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         }
 
-        internal static void ClearSearchDetails()
+        internal static void ResetInitialSearch()
         {
-            _searchDetails.Clear();
+            _searchDetail = _initalSearchDetail;
+        }
+
+        internal static List<SearchDetail> GetAllSearchDetails(IEntityDefinitionsAccessor entityDefinitionsAccessor)
+        {
+            var list = new List<SearchDetail>();
+            var details = entityDefinitionsAccessor.GetSearchDetails();
+           
+            foreach (var item in details)
+            {
+                var symbols = entityDefinitionsAccessor.GetSymbolsBetweenIds(item.Item4.StartingSymbolId,
+                                                item.Item4.EndingSymbolId);
+                SearchDetail detail = GetDetail(item, symbols);
+             
+                list.Add(detail);
+                _savedSearchDetailsSeeting.Add(detail);
+            }
+            return list;
+        }
+
+        private static SearchDetail GetDetail(Tuple<EntityDefinitions.DepositRule,
+            EntityDefinitions.TradingRule, EntityDefinitions.Symbol,
+            EntityDefinitions.PerformanceSetup, string> item,
+            List<string> symbols)
+        {
+            var a = new DepositRule
+            {
+                DepositAmount = item.Item1.DepositAmount,
+                InitialDepositAmount = item.Item1.InitialDepositAmount,
+                FirstDepositDate = item.Item1.FirstDepositDate,
+                NumberOfDepositDate = item.Item1.NumberOfDepositDate,
+                SecondDepositDate = item.Item1.SecondDepositDate,
+            };
+
+            var b = new TradingRule
+            {
+                NumberOfTradeAMonth = item.Item2.NumberOfTradeAMonth,
+                SellAllWhenPriceDropAtPercentageSinceLastTrade = item.Item2.SellAllWhenPriceDropAtPercentageSinceLastTrade,
+                BuyPercentageLimitation = item.Item2.BuyPercentageLimitation,
+                HigherRangeOfTradingDate = item.Item2.HigherRangeOfTradingDate,
+                LossLimitation = item.Item2.LossLimitation,
+                LowerRangeOfTradingDate = item.Item2.LowerRangeOfTradingDate,
+                SellPercentageLimitation = item.Item2.SellPercentageLimitation,
+                PurchaseLimitation = item.Item2.PurchaseLimitation,
+            };
+            var d = new SettingDate
+            {
+                Day = item.Item4.StartingYear.Day,
+                Month = item.Item4.StartingYear.Month,
+                Year = item.Item4.StartingYear.Year,
+            };
+            var c = new SearchInitialSetup
+            {
+                StartingYear = item.Item4.StartingYear,
+                EndingYear = item.Item4.EndingYear,
+                Symbols = symbols
+            };
+            return new SearchDetail
+            {
+                DepositRule = a,
+                TradingRule = b,
+                SearchSetup = c,
+                Symbol = item.Item3.TradingSymbol,
+                SettingDate = d,
+                Name = item.Item5
+            };
+        }
+
+        internal static void ClearSelectedAllSearches()
+        {
+            _activeSearchDetailsSeeting.Clear();
         }
     }
 }

@@ -7,7 +7,7 @@
         .Select(symbol => new SelectListItem { Text = symbol?.ToUpper(), Value = symbol?.ToUpper() })
         .ToList();
 
-    var selectListSaveName = Model.SearchDetails
+    var selectListSaveName = Model.ActiveSelectedSearchDetails
     .Select(detail => new SelectListItem { Text = detail.Name, Value = detail.Name })
     .ToList();
 
@@ -48,7 +48,7 @@
 
 
 <div class="text-center">
-    @using (Html.BeginForm("SaveSearchDetailSetup", "Home", FormMethod.Get, new { useDefault = false }))
+    @using (Html.BeginForm("SaveCustomizedSearchDetailSetup", "Home", FormMethod.Get, new { useDefault = false }))
     {
         <fieldset>
             <span>

@@ -1,15 +1,11 @@
 ﻿@model StockPerformance_CleanArchitecture.Models.ProfitDetails.SearchDetail
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Add Customize Search Detail Page";
     var symbols = Model.SearchSetup?.Symbols?.OrderBy(a => a);
     var selectListSymbols = symbols?
         .Select(symbol => new SelectListItem { Text = symbol?.ToUpper(), Value = symbol?.ToUpper() })
         .ToList();
-
-    var selectListSaveName = Model.ActiveSelectedSearchDetails
-    .Select(detail => new SelectListItem { Text = detail.Name, Value = detail.Name })
-    .ToList();
 
     var count = Model.SearchSetup?.EndingYear.Year - Model.SearchSetup?.StartingYear.Year + 1;
     var selectListYears = Enumerable.Range(2000, DateTime.Now.Year + 1 - 2000)
@@ -46,20 +42,16 @@
         }).ToList();
 }
 
-<div class="text-center">
-    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
-        {
-        <p>@Html.DropDownListFor(m => m.Name, selectListSaveName)</p>
-        <p>
-            <input type="submit" value="Apply Setting" />
-        </p>
-    }
-</div>
-<div class="text-center">
-    @using (Html.BeginForm("StockPerformanceFromSelectedDetail", "StockPerformance", FormMethod.Get))
-    {
 
+<div class="text-center">
+    @using (Html.BeginForm("SaveCustomizedSearchDetailSetup", "Home", FormMethod.Get, new { useDefault = false }))
+    {
         <fieldset>
+            <span>
+                <p>
+                    Name your search: @Html.TextBoxFor(a => a.Name)
+                </p>
+            </span>
             <span>
                 <h4> Deposit Setting</h4>
                 <p>First One Time Deposit Amount @Html.TextBoxFor(m => m.DepositRule.InitialDepositAmount)</p>
@@ -118,17 +110,12 @@
             </p>
         </fieldset>
         <p>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Save Search" />
         </p>
 
     }
 
 </div>
-<div class="text-center">
-    <button class="button">
-        @Html.ActionLink("Use Default Setting", "Index", "Home", new { useDefaultSetting = true })
-    </button>
 
-</div>
 
 
