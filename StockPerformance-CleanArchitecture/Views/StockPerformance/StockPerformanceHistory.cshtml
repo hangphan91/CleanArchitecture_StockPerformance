@@ -12,46 +12,8 @@
         <br />
     </form>
 </body>
-</html>
-
 
 <h1>@ViewData["Title"]</h1>
 <div>
-    <h3>Perfomrance Result:</h3>
     @Html.Raw(resultTable)
 </div>
-@{ /*
- <div class="text-center">
-
-     <table class="table table-bordered table-responsive table-hover">
-         <tr>
-             <th>Symbol</th>
-             <th>Profit In Percentage</th>
-             <th>Profit In $</th>
-             <th>Start Year</th>
-             <th>End Year</th>
-             <th>Created Time</th>
-             <th>Number of trade a month</th>
-
-         </tr>
-         @foreach (var row in Model.StockPerformanceResponses)
-         {
-
-
-             <tr>
-                 <th>
-                     @Html.ActionLink(row.Symbol, "StockPerformance", "StockPerformance", new { json = row.SearchDetail.ToJson() })
-                 </th>
-                 <th>@row.ProfitInPercentage</th>
-                 <th>@row.ProfitInDollar</th>
-                 <th>@row.SearchDetail.SettingDate</th>
-                 <th>@row.SearchDetail.SearchSetup.EndingYear</th>
-                 <th>@row.CreatedTime</th>
-                 <th>@row.SearchDetail.TradingRule.NumberOfTradeAMonth</th>
-
-             </tr>
-         }
-     </table>
- </div>
-*/
-   }

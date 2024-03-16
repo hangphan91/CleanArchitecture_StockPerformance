@@ -141,7 +141,8 @@ namespace StockPerformance_CleanArchitecture.Formatters
                 item.ProfitSummaryPercentage?.SetTotalProfit();
                 var basedURL = "https://stockperformance.azurewebsites.net/";
 
-                var link = $"{basedURL}?symbol={item.Symbol}&startYear={item.SearchDetail?.SettingDate.Year}";
+                var link = $"{basedURL}?symbol={item.Symbol}&startYear={item.SearchDetail?.SettingDate.Year}" +
+                    $"&Name={item.SearchDetail?.Name}";
 
                 var yearlyAVGGrowth = item.ProfitSummaryPercentage?.AVGYearlyProfit;
                 var monthlyAVGGrowth = item.ProfitSummaryPercentage?.AVGMonthlyProfit;

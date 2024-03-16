@@ -22,7 +22,6 @@ namespace UnitTests.Logics
                     StartDate = new DateDetail(2022, 11, 20),
                     Symbol = "AAPL",
                     ProfitSummaryPercentage = new ProfitSummaryPercentage(),
-
                 }
             };
 
