@@ -18,7 +18,7 @@ namespace Exporter
 
         public static string WriteToExcel(List<ExcelExport> exports)
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(),
                $"Report{DateTime.Now:yyyy-MM-dd HH-mm-ss}.xlsx");
             var sheet = new SwiftExcel.Sheet
             {

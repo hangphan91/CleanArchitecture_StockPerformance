@@ -86,10 +86,8 @@ namespace StockPerformance_CleanArchitecture.Controllers
             var response = CachedHelper.GetAllCache()
                 .OrderByDescending(a => a.CreatedTime)
                 .FirstOrDefault();
-
             if (response == null)
                 return Ok();
-
             CreateAndDownloadFile(response.GetSaveFileStockPerformanceSetting());
             return CreateAndDownloadFile(response.GetSaveFilePerformanceResultTableForAll());
         }
