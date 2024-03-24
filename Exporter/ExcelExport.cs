@@ -20,8 +20,10 @@ namespace Exporter
         {
             string fileName = $"Report{DateTime.Now:yyyy-MM-dd HH-mm-ss}.xlsx";
 
-            var basedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var formattedBasedPath = CrossPlatform.PathCombine(basedPath);
+            var basedPath = Environment.CurrentDirectory;
+            //Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var uri = new Uri(basedPath);
+            var formattedBasedPath = CrossPlatform.PathCombine(uri.LocalPath);
             string filePath = Path.Combine(formattedBasedPath, fileName);
 
             var sheet = new SwiftExcel.Sheet

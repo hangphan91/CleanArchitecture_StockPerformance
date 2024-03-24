@@ -97,6 +97,7 @@ namespace StockPerformance_CleanArchitecture.Controllers
             var result = File(System.IO.File.OpenRead(filePath), "application/vnd.ms-excel", Path.GetFileName(filePath));
             System.IO.File.Delete(filePath);
             Console.WriteLine(filePath);
+
             return result;
         }
 
