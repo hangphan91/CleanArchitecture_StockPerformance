@@ -20,9 +20,11 @@ namespace Exporter
         {
             string fileName = $"Report{DateTime.Now:yyyy-MM-dd HH-mm-ss}.xlsx";
 
-            var basedPath = Environment.CurrentDirectory;
+            var basedPath = AppDomain.CurrentDomain.BaseDirectory;
             //Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var uri = new Uri(basedPath);
+            Console.WriteLine("basedPath" +basedPath);
+
             var formattedBasedPath = CrossPlatform.PathCombine(uri.LocalPath);
             string filePath = Path.Combine(formattedBasedPath, fileName);
 
