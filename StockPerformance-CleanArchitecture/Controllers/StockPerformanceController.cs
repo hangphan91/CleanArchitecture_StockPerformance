@@ -94,8 +94,9 @@ namespace StockPerformance_CleanArchitecture.Controllers
 
         public IActionResult CreateAndDownloadFile(string filePath)
         {
-            var result = File(System.IO.File.OpenRead(filePath), "application/octet-stream", Path.GetFileName(filePath));
+            var result = File(System.IO.File.OpenRead(filePath), "application/vnd.ms-excel", Path.GetFileName(filePath));
             System.IO.File.Delete(filePath);
+            Console.WriteLine(filePath);
             return result;
         }
 
