@@ -18,8 +18,12 @@ namespace Exporter
 
         public static string WriteToExcel(List<ExcelExport> exports)
         {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(),
-               $"Report{DateTime.Now:yyyy-MM-dd HH-mm-ss}.xlsx");
+            string fileName = $"Report{DateTime.Now:yyyy-MM-dd HH-mm-ss}.xlsx";
+
+            var basedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var formattedBasedPath = CrossPlatform.PathCombine(basedPath);
+            string filePath = Path.Combine(formattedBasedPath, fileName);
+
             var sheet = new SwiftExcel.Sheet
             {
                 Name = "Report",
