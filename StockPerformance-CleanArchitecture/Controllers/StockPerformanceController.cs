@@ -102,7 +102,7 @@ namespace StockPerformance_CleanArchitecture.Controllers
             Byte[] buffer = await System.IO.File.ReadAllBytesAsync(filePath);
             System.IO.File.Delete(filePath);
 
-            return File(buffer, "application/vnd.ms-excel");
+            return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
         private IActionResult CreateAndDownloadFile()
