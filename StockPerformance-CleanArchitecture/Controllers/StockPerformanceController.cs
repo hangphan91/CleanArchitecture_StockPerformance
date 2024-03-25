@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Exporter;
 using FusionCharts.Visualization;
+using HP.PersonalStocks.Mgr.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using SharpCompress.Common;
 using StockPerformance_CleanArchitecture.Formatters;
@@ -88,17 +89,20 @@ namespace StockPerformance_CleanArchitecture.Controllers
                 .FirstOrDefault();
             if (response == null)
                 return Ok();
-            CreateAndDownloadFile(response.GetSaveFileStockPerformanceSetting());
-            return CreateAndDownloadFile(response.GetSaveFilePerformanceResultTableForAll());
+            var filePath = response.GetSaveFilePerformanceResultTableForAll();
+
+            return await CreateAndDownloadFile(filePath);
         }
 
-        public IActionResult CreateAndDownloadFile(string filePath)
+        public async Task< IActionResult> CreateAndDownloadFile(string filePath)
         {
-            var result = File(System.IO.File.OpenRead(filePath), "application/vnd.ms-excel", Path.GetFileName(filePath));
-            System.IO.File.Delete(filePath);
+           // var result = File(System.IO.File.OpenRead(filePath), "application/vnd.ms-excel", Path.GetFileName(filePath));
             Console.WriteLine(filePath);
 
-            return result;
+            Byte[] buffer = await System.IO.File.ReadAllBytesAsync(filePath);
+            System.IO.File.Delete(filePath);
+
+            return File(buffer, "application/vnd.ms-excel");
         }
 
         private IActionResult CreateAndDownloadFile()
