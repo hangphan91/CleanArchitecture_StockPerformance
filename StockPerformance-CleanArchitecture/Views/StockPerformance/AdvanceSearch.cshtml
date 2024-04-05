@@ -16,6 +16,9 @@
     </form>
 </body>
 </html>
+<p style="float: right;">
+    @Html.ActionLink("Export to Excel", "OnPostDownloadFileForAdvanceSearch", "StockPerformance")
+</p>
 <span class="text-center">
     <button class="button">
         @Html.ActionLink("Back to search", "AdvanceSearch", "Home", new { willClearAllSearch = true })

@@ -39,7 +39,7 @@ namespace StockPerformance_CleanArchitecture.Formatters
 
         public static string ExportDataTableToExcelFormatAndGetFile(List<StockPerformanceResponse> list)
         {
-            if (list == null)
+            if (list == null || list.Count ==0)
                 return "";
 
             var dt = DataTableFormatter.GetStockPerformanceReponseDataTable(list);
@@ -129,8 +129,6 @@ namespace StockPerformance_CleanArchitecture.Formatters
             string Htmltext = strHTMLBuilder.ToString();
             return Htmltext;
         }
-
-
     }
 }
 

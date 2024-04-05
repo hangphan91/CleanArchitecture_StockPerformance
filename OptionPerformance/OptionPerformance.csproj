@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Logic\" />
+    <None Remove="Models\" />
+    <None Remove="DataAccessors\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logic\" />
+    <Folder Include="Models\" />
+    <Folder Include="DataAccessors\" />
+  </ItemGroup>
+</Project>
