@@ -176,7 +176,7 @@ namespace EntityPersistence.DataAccessors
                 SecondDepositDate = 16,
                 NumberOfDepositDate = 2,
                 Id = 0,
-                InitialDepositAmount = 3000,
+                InitialDepositAmount = 0,
             };
         }
 
@@ -194,7 +194,7 @@ namespace EntityPersistence.DataAccessors
                 SecondDepositDate = 16,
                 NumberOfDepositDate = 2,
                 Id = rand.Next(1,1000),
-                InitialDepositAmount = rand.Next(1,10)*1000,
+                InitialDepositAmount = rand.Next(0,5)*100,
             };
         }
 
@@ -226,7 +226,7 @@ namespace EntityPersistence.DataAccessors
             var randTradeDateLow = rand.Next(1, 14);
 
             var randPurchaseLimit = rand.Next(1, 5) * 500;
-            var randLostLimit = rand.Next(1, 4) * randPurchaseLimit;
+            var randLostLimit = rand.Next(1, 5) * randPurchaseLimit;
             var randNumberOfTrade = rand.Next(1, 2);
             var randSellAll = ((decimal)rand.Next(1, 10)) * 10;
             return new TradingRule
