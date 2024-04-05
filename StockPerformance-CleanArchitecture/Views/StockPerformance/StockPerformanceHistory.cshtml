@@ -5,7 +5,9 @@
     var resultTable = Model.DisplayPerformanceResult();
 
 }
-
+<p style="float: right;">
+    @Html.ActionLink("Export to Excel", "OnPostDownloadFileForAdvanceSearch", "StockPerformance")
+</p>
 <body>
     <form method="post">
         <div>@Html.Raw(Model.ProfitChart.ChartJsonForPerformanceHistory)</div>
