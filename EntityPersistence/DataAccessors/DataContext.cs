@@ -140,8 +140,22 @@ namespace EntityPersistence.DataAccessors
                 "FERG", "EP", "ARCH", "EG", "RGA",
             };
 
+            var optionStocks042024 = new List<string>
+            {
+                "SPY", "SWAV", "GLD", "XOM", "ROOT", "UBER", "OXY",
+                "DXYZ", "DJT", "NEM", "INTC", "DNUT", "GEO", "TDOC",
+                "ZGN", "GCTS", "CADL",
+            };
+
+            var highOpenInterest042024 = new List<string>
+            {
+                "XLF", "XLE", "SPY", "IWM"
+            };
+
             symbols.AddRange(growingIn2022To2023);
             symbols.AddRange(growingIn2020To2024);
+            symbols.AddRange(optionStocks042024);
+            symbols.AddRange(highOpenInterest042024);
 
             symbols = symbols.Select(a => a.ToUpper()).Distinct().ToList();
             var toSaveSymbols = symbols.Select(symbol => new Symbol
