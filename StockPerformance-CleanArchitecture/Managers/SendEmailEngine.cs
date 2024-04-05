@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using EntityDefinitions;
 using OoplesFinance.YahooFinanceAPI.Models;
 using StockPerformance_CleanArchitecture.Formatters;
 using StockPerformance_CleanArchitecture.Models;
@@ -60,6 +61,24 @@ namespace StockPerformance_CleanArchitecture.Managers
             emailMessage.IsBodyHtml = true;
 
             success = true;
+        }
+
+        public static (List<StockPerformanceResponse>, List<Email>, int) GetToSendEmailList(
+            List<StockPerformanceResponse> stockPerformanceResponses,
+            List<Email> emails)
+        {
+            List<StockPerformanceResponse> responses;
+            List<Email> emailsTosend;
+            int minCount;
+
+            responses = stockPerformanceResponses
+                .Where(response => response.ProfitSummaryPercentage.IsProfitable())
+                .Select(a => a).Distinct().ToList();
+            emailsTosend = emails.Select(a => a).Distinct().ToList();
+            // uhaphan only send email at 5 am and on week day
+            minCount = 5;
+
+            return (responses, emailsTosend, minCount);
         }
     }
 }

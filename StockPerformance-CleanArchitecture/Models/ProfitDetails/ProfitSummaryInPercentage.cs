@@ -13,6 +13,16 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         {
             return $"{base.DisplayProfitSummary()}";
         }
+
+        internal bool IsProfitable()
+        {
+            return MAXMonthlyProfit > 0 &&
+                 MAXYearlyProfit > 0 &&
+                 MINMonthlyProfit > 0 &&
+                 MINYearlyProfit > 0 &&
+                 AVGMonthlyProfit > 0 &&
+                 AVGYearlyProfit > 0;
+        }
     }
 }
 

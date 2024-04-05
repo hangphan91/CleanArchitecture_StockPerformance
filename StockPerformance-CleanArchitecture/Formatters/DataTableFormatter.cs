@@ -120,6 +120,8 @@ namespace StockPerformance_CleanArchitecture.Formatters
         {
             DataTable table = new DataTable("Performance Result");
             table.Columns.Add("Symbol", typeof(string));
+            table.Columns.Add("Current Price $", typeof(decimal));
+
             table.Columns.Add("Start Date", typeof(Models.Settings.SettingDate));
             table.Columns.Add("End Date", typeof(DateOnly));
 
@@ -152,6 +154,7 @@ namespace StockPerformance_CleanArchitecture.Formatters
                 var monthlyMaxGrowth = item.ProfitSummaryPercentage?.MAXMonthlyProfit;
 
                 table.Rows.Add($"<a href={link}>{item.Symbol}</a>",
+                    item.CurrentPrice.RoundNumber(),
                     item.SearchDetail?.SettingDate,
                     item.SearchDetail?.SearchSetup?.EndingYear,
                     yearlyMaxGrowth.RoundNumber(),

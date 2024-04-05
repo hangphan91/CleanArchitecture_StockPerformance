@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Timers;
+using EntityDefinitions;
+using HP.PersonalStocks.Mgr.Helpers;
 using StockPerformance_CleanArchitecture.Models;
 
 namespace StockPerformance_CleanArchitecture.Managers
@@ -7,11 +9,11 @@ namespace StockPerformance_CleanArchitecture.Managers
     public class SendEmailTimer
     {
         public ConcurrentBag<StockPerformanceResponse> stockPerformanceResponses;
-        public ConcurrentBag<EntityDefinitions.Email> emails;
+        public ConcurrentBag<Email> emails;
         public SendEmailTimer()
         {
             stockPerformanceResponses = new ConcurrentBag<StockPerformanceResponse>();
-            emails = new ConcurrentBag<EntityDefinitions.Email>();
+            emails = new ConcurrentBag<Email>();
             Start();
         }
         private static System.Timers.Timer aTimer;
@@ -21,7 +23,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             SetTimer();
         }
 
-        public void AddResponse(StockPerformanceResponse response, List<EntityDefinitions.Email> toSendEmails)
+        public void AddResponse(StockPerformanceResponse response, List<Email> toSendEmails)
         {
             if (response.ProfitInPercentage > 20 &&
                 stockPerformanceResponses.All(a => a.Symbol != response.Symbol))
@@ -46,19 +48,17 @@ namespace StockPerformance_CleanArchitecture.Managers
 
         private void OnTimedEventStart(Object source, ElapsedEventArgs e)
         {
-            var responses = stockPerformanceResponses.Select(a => a).Distinct().ToList();
-            var emailsTosend = emails.Select(a => a).Distinct().ToList();
-            // uhaphan only send email at 5 am and on week day
-            var isWeekDay = !(DateTime.Now.DayOfWeek == DayOfWeek.Saturday ||
-                DateTime.Now.DayOfWeek == DayOfWeek.Sunday);
+           var (responses, emailsTosend, minCount) =
+                SendEmailEngine.GetToSendEmailList(
+                    stockPerformanceResponses.Select(a => a).ToList(),
+                    emails.Select(a => a).ToList());
 
-            // if (DateTime.Now.Hour == 5 && isWeekDay && responses?.Count > 0)
-            if (responses?.Count > 10)
+            if (responses?.Count >= minCount)
             {
                 SendEmailEngine.CreateAndSendEmail(responses, emailsTosend);
                 stockPerformanceResponses.Clear();
             }
-        }
+        }        
     }
 }
 
