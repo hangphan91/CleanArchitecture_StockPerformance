@@ -106,6 +106,9 @@ namespace StockPerformance_CleanArchitecture.Controllers
 
             var filePath =  PerformanceResultFormatter.ExportDataTableToExcelFormatAndGetFile(responses);
 
+            if (string.IsNullOrWhiteSpace(filePath))
+                return Ok();
+
             return await CreateAndDownloadFile(filePath);
         }
 
