@@ -19,7 +19,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
         private static SearchInitialSetup _searchSetup;
         private static IEntityDefinitionsAccessor _entityDefinitionsAccessor;
         private static ConcurrentBag<SearchDetail> _savedSearchDetailsSeeting = new ConcurrentBag<SearchDetail>();
-        private static ConcurrentBag<SearchDetail> _activeSearchDetailsSeeting = new ConcurrentBag<SearchDetail>();
+        private static ConcurrentBag<SearchDetail> _activeSearchDetailsSetting = new ConcurrentBag<SearchDetail>();
 
         private static StockPerformanceManager _stockPerformanceManager;
 
@@ -47,7 +47,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         public static void AddAdvanceSearchDetail(SearchDetail searchDetail)
         {
-            _activeSearchDetailsSeeting.Add(searchDetail);
+            _activeSearchDetailsSetting.Add(searchDetail);
         }
 
         public static SearchInitialSetup GetSearchInitialSetup()
@@ -158,7 +158,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         internal static List<SearchDetail> GetSearchDetails()
         {
-            return _activeSearchDetailsSeeting.Select(a => a).ToList();
+            return _activeSearchDetailsSetting.Select(a => a).ToList();
         }
 
         internal static List<SearchDetail> GetSearchDetailsForAll()
@@ -268,7 +268,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
         internal static void ClearSelectedAllSearches()
         {
-            _activeSearchDetailsSeeting.Clear();
+            _activeSearchDetailsSetting.Clear();
         }
     }
 }

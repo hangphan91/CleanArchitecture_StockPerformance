@@ -4,6 +4,7 @@ using StockPerformance_CleanArchitecture.Helpers;
 using StockPerformance_CleanArchitecture.Models;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformance_CleanArchitecture.Models.Settings;
+using StockPerformance_CleanArchitecture.Models.Storages;
 using StockPerformanceCalculator.DatabaseAccessors;
 using StockPerformanceCalculator.Logic;
 
@@ -260,19 +261,12 @@ namespace StockPerformance_CleanArchitecture.Managers
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
                 if (cachedResponse != null)
                 {
-                    advancedSearchResult.StockPerformanceResponses.Add(cachedResponse);
+                    StockPerformanceHistoryStorage.AddResponse(cachedResponse);
                     continue;
                 }
                 var response = await GetStockPerformanceResponse(searchDetail);
-                advancedSearchResult.StockPerformanceResponses.Add(response);
-                advancedSearchResult.StockPerformanceResponses =
-                    advancedSearchResult.StockPerformanceResponses
-                    .OrderByDescending(a => a.ProfitInDollar)
-                    .ToList();
+                StockPerformanceHistoryStorage.AddResponse(response);
             }
-            advancedSearchResult.StockPerformanceResponses =
-                advancedSearchResult.StockPerformanceResponses.OrderBy(a => a.Symbol)
-            .ThenBy(a => a.SearchDetail.SettingDate.Year).ToList();
 
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =
@@ -292,19 +286,12 @@ namespace StockPerformance_CleanArchitecture.Managers
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
                 if (cachedResponse != null)
                 {
-                    advancedSearchResult.StockPerformanceResponses.Add(cachedResponse);
+                    StockPerformanceHistoryStorage.AddResponse(cachedResponse);
                     continue;
                 }
                 var response = await GetStockPerformanceResponse(searchDetail);
-                advancedSearchResult.StockPerformanceResponses.Add(response);
-                advancedSearchResult.StockPerformanceResponses =
-                    advancedSearchResult.StockPerformanceResponses
-                    .OrderByDescending(a => a.ProfitInDollar)
-                    .ToList();
+                StockPerformanceHistoryStorage.AddResponse(response);
             }
-            advancedSearchResult.StockPerformanceResponses =
-                advancedSearchResult.StockPerformanceResponses.OrderBy(a => a.Symbol)
-            .ThenBy(a => a.SearchDetail.SettingDate.Year).ToList();
 
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =
@@ -320,7 +307,6 @@ namespace StockPerformance_CleanArchitecture.Managers
             var responses = CachedHelper.GetAllCache();
             var history = new StockPerformanceHistory
             {
-                StockPerformanceResponses = responses,
                 ProfitChart = new ProfitChart(responses)
             };
             return history;

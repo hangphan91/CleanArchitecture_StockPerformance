@@ -149,7 +149,10 @@ namespace EntityPersistence.DataAccessors
 
             var highOpenInterest042024 = new List<string>
             {
-                "XLF", "XLE", "SPY", "IWM"
+                "XLF", "XLE", "SPY", "IWM", "tsla", "mara", "riot", "coin",
+                 "nkla", "nio", "wkhs", "lcid", "amzn", "spy", "gld", "xom", 
+                 "root", "uber", "oxy","dxyz", "djt","nem", "dnut", "geo", 
+                 "zgn", "gcts", "cadl","xlf","iwm", "xle","xlf"
             };
 
             symbols.AddRange(growingIn2022To2023);

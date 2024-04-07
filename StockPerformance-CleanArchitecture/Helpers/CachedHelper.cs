@@ -49,8 +49,6 @@ namespace StockPerformance_CleanArchitecture.Helpers
 
             return cachedResponse;
         }
-
-
     }
 }
 
