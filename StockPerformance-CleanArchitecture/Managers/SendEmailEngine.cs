@@ -4,6 +4,7 @@ using EntityDefinitions;
 using OoplesFinance.YahooFinanceAPI.Models;
 using StockPerformance_CleanArchitecture.Formatters;
 using StockPerformance_CleanArchitecture.Models;
+using StockPerformance_CleanArchitecture.Models.EmailDetails;
 using Utilities;
 
 namespace StockPerformance_CleanArchitecture.Managers
@@ -11,11 +12,12 @@ namespace StockPerformance_CleanArchitecture.Managers
     public class SendEmailEngine
     {
         public static void CreateAndSendEmail(List<StockPerformanceResponse> responses,
-            List<EntityDefinitions.Email> emailsTosend)
+            List<EmailContact> emailsTosend,
+            bool isProfitable)
         {
             foreach (var email in emailsTosend)
             {
-                GenerateEmail(responses.Distinct().ToList(), email, out var emailMessage, out var success);
+                var emailMessage = GenerateEmail(responses.Distinct().ToList(), email, isProfitable);
                 SendEmail(emailMessage);
             }
         }
@@ -37,22 +39,23 @@ namespace StockPerformance_CleanArchitecture.Managers
             return success;
         }
 
-        public static void GenerateEmail(List<StockPerformanceResponse> list,
-            EntityDefinitions.Email email, out MailMessage emailMessage, out bool success)
+        public static MailMessage GenerateEmail(List<StockPerformanceResponse> list,
+            EmailContact email, bool success)
         {
             var htmlHead = "<!DOCTYPE html>\n<html>\n<head>\n  <title></title>\n  <meta charset=\"UTF-8\">\n</head>\n<body>";
             string tableMessage = PerformanceResultFormatter.GetStockPerformanceResponseTableHTML(list);
 
-            var emailStartMessage = $@"Dear {email.FistName}, " +
+            var direction = success ? "growth" : "degration";
+            var emailStartMessage = $@"Dear {email.FirstName}, " +
                 $"<br>These are the stock performance reports for {DateTime.Now.ToLongDateString()}. " +
-                $"Our analysis highlights the following stocks that have shown growth in recent years:";
+                $"Our analysis highlights the following stocks that have shown {direction} in recent years:";
 
             var url = "https://stockperformance.azurewebsites.net";
             var emailEndSentence = $"<br>Thanks,<br> StockPerformance<br><br>Visit us at: <a href={url}>Stock Perfomance Site</a> ";
 
             var fullMessage = htmlHead + emailStartMessage + tableMessage + emailEndSentence + "\n</body>\n</html>";
 
-            emailMessage = new MailMessage(
+            var emailMessage = new MailMessage(
                         "stockperformance2023@gmail.com",
                         email.EmailAddress,
                         $"Stock Performance Report on {DateTime.Now.ToLongDateString()}",
@@ -60,25 +63,39 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             emailMessage.IsBodyHtml = true;
 
-            success = true;
+            return emailMessage;
         }
 
-        public static (List<StockPerformanceResponse>, List<Email>, int) GetToSendEmailList(
+        public static List<SendEmailData> GetToSendEmailList(
             List<StockPerformanceResponse> stockPerformanceResponses,
             List<Email> emails)
         {
-            List<StockPerformanceResponse> responses;
-            List<Email> emailsTosend;
-            int minCount;
-
-            responses = stockPerformanceResponses
+            // Hang - gaining list
+           var  gainingProfitResponses = stockPerformanceResponses
                 .Where(response => response.ProfitSummaryPercentage.IsProfitable())
-                .Select(a => a).Distinct().ToList();
-            emailsTosend = emails.Select(a => a).Distinct().ToList();
-            // uhaphan only send email at 5 am and on week day
-            minCount = 5;
+                .Select(a => a)
+                .Distinct().ToList();
 
-            return (responses, emailsTosend, minCount);
+           var  emailsTosend = emails.Select(a => 
+           new EmailContact{
+                EmailAddress = a.EmailAddress,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+           } )
+           .Distinct().ToList();           
+            int minCount = 5;
+            var sendEmailGainData = new SendEmailData(gainingProfitResponses, minCount, emailsTosend, true);
+
+            //uhaphan - Here is non profit List
+            var  lossingProfitResponses = stockPerformanceResponses
+                .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable())
+                .Select(a => a).Distinct().ToList();
+
+            var  emailsTosendForLostProfit = emailsTosend.Where(email => email.FirstName.Equals("Love")).ToList();
+            var sendEmailLostData = new SendEmailData(lossingProfitResponses, 1, emailsTosendForLostProfit, false);
+
+            var sendEmailData = new List<SendEmailData>{sendEmailGainData, sendEmailLostData};
+            return sendEmailData;
         }
     }
 }

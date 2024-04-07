@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using EntityDefinitions;
 using StockPerformance_CleanArchitecture.Managers;
 using StockPerformance_CleanArchitecture.Models;
+using StockPerformance_CleanArchitecture.Models.EmailDetails;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformanceCalculator.Models;
 using static System.Net.WebRequestMethods;
@@ -24,16 +26,13 @@ namespace UnitTests.Logics
                     ProfitSummaryPercentage = new ProfitSummaryPercentage(),
                 }
             };
-
-            MailMessage emailMessage;
-            bool success;
-            EntityDefinitions.Email email = new EntityDefinitions.Email
+            var email = new EmailContact
             {
                 EmailAddress = "funnyluv122@gmail.com",
-                FistName = "Amor"
+                FirstName = "Amor"
             };
-            SendEmailEngine.GenerateEmail(dictionary, email, out emailMessage, out success);
-            success = SendEmailEngine.SendEmail(emailMessage);
+            var emailMessage = SendEmailEngine.GenerateEmail(dictionary, email, true);
+            var success = SendEmailEngine.SendEmail(emailMessage);
             Assert.AreEqual(success, true);
         }
 
@@ -63,12 +62,12 @@ namespace UnitTests.Logics
                 }
             };
 
-            EntityDefinitions.Email email = new EntityDefinitions.Email
+            var email = new EmailContact
             {
                 EmailAddress = "funnyluv122@gmail.com",
-                FistName = "Amor"
+                FirstName = "Amor"
             };
-            SendEmailEngine.CreateAndSendEmail(dictionary, new List<EntityDefinitions.Email> { email });
+            SendEmailEngine.CreateAndSendEmail(dictionary, new List<EmailContact> { email }, false);
         }
     }
 }

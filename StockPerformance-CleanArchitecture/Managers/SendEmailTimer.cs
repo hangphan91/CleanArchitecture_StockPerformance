@@ -3,6 +3,7 @@ using System.Timers;
 using EntityDefinitions;
 using HP.PersonalStocks.Mgr.Helpers;
 using StockPerformance_CleanArchitecture.Models;
+using StockPerformance_CleanArchitecture.Models.EmailDetails;
 
 namespace StockPerformance_CleanArchitecture.Managers
 {
@@ -48,16 +49,19 @@ namespace StockPerformance_CleanArchitecture.Managers
 
         private void OnTimedEventStart(Object source, ElapsedEventArgs e)
         {
-           var (responses, emailsTosend, minCount) =
+           var sendEmailData =
                 SendEmailEngine.GetToSendEmailList(
                     stockPerformanceResponses.Select(a => a).ToList(),
                     emails.Select(a => a).ToList());
 
-            if (responses?.Count >= minCount)
+            foreach (SendEmailData sendEmail in sendEmailData)
             {
-                SendEmailEngine.CreateAndSendEmail(responses, emailsTosend);
-                stockPerformanceResponses.Clear();
+                if (sendEmail.StockPerformanceResponses.Count >= sendEmail.MaxCount)
+                {
+                    SendEmailEngine.CreateAndSendEmail(sendEmail.StockPerformanceResponses, sendEmail.EmailContacts, sendEmail.IsProfitable);
+                }
             }
+            stockPerformanceResponses.Clear();
         }        
     }
 }

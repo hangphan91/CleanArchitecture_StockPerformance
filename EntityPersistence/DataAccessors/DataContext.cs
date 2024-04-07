@@ -77,9 +77,9 @@ namespace EntityPersistence.DataAccessors
         {
             return new List<Email>
             {
-                new Email{Id = 0, EmailAddress = "cristian.g.navarrete@gmail.com", FistName = "Cristian"},
+                new Email{Id = 0, EmailAddress = "cristian.g.navarrete@gmail.com", FirstName = "Cristian"},
                 //new Email{Id = 1, EmailAddress = "funnyluv122@gmail.com", FistName = "Hang"},
-                new Email{Id = 2, EmailAddress = "stockperformance2023@gmail.com", FistName = "Love"},
+                new Email{Id = 2, EmailAddress = "stockperformance2023@gmail.com", FirstName = "Love"},
             };
         }
 
