@@ -70,9 +70,10 @@ namespace StockPerformance_CleanArchitecture.Managers
             List<StockPerformanceResponse> stockPerformanceResponses,
             List<Email> emails)
         {
+            var responses = stockPerformanceResponses.OrderByDescending(stock => stock.ProfitInPercentage);
             // Hang - gaining list
-           var  gainingProfitResponses = stockPerformanceResponses
-                .Where(response => response.ProfitSummaryPercentage.IsProfitable()&& response.ProfitInPercentage > 10)
+           var  gainingProfitResponses = responses
+                .Where(response => response.ProfitSummaryPercentage.IsProfitable()&& response.ProfitInPercentage > 20)
                 .Select(a => a)
                 .Distinct().ToList();
 
@@ -87,7 +88,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             var sendEmailGainData = new SendEmailData(gainingProfitResponses, minCount, emailsTosend, true);
 
             //uhaphan - Here is non profit List
-            var  lossingProfitResponses = stockPerformanceResponses
+            var  lossingProfitResponses = responses
                 .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable()|| response.ProfitInPercentage < 0)
                 .Select(a => a).Distinct().ToList();
 

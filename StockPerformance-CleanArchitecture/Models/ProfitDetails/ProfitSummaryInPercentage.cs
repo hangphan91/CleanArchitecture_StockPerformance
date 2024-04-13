@@ -26,11 +26,8 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
 
         internal bool IsNeverProfitable()
         {
-            return MAXMonthlyProfit < 0 &&
-                 MINMonthlyProfit < 0 &&
+            return 
                  AVGMonthlyProfit < 0 &&
-                 MAXYearlyProfit < 0 &&
-                 MINYearlyProfit < 0 &&
                  AVGYearlyProfit < 0;
         }
     }
