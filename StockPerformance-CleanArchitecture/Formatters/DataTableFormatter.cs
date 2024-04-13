@@ -146,12 +146,12 @@ namespace StockPerformance_CleanArchitecture.Formatters
                 var link = $"{basedURL}?symbol={item.Symbol}&startYear={item.SearchDetail?.SettingDate.Year}" +
                     $"&Name={item.SearchDetail?.Name}";
 
-                var yearlyAVGGrowth = item.ProfitSummaryPercentage?.AVGYearlyProfit;
-                var monthlyAVGGrowth = item.ProfitSummaryPercentage?.AVGMonthlyProfit;
-                var yearlyMinGrowth = item.ProfitSummaryPercentage?.MINYearlyProfit;
-                var monthlyMinGrowth = item.ProfitSummaryPercentage?.MINMonthlyProfit;
                 var yearlyMaxGrowth = item.ProfitSummaryPercentage?.MAXYearlyProfit;
+                var yearlyMinGrowth = item.ProfitSummaryPercentage?.MINYearlyProfit;
+                var yearlyAVGGrowth = item.ProfitSummaryPercentage?.AVGYearlyProfit;
                 var monthlyMaxGrowth = item.ProfitSummaryPercentage?.MAXMonthlyProfit;
+                var monthlyMinGrowth = item.ProfitSummaryPercentage?.MINMonthlyProfit;
+                var monthlyAVGGrowth = item.ProfitSummaryPercentage?.AVGMonthlyProfit;
 
                 table.Rows.Add($"<a href={link}>{item.Symbol}</a>",
                     item.CurrentPrice.RoundNumber(),
