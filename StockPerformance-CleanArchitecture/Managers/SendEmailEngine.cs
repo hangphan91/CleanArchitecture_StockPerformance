@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Mail;
 using EntityDefinitions;
 using OoplesFinance.YahooFinanceAPI.Models;
@@ -83,7 +84,11 @@ namespace StockPerformance_CleanArchitecture.Managers
                 FirstName = a.FirstName,
                 LastName = a.LastName,
            } )
-           .Distinct().ToList();           
+           .Distinct().ToList();    
+
+            var debugEmails = emailsTosend.Where(email => email.FirstName.Equals("Love")).ToList();
+            emailsTosend = Debugger.IsAttached ? debugEmails : emailsTosend; 
+
             int minCount = 5;
             var sendEmailGainData = new SendEmailData(gainingProfitResponses, minCount, emailsTosend, true);
 
@@ -92,7 +97,7 @@ namespace StockPerformance_CleanArchitecture.Managers
                 .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable()|| response.ProfitInPercentage < 0)
                 .Select(a => a).Distinct().ToList();
 
-            var  emailsTosendForLostProfit = emailsTosend.Where(email => email.FirstName.Equals("Love")).ToList();
+            var  emailsTosendForLostProfit = debugEmails;
             var sendEmailLostData = new SendEmailData(lossingProfitResponses, 1, emailsTosendForLostProfit, false);
 
             var sendEmailData = new List<SendEmailData>{sendEmailGainData, sendEmailLostData};
