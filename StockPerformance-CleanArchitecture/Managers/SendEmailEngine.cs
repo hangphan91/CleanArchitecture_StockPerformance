@@ -72,7 +72,7 @@ namespace StockPerformance_CleanArchitecture.Managers
         {
             // Hang - gaining list
            var  gainingProfitResponses = stockPerformanceResponses
-                .Where(response => response.ProfitSummaryPercentage.IsProfitable())
+                .Where(response => response.ProfitSummaryPercentage.IsProfitable()&& response.ProfitInPercentage > 10)
                 .Select(a => a)
                 .Distinct().ToList();
 
@@ -88,7 +88,7 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             //uhaphan - Here is non profit List
             var  lossingProfitResponses = stockPerformanceResponses
-                .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable())
+                .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable()|| response.ProfitInPercentage < 0)
                 .Select(a => a).Distinct().ToList();
 
             var  emailsTosendForLostProfit = emailsTosend.Where(email => email.FirstName.Equals("Love")).ToList();
