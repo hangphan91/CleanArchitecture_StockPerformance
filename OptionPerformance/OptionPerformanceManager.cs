@@ -12,10 +12,10 @@ namespace OptionPerformance
 
         }
 
-        public static List<IStrategy> GetStrategies()
+        public static async Task<List<IStrategy>> GetStrategies()
         {
             var result = new List<IStrategy>();
-            var batchedOptionsDatas = OptionDataAccessor.GetOptionsData("AAPL");
+            var batchedOptionsDatas = await OptionDataAccessor.GetOptionsData("AAPL");
 
             foreach (var optionsData in batchedOptionsDatas.OptionsDatas)
             {

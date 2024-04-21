@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
-    <PackageReference Include="coverlet.collector" Version="3.2.0" />
+    <PackageReference Include="coverlet.collector" Version="3.2.0" />    
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,10 +21,7 @@
     <ProjectReference Include="..\StockPerformanceCalculator\StockPerformanceCalculator.csproj" />
     <ProjectReference Include="..\EntityPersistence\EntityPersistence.csproj" />
     <ProjectReference Include="..\ExternalCommunicator\ExternalCommunicator.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="ExternalCommunications\" />
-    <None Remove="Logics\" />
+    <ProjectReference Include="..\OptionPerformance\OptionPerformance.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ExternalCommunications\" />
