@@ -1,12 +1,8 @@
-﻿using System.Net;
-using System.Net.Mail;
-using EntityDefinitions;
-using StockPerformance_CleanArchitecture.Managers;
+﻿using StockPerformance_CleanArchitecture.Managers;
 using StockPerformance_CleanArchitecture.Models;
 using StockPerformance_CleanArchitecture.Models.EmailDetails;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformanceCalculator.Models;
-using static System.Net.WebRequestMethods;
 
 namespace UnitTests.Logics
 {

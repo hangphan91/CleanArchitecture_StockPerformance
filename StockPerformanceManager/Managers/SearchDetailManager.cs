@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using FusionChartsRazorSamples.Pages;
+﻿using FusionChartsRazorSamples.Pages;
 using StockPerformance_CleanArchitecture.Helpers;
 using StockPerformance_CleanArchitecture.Models;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
 using StockPerformance_CleanArchitecture.Models.Settings;
 using StockPerformance_CleanArchitecture.Models.Storages;
 using StockPerformanceCalculator.DatabaseAccessors;
-using StockPerformanceCalculator.Logic;
 
 namespace StockPerformance_CleanArchitecture.Managers
 {
@@ -21,12 +19,12 @@ namespace StockPerformance_CleanArchitecture.Managers
             _timer = new SendEmailTimer();
         }
 
-        internal SearchDetail GetCurrentSearchDetail()
+        public SearchDetail GetCurrentSearchDetail()
         {
             return SearchDetailHelper.GetCurrentSearchDetail(_entityDefinitionsAccessor);
         }
 
-        internal SearchDetail GetInitialSearchDetail()
+        public SearchDetail GetInitialSearchDetail()
         {
             return SearchDetailHelper.GetInitialSearchDetail();
         }
@@ -41,13 +39,13 @@ namespace StockPerformance_CleanArchitecture.Managers
             return SearchDetailHelper.GetSearchInitialSetup();
         }
 
-        internal void SetCurrentSearchDetail(SearchDetail searchDetail)
+        public void SetCurrentSearchDetail(SearchDetail searchDetail)
         {
             searchDetail.SearchSetup = GetCurrentSearchSetup();
             SearchDetailHelper.SetCurrentSearchDetail(searchDetail);
         }
 
-        internal void AddAdvanceSearchDetail(SearchDetail searchDetail)
+        public void AddAdvanceSearchDetail(SearchDetail searchDetail)
         {
             searchDetail.SearchSetup = GetCurrentSearchSetup();
             SearchDetailHelper.AddAdvanceSearchDetail(searchDetail);
@@ -185,7 +183,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             return response;
         }
 
-        internal void AddNewSymbols(SearchInitialSetup searchSetup, List<string> symbols)
+        public void AddNewSymbols(SearchInitialSetup searchSetup, List<string> symbols)
         {
             var addSymbols = searchSetup.AddingSymbols;
             var savedSymbols = _entityDefinitionsAccessor.GetSavedSymbols(addSymbols);
@@ -203,22 +201,22 @@ namespace StockPerformance_CleanArchitecture.Managers
             searchSetup.Symbols.AddRange(symbols.OrderBy(a => a));
         }
 
-        internal List<SearchDetail> GetActiveSearchDetails()
+        public List<SearchDetail> GetActiveSearchDetails()
         {
             return SearchDetailHelper.GetSearchDetails();
         }
 
-        internal List<SearchDetail> GetSearchDetailsForAll()
+        public List<SearchDetail> GetSearchDetailsForAll()
         {
             return SearchDetailHelper.GetSearchDetailsForAll();
         }
 
-        internal void SetSearchDetail(SearchDetail searchDetail)
+        public void SetSearchDetail(SearchDetail searchDetail)
         {
             SetCurrentSearchDetail(searchDetail);
         }
 
-        internal void ClearAdvanceSearch()
+        public void ClearAdvanceSearch()
         {
             SearchDetailHelper.ClearSelectedAllSearches();
             SearchDetailHelper.ResetInitialSearch();
@@ -312,7 +310,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             return history;
         }
 
-        internal void SaveSearchDetail(SearchDetail toSave)
+        public void SaveSearchDetail(SearchDetail toSave)
         {
             if (toSave == null || toSave.DepositRule == null || toSave.TradingRule == null
                 || toSave.SearchSetup == null)
@@ -356,9 +354,9 @@ namespace StockPerformance_CleanArchitecture.Managers
             _entityDefinitionsAccessor.Insert(depositRule, tradingRule, symbol, setup, toSave.Name);
         }
 
-        internal List<SearchDetail> GetAllSavedSearchDetails()
+        public List<SearchDetail> GetAllSavedSearchDetails()
         {
-           return SearchDetailHelper.GetAllSearchDetails(_entityDefinitionsAccessor);
+            return SearchDetailHelper.GetAllSearchDetails(_entityDefinitionsAccessor);
         }
     }
 
