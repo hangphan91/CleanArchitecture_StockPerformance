@@ -39,14 +39,14 @@
     <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="YahooQuotesApi" Version="5.5.1" />
     <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
     <PackageReference Include="Vse.Web.Serialization.ControlledSerializationJsonConverter" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OoplesFinance.YahooFinanceAPI" Version="1.5.0" />
+    <PackageReference Include="OoplesFinance.YahooFinanceAPI" Version="1.6.4" />
     <PackageReference Include="Fynance" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntityDefinitions\EntityDefinitions.csproj" />
+    <ProjectReference Include="..\ExternalCommunicator\ExternalCommunicator.csproj" />
   </ItemGroup>
 </Project>

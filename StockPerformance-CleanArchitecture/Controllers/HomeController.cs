@@ -23,7 +23,9 @@ public class HomeController : Controller
     {
         var currentSearchDetail = _searchDetailManager.SetInitialView(symbol, startYear, useDefaultSetting, Name);
 
-        return View(currentSearchDetail);
+        //return View(currentSearchDetail);
+
+        return View("./Views/Home/Index.cshtml", currentSearchDetail);
     }
 
     [HttpGet]
@@ -66,11 +68,11 @@ public class HomeController : Controller
 
     public IActionResult DefaultAdvanceSearch()
     {
-        var result =_searchDetailManager.GetInitialSearchDetail();
+        var result = _searchDetailManager.GetInitialSearchDetail();
         result.ActiveSelectedSearchDetails = _searchDetailManager.GetActiveSearchDetails();
         result.SavedSearchDetails = _searchDetailManager.GetAllSavedSearchDetails();
 
-        return View(new AdvanceSearch { SearchDetail = result});
+        return View(new AdvanceSearch { SearchDetail = result });
 
     }
 

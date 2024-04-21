@@ -1,8 +1,7 @@
-﻿using Fynance.Result;
+﻿using ExternalCommunications.Models;
+using Fynance.Result;
 using HP.PersonalStocks.Mgr.Helpers;
 using OoplesFinance.YahooFinanceAPI.Models;
-using StockPerformanceCalculator.Models;
-using YahooQuotesApi;
 
 namespace StockPerformanceCalculator.ExternalCommunications
 {
@@ -13,35 +12,36 @@ namespace StockPerformanceCalculator.ExternalCommunications
         {
             SymbolSummaries = new List<SymbolSummary>();
         }
-
-        public List<SymbolSummary> Map(Security? result)
-        {
-            if (result == null
-                || result?.PriceHistory == null
-                || !result.PriceHistory.HasValue)
-                return SymbolSummaries;
-
-            var priceHistory = result.PriceHistory.Value;
-            foreach (var item in priceHistory)
-            {
-                var date = item.Date.ToDateTimeUnspecified();
-                SymbolSummaries.Add(new SymbolSummary
+        /*
+                public List<SymbolSummary> Map(Security? result)
                 {
-                    ClosingPrice = (decimal)item.Close,
-                    Date = date,
-                    Symbol = result.Symbol.Name
-                });
-            }
+                    if (result == null
+                        || result?.PriceHistory == null
+                        || !result.PriceHistory.HasValue)
+                        return SymbolSummaries;
 
-            return SymbolSummaries.OrderByDescending(symbol => symbol.Date)
-                .ToList(); ;
-        }
+                    var priceHistory = result.PriceHistory.Value;
+                    foreach (var item in priceHistory)
+                    {
+                        var date = item.Date.ToDateTimeUnspecified();
+                        SymbolSummaries.Add(new SymbolSummary
+                        {
+                            ClosingPrice = (decimal)item.Close,
+                            Date = date,
+                            Symbol = result.Symbol.Name,
+                            Volume = (decimal)item.Volume,
+                        });
+                    }
 
+                    return SymbolSummaries.OrderByDescending(symbol => symbol.Date)
+                        .ToList(); ;
+                }
+        */
         internal List<SymbolSummary> Map(Response result2, string symbol)
         {
             var summaries = new List<SymbolSummary>();
 
-            if (result2 == null|| result2.data == null)
+            if (result2 == null || result2.data == null)
                 return summaries;
 
             foreach (var item in result2.data)
@@ -51,6 +51,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
                     ClosingPrice = (decimal)item.close,
                     Date = DateTime.Parse(item.date),
                     Symbol = symbol,
+                    Volume = (decimal)item.volume,
                 });
             }
             return summaries.OrderBy(a => a.Date).ToList();
@@ -66,6 +67,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
                     ClosingPrice = (decimal)item.Close,
                     Date = item.Date,
                     Symbol = symbol,
+                    Volume = (decimal)item.Volume,
                 });
             }
             return summaries;
@@ -81,6 +83,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
                     ClosingPrice = (decimal)item.Close,
                     Date = item.Period,
                     Symbol = symbol,
+                    Volume = (decimal)item.Volume,
                 });
             }
             return summaries;
@@ -98,6 +101,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
                     ClosingPrice = (decimal)item.Close,
                     Date = date,
                     Symbol = symbol,
+                    Volume = (decimal)item.Volume,
                 });
             }
             return summaries.OrderBy(a => a.Date).ToList();

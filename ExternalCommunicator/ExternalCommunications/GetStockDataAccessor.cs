@@ -1,12 +1,8 @@
-﻿using System.Net.Http.Headers;
-using NodaTime;
-using YahooQuotesApi;
-using OoplesFinance.YahooFinanceAPI;
+﻿using OoplesFinance.YahooFinanceAPI;
 using OoplesFinance.YahooFinanceAPI.Enums;
 using OoplesFinance.YahooFinanceAPI.Models;
 using Fynance;
 using Newtonsoft.Json;
-using System;
 
 namespace HP.PersonalStocks.Mgr.Helpers
 {
@@ -28,8 +24,8 @@ namespace HP.PersonalStocks.Mgr.Helpers
             var month = _startingDate.Month;
             var day = _startingDate.Day;
 
-            var a = "symbol=" +CurrentSticker +"&";
-            var b = "dateStart="+ year + "-" + month.ToString("D2") + "-" + day.ToString("D2") + "&";
+            var a = "symbol=" + CurrentSticker + "&";
+            var b = "dateStart=" + year + "-" + month.ToString("D2") + "-" + day.ToString("D2") + "&";
             var c = "dateEnd=" + now.Year + "-" + now.Month.ToString("D2") + "-" + now.Day.ToString("D2") + "&";
 
             string QUERY_URL = "https://apistocks.p.rapidapi.com/weekly?" + a + b + c;
@@ -59,30 +55,31 @@ namespace HP.PersonalStocks.Mgr.Helpers
             throw new Exception("Failed to retrieve data");
         }
 
-        public async Task<Security?> GetHistoricalQuotesInfoAsyncFromYahoo()
-        {
-            try
-            {
-                var year = _startingDate.Year;
-                var month = _startingDate.Month;
-                var day = _startingDate.Day;
-                var quotes =
-                    new YahooQuotesBuilder()
-                    .WithHistoryStartDate(Instant.FromUtc(year, month, day, 0, 0, 0))
-                    .Build();
+        /*
+               public async Task<Security?> GetHistoricalQuotesInfoAsyncFromYahoo()
+               {
+                   try
+                   {
+                       var year = _startingDate.Year;
+                       var month = _startingDate.Month;
+                       var day = _startingDate.Day;
+                       var quotes =
+                           new YahooQuotesBuilder()
+                           .WithHistoryStartDate(Instant.FromUtc(year, month, day, 0, 0, 0))
+                           .Build();
 
-                var result = await quotes.GetAsync(CurrentSticker, Histories.PriceHistory);
+                       var result = await quotes.GetAsync(CurrentSticker, Histories.PriceHistory);
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Failed to Get Historical Quotes Info. {ex.Message}");
-            }
-        }
+                       return result;
+                   }
+                   catch (Exception ex)
+                   {
+                       throw new Exception($"Failed to Get Historical Quotes Info. {ex.Message}");
+                   }
+               }
+       */
 
-
-        public async Task< List<HistoricalData>> GetHistoricalQuotesInfoAsyncFromYahoo2()
+        public async Task<List<HistoricalData>> GetHistoricalQuotesInfoAsyncFromYahoo2()
         {
             try
             {
@@ -158,7 +155,7 @@ namespace HP.PersonalStocks.Mgr.Helpers
         public async Task<Response> GetHistoricalQuotesInfoAsyncFromMarketStack()
         {
             var apiKey = "62fc8f7f2a50984eebb353419743d1a9";
-            
+
 
             try
             {
@@ -250,6 +247,10 @@ namespace HP.PersonalStocks.Mgr.Helpers
 
         [JsonProperty("adjClose")]
         public double AdjClose;
+
+
+        [JsonProperty("volume")]
+        public int Volume;
     }
 
     public class RapiAPiResponse

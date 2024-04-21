@@ -1,19 +1,17 @@
-﻿using HP.PersonalStocks.Mgr.Helpers;
-using StockPerformanceCalculator.DatabaseAccessors;
-using StockPerformanceCalculator.Models;
+﻿using ExternalCommunications;
+using ExternalCommunications.Models;
+using HP.PersonalStocks.Mgr.Helpers;
 
 namespace StockPerformanceCalculator.ExternalCommunications
 {
     public class YahooFinanceCaller : IYahooFinanceCaller
     {
-        private Logic.EntityEngine _entityEngine;
         private decimal _currentPrice;
         private List<SymbolSummary> _symbolSummaries;
-        public YahooFinanceCaller(Logic.EntityEngine entityEngine)
+        public YahooFinanceCaller()
         {
             _currentPrice = 0;
             _symbolSummaries = new List<SymbolSummary>();
-            _entityEngine = entityEngine;
         }
 
         public decimal GetCurrentPrice()
@@ -53,7 +51,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
 
                     }
                     catch (Exception ex2)
-                    {
+                    {/*
                         try
                         {
                             var result2 = await dataAccessor.GetHistoricalQuotesInfoAsyncFromYahoo();
@@ -63,25 +61,15 @@ namespace StockPerformanceCalculator.ExternalCommunications
                         {
                             var result2 = await dataAccessor.GetHistoricalQuotesInfoAsyncFromYahoo2();
                             response = new YahooFinanceAPIMapper().Map(result2, symbol);
-                        }
+                        }*/
                     }
                 }
             }
 
-            _currentPrice = response.OrderByDescending(a =>a.Date).FirstOrDefault()?.ClosingPrice ?? 0;
-            _symbolSummaries = response;
+            _currentPrice = response.OrderByDescending(a => a.Date).FirstOrDefault()?.ClosingPrice ?? 0;
+            _symbolSummaries = response.Where(a => a.Date >= startingDate).ToList();
 
-            var toInsert = response.Select(result
-                => new EntityDefinitions.SymbolSummary
-                {
-                    ClosingPrice = result.ClosingPrice,
-                    Date = result.Date,
-                    Symbol = result.Symbol,
-                }).ToList();
-
-            _entityEngine.AddSymbolSummaries(toInsert);
-            return response.Where(a => a.Date >= startingDate).ToList();
-
+            return _symbolSummaries;
         }
     }
 }

@@ -21,6 +21,5 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "StockPerformance",
     pattern: "{controller=StockPerformance}/{action=StockPerformance}");
-
 app.Run();
 

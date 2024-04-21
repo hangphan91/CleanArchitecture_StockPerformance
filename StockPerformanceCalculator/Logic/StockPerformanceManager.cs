@@ -1,4 +1,6 @@
-﻿using StockPerformanceCalculator.DatabaseAccessors;
+﻿using ExternalCommunications;
+using Newtonsoft.Json;
+using StockPerformanceCalculator.DatabaseAccessors;
 using StockPerformanceCalculator.ExternalCommunications;
 using StockPerformanceCalculator.Helpers;
 using StockPerformanceCalculator.Logic.Calculators;
@@ -39,7 +41,7 @@ namespace StockPerformanceCalculator.Logic
             _entityEngine = new EntityEngine(entityDefinitionsAccessor);
             _depositRule = new DepositRule(_entityEngine);
             _symbol = symbol;
-            _yahooFinanceCaller = new YahooFinanceCaller(_entityEngine);
+            _yahooFinanceCaller = new YahooFinanceCaller();
             _depositLedgerCalculator = new DepositLedgerCalculator(_depositRule);
             _stockLedgerCalculator = new StockLedgerCalculator();
             _shareNumberCalculator = new ShareNumberCalculator(_stockLedgerCalculator);
@@ -51,7 +53,7 @@ namespace StockPerformanceCalculator.Logic
                 _availableBalanceCalculator, _shareNumberCalculator, _tradingRule);
             _priceCalculator = new PriceCalculator(_yahooFinanceCaller);
             _tradeDetailCalculator = new TradeDetailCalculator(_stockLedgerCalculator,
-                _priceCalculator, _tradingRule, startDate, _depositRule );
+                _priceCalculator, _tradingRule, startDate, _depositRule);
             _stockPerformanceSummaryCalculator =
                 new StockPerformanceSummaryCalculator
                 (symbol, startDate, _priceCalculator, _stockLedgerCalculator,
@@ -66,7 +68,9 @@ namespace StockPerformanceCalculator.Logic
 
         public async Task<StockPerformanceSummary> StartStockPerforamanceCalculation(InitialPerformanceSetup mapped)
         {
-            _symbolSummaries = await _yahooFinanceCaller.GetStockHistory(_symbol, _startingDate);
+            var symbols = await _yahooFinanceCaller.GetStockHistory(_symbol, _startingDate);
+            AddNewSymbolsToStorage(symbols);
+            _symbolSummaries = Map(symbols);
             var newTradingRule = SearchDetailMapper.MapTradingRule(mapped);
             var newDepositRule = SearchDetailMapper.MapDepositRule(mapped);
             var symbolIds = _entityEngine.GetSymbolIds(mapped.Symbols);
@@ -88,6 +92,30 @@ namespace StockPerformanceCalculator.Logic
                 allPositions, allDeposit);
 
             return result;
+        }
+
+        private void AddNewSymbolsToStorage(List<global::ExternalCommunications.Models.SymbolSummary> result)
+        {
+            _entityEngine.AddSymbolSummaries(result.Select(item => new EntityDefinitions.SymbolSummary
+            {
+                ClosingPrice = (decimal)item.ClosingPrice,
+                Date = item.Date,
+                Symbol = item.Symbol,
+                Volume = (decimal)item.Volume,
+
+            }).ToList());
+        }
+
+        private List<SymbolSummary> Map(List<global::ExternalCommunications.Models.SymbolSummary> result)
+        {
+            return result.Select(item => new SymbolSummary
+            {
+                ClosingPrice = (decimal)item.ClosingPrice,
+                Date = item.Date,
+                Symbol = item.Symbol,
+                Volume = (decimal)item.Volume,
+
+            }).ToList();
         }
 
         private void SavePerformanceRecord(StockPerformanceSummary result,
@@ -138,7 +166,7 @@ namespace StockPerformanceCalculator.Logic
 
             summary.ProfitInDollar = totalProfit;
 
-            summary.ProfitInPercentage = totalDeposit != 0 ? summary.ProfitInDollar * 100 / totalDeposit :0;
+            summary.ProfitInPercentage = totalDeposit != 0 ? summary.ProfitInDollar * 100 / totalDeposit : 0;
             return summary;
         }
 

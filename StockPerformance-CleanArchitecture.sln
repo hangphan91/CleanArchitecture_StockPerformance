@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exporter", "Exporter\Export
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionPerformance", "OptionPerformance\OptionPerformance.csproj", "{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalCommunicator", "ExternalCommunicator\ExternalCommunicator.csproj", "{7D159752-37A5-44BD-980F-F788BD4A1401}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceManager", "StockPerformanceManager\StockPerformanceManager.csproj", "{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

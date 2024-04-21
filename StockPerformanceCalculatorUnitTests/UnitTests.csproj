@@ -20,6 +20,7 @@
     <ProjectReference Include="..\StockPerformanceCalculator\StockPerformanceCalculator.csproj" />
     <ProjectReference Include="..\EntityPersistence\EntityPersistence.csproj" />
     <ProjectReference Include="..\StockPerformance-CleanArchitecture\StockPerformance-CleanArchitecture.csproj" />
+    <ProjectReference Include="..\ExternalCommunicator\ExternalCommunicator.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="ExternalCommunications\" />
