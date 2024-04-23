@@ -2,6 +2,7 @@
 using OptionPerformance.DataAccessors;
 using OptionPerformance.DataAccessors.Models;
 using OptionPerformance.Logic.Factories;
+using OptionPerformance.Models.Interfaces;
 using OptionPerformance.Models.Interfaces.OptionsTypes;
 namespace OptionPerformance
 {
@@ -41,6 +42,35 @@ namespace OptionPerformance
             }
 
             return result;
+        }
+
+        public static async Task<List<IOptionsLeg>> EnterOptions(List<IStrategy> strategies)
+        {
+            var addingOptions = new List<IOptionsLeg>();
+            foreach (var strategy in strategies)
+            {
+                if (strategy.EnteringOptionsSetup.IsQualifiedToEnter)
+                {
+                    addingOptions.AddRange(strategy.OptionsLegs.OptionsLegList.ToList());
+                }
+            }
+
+            return addingOptions;
+        }
+
+
+        public static async Task<List<IOptionsLeg>> ExitOptions(List<IStrategy> strategies)
+        {
+            var addingOptions = new List<IOptionsLeg>();
+            foreach (var strategy in strategies)
+            {
+                if (strategy.ExitOptionsSetup.IsQualifiedToExit)
+                {
+                    addingOptions.AddRange(strategy.OptionsLegs.OptionsLegList.ToList());
+                }
+            }
+
+            return addingOptions;
         }
     }
 }

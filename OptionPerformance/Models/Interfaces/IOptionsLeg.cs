@@ -29,18 +29,18 @@ namespace OptionPerformance.Models.Interfaces
     {
         public OptionsLegs()
         {
-            OpetionsLegs = new List<IOptionsLeg> { };
+            OptionsLegList = new List<IOptionsLeg> { };
         }
         public OptionsLegs(List<IOptionsLeg> optionsLegs)
         {
-            OpetionsLegs = optionsLegs;
+            OptionsLegList = optionsLegs;
         }
 
         public OptionsLegs(IOptionsLeg optionsLeg)
         {
-            OpetionsLegs = new List<IOptionsLeg> { optionsLeg };
+            OptionsLegList = new List<IOptionsLeg> { optionsLeg };
         }
 
-        public List<IOptionsLeg> OpetionsLegs { get; set; }
+        public List<IOptionsLeg> OptionsLegList { get; set; }
     }
 }

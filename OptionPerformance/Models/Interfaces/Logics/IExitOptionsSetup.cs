@@ -24,7 +24,7 @@ namespace OptionPerformance.Models.Interfaces.Logics
 
         public bool ExecuteExit()
         {
-            return NumberOfWeekUntilExpiration <= 4 && NumberOfExitingOptions > 0;
+            return NumberOfExitingOptions > 0;
         }
     }
 }

@@ -4,12 +4,19 @@ using OptionPerformance.Models.Interfaces.OptionsTypes;
 
 namespace OptionPerformance.Models.OptionsStrategies
 {
-    public class LongCallStrategy :  IStrategy, ICallOptions, ICapitalGainOptions
+    public class LongCallStrategy : IStrategy, ICallOptions, ICapitalGainOptions
     {
         private OptionsLegs? _optionsLegs;
         private LongCall _longCall;
         private ExitOptionsSetup _exitOptionsSetup;
         private EnteringOptionsSetup _enteringOptionsSetup;
+        public OptionsLegs OptionsLegs => _optionsLegs ?? new OptionsLegs();
+
+        public ExitOptionsSetup ExitOptionsSetup => _exitOptionsSetup;
+
+        public EnteringOptionsSetup EnteringOptionsSetup => _enteringOptionsSetup;
+
+        public LongCall LongCall => _longCall;
 
         public LongCallStrategy(LongCall longCall)
         {
@@ -20,7 +27,7 @@ namespace OptionPerformance.Models.OptionsStrategies
             int numberOfExitingOptions = longCall.OptionsLeg.NumberOfOptions;
             decimal stockPriceToExitOptions = longCall.SelectingStock.StockPrice * (decimal)-.80;
             decimal optionPremiumToExitOptions = longCall.SelectingOptions.BreakEven * 2;
-            var numberOfDays = DateTime.UtcNow.Date.Subtract(longCall.SelectingOptions.ExpirationDate.ToDateTime(new TimeOnly())).Days;
+            var numberOfDays = longCall.SelectingOptions.ExpirationDate.ToDateTime(new TimeOnly()).Subtract(DateTime.UtcNow.Date).Days;
 
             decimal stockPriceToEnterOptions = longCall.SelectingStock.StockPrice;
             decimal optionPremiumToEnterOptions = longCall.SelectingOptions.OptionsPremium;
@@ -33,12 +40,6 @@ namespace OptionPerformance.Models.OptionsStrategies
             _enteringOptionsSetup = new EnteringOptionsSetup(numberOfExitingOptions, stockPriceToEnterOptions,
             optionPremiumToEnterOptions, numberOfWeekToHoldUntilExpiration);
         }
-
-        public OptionsLegs OptionsLegs => _optionsLegs ?? new OptionsLegs();
-
-        public ExitOptionsSetup ExitOptionsSetup => _exitOptionsSetup;
-
-        public EnteringOptionsSetup EnteringOptionsSetup => _enteringOptionsSetup;
 
         public decimal? ActualReturn(decimal stockPrice)
         {
@@ -57,7 +58,7 @@ namespace OptionPerformance.Models.OptionsStrategies
 
         public decimal CurrentUnrealizedGain(decimal stockPrice)
         {
-            throw new NotImplementedException();
+            return (stockPrice - _longCall.SelectingOptions.BreakEven) * _longCall.OptionsLeg.NumberOfOptions;
         }
 
         public decimal MarginCollateral()

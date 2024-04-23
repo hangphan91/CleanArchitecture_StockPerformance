@@ -17,7 +17,7 @@ namespace OptionPerformance.DataAccessors.Models
     {
         public string OptionName { get; set; }
         public int NumberOfEnterOptions { get; set; }
-        public decimal DailyMovingAverage { get; set; }
+        public int DailyMovingAverage { get; set; }
         public decimal StockPrice { get; set; }
         public decimal YearlyReturn { get; set; }
         public decimal MonthlyReturn { get; set; }

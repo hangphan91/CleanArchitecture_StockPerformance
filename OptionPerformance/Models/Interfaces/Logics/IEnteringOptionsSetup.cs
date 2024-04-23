@@ -21,6 +21,6 @@ namespace OptionPerformance.Models.Interfaces.Logics
         public decimal OptionPremiumToEnterOptions { get; set; }
         public int NumberOfWeekToHoldUntilExpiration { get; set; }
         public bool IsQualifiedToEnter { get; }
-        public bool ExecuteEnter() { return NumberOfWeekToHoldUntilExpiration > 40 && NumberOfEnterOptions >= 0; }
+        public bool ExecuteEnter() { return NumberOfEnterOptions >= 0; }
     }
 }
