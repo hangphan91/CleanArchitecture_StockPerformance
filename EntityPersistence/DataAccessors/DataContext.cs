@@ -157,13 +157,20 @@ namespace EntityPersistence.DataAccessors
 
             var from20To50Dollar = new List<string>
             {
-                "CLS", "CLF", "X", "rig", "WFC", "WMT", "MS", "ET", "BSX"
+                "CLS", "CLF", "X", "rig", "WFC", "WMT", "MS", "ET", "BSX",
+            };
+
+            var from20to50Finviz = new List<string>
+            {
+                "CSX", "bkr"
             };
 
             symbols.AddRange(growingIn2022To2023);
             symbols.AddRange(growingIn2020To2024);
             symbols.AddRange(optionStocks042024);
             symbols.AddRange(highOpenInterest042024);
+            symbols.AddRange(from20To50Dollar);
+            symbols.AddRange(from20to50Finviz);
 
             symbols = symbols.Select(a => a.ToUpper()).Distinct().ToList();
             var toSaveSymbols = symbols.Select(symbol => new Symbol
