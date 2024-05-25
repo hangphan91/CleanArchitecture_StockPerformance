@@ -4,59 +4,50 @@
     ViewData["Title"] = "Home Page";
     var symbols = Model.SearchDetail.SearchSetup.Symbols.OrderBy(a => a);
     var selectListSymbols = symbols
-        .Select(symbol => new SelectListItem { Text = symbol.ToUpper(), Value = symbol.ToUpper() })
-        .ToList();
+    .Select(symbol => new SelectListItem { Text = symbol.ToUpper(), Value = symbol.ToUpper() })
+    .ToList();
 
     var selectListSaveName = Model.SearchDetail.SavedSearchDetails
-   .Select(detail => new SelectListItem { Text = detail.Name, Value = detail.Name })
-   .ToList();
+    .Select(detail => new SelectListItem { Text = detail.Name, Value = detail.Name })
+    .ToList();
 
     var count = Model.SearchDetail.SearchSetup.EndingYear.Year - Model.SearchDetail.SearchSetup.StartingYear.Year + 1;
     var selectListYears = Enumerable.Range(2000, DateTime.Now.Year + 1 - 2000)
-        .Select(year => new SelectListItem
-        {
-            Text = year.ToString(),
-            Value = year.ToString(),
-        }).ToList();
+    .Select(year => new SelectListItem
+            {
+                Text = year.ToString(),
+                Value = year.ToString(),
+            }).ToList();
     var selectListNumberOfDeposits = Enumerable.Range(0, 100)
-        .Select(number => new SelectListItem
-        {
-            Text = number.ToString(),
-            Value = number.ToString(),
-        }).ToList();
+    .Select(number => new SelectListItem
+            {
+                Text = number.ToString(),
+                Value = number.ToString(),
+            }).ToList();
     var selectListDateOfMonth = Enumerable.Range(1, 31)
-        .Select(number => new SelectListItem
-        {
-            Text = number.ToString(),
-            Value = number.ToString(),
-        }).ToList();
+    .Select(number => new SelectListItem
+            {
+                Text = number.ToString(),
+                Value = number.ToString(),
+            }).ToList();
     var selectListMonths = Enumerable.Range(1, 12)
-      .Select(month => new SelectListItem
-      {
-          Text = month.ToString(),
-          Value = month.ToString(),
-      }).ToList();
+    .Select(month => new SelectListItem
+            {
+                Text = month.ToString(),
+                Value = month.ToString(),
+            }).ToList();
     var selectListForNumberOftrademonthly = Enumerable.Range(1, 2)
     .Select(number => new SelectListItem
-    {
-        Text = number.ToString(),
-        Value = number.ToString(),
-    }).ToList();
+            {
+                Text = number.ToString(),
+                Value = number.ToString(),
+            }).ToList();
 
     var searchingSymbols = Model.SearchDetail.ActiveSelectedSearchDetails.Select(a => a.Symbol);
     var queueText = searchingSymbols.Any() ? $"Added {searchingSymbols.Count()} " +
-        $"searches for {string.Join(",", searchingSymbols.Distinct())}" : "";
+    $"searches for {string.Join(",", searchingSymbols.Distinct())}" : "";
     Model.WillPerformSearch = false;
 }
-<div class="text-center">
-    @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get))
-    {
-        <p>@Html.DropDownListFor(m => m.SearchDetail.Name, selectListSaveName)</p>
-        <p>
-            <input type="submit" value="Apply Setting" />
-        </p>
-    }
-</div>
 <div class="text-center">
 
     @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get, new { willPerformSearch = true }))
@@ -71,9 +62,11 @@
                 <p>First One Time Deposit Amount @Html.TextBoxFor(m => m.SearchDetail.DepositRule.InitialDepositAmount)</p>
                 <p>Repetitive Deposit Amount: @Html.TextBoxFor(m => m.SearchDetail.DepositRule.DepositAmount)</p>
                 <p>
-                    First deposit date @Html.DropDownListFor(m => m.SearchDetail.DepositRule.FirstDepositDate, selectListDateOfMonth)
+                    First deposit date @Html.DropDownListFor(m => m.SearchDetail.DepositRule.FirstDepositDate,
+                selectListDateOfMonth)
 
-                    Last deposit date @Html.DropDownListFor(m => m.SearchDetail.DepositRule.SecondDepositDate, selectListDateOfMonth)
+                    Last deposit date @Html.DropDownListFor(m => m.SearchDetail.DepositRule.SecondDepositDate,
+                selectListDateOfMonth)
                 </p>
             </span>
             <span>
@@ -85,7 +78,8 @@
                 </p>
                 <p>
                     Sell all when we are lost and currently at
-                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellPercentageLimitation)% of cost of overall investment
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellPercentageLimitation)% of cost of overall
+                    investment
                 </p>
                 <p>
                     Maximum amount to trade at once $
@@ -95,41 +89,44 @@
                     Loss Limitation:
                     @Html.TextBoxFor(m => m.SearchDetail.TradingRule.LossLimitation)
                     or price dropped
-                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade)% since last visit.
+                    @Html.TextBoxFor(m => m.SearchDetail.TradingRule.SellAllWhenPriceDropAtPercentageSinceLastTrade)% since
+                    last visit.
                 </p>
 
                 <p>
                     Number of Trade monthly:
-                    @Html.DropDownListFor(m => m.SearchDetail.TradingRule.NumberOfTradeAMonth, selectListForNumberOftrademonthly)
+                    @Html.DropDownListFor(m => m.SearchDetail.TradingRule.NumberOfTradeAMonth,
+                             selectListForNumberOftrademonthly)
                 </p>
                 <p>We will trade between</p>
                 <p>
                     @Html.DropDownListFor(m => m.SearchDetail.TradingRule.LowerRangeOfTradingDate, selectListDateOfMonth)
-                    and @Html.DropDownListFor(m => m.SearchDetail.TradingRule.HigherRangeOfTradingDate, selectListDateOfMonth)
+                    and @Html.DropDownListFor(m => m.SearchDetail.TradingRule.HigherRangeOfTradingDate,
+                         selectListDateOfMonth)
                     of a month
                 </p>
 
             </span>
             <p>
 
-                <h4>Symbol List </h4>
+            <h4>Symbol List </h4>
                 @Html.ListBoxFor(m => m.Symbols, selectListSymbols)
             <p>
             <p>
                 Start Date
 
                 Year
-                @Html.DropDownListFor(m => m.StartDate.Year, selectListYears)
+                        @Html.DropDownListFor(m => m.StartDate.Year, selectListYears)
                 Month
-                @Html.DropDownListFor(m => m.StartDate.Month, selectListMonths)
+                        @Html.DropDownListFor(m => m.StartDate.Month, selectListMonths)
                 Date
-                @Html.DropDownListFor(m => m.StartDate.Day, selectListDateOfMonth)
+                        @Html.DropDownListFor(m => m.StartDate.Day, selectListDateOfMonth)
 
             </p>
-                <div class="text-center"style="word-wrap:break-word;">
-                    <p><strong style="color:green">@queueText</strong></p>
-                </div>
-                <input type="submit" value="Add Search" />
+            <div class="text-center" style="word-wrap:break-word;">
+                <p><strong style="color:green">@queueText</strong></p>
+            </div>
+            <input type="submit" value="Add Search" />
             </p>
 
         </fieldset>
@@ -153,5 +150,3 @@
         </button>
     </span>
 </div>
-
-

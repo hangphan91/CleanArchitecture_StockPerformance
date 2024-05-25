@@ -8,8 +8,9 @@ namespace EntityPersistence.DataAccessors
         GetBase _getBase;
         InsertBase _insertBase;
 
-        public PerformanceDataAccessor(DataContext dataContext)
+        public PerformanceDataAccessor()
         {
+            var dataContext = new DataContext();
             _getBase = new GetBase(dataContext);
             _insertBase = new InsertBase(dataContext);
         }

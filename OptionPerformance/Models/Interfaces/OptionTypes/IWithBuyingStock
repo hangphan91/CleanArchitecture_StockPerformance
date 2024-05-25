@@ -1,0 +1,8 @@
+namespace OptionPerformance.Models.Interfaces.OptionsTypes
+{
+    public interface IWithBuyingStock
+    {
+        int NumberOfBuyingStock { get; set; }
+        decimal BuyingPrice { get; set; }
+    }
+}

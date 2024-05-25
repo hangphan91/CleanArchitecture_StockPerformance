@@ -1,20 +1,19 @@
-﻿using EntityDefinitions;
+﻿using System.Collections.Concurrent;
+using EntityDefinitions;
 
 namespace EntityPersistence.Calculators
 {
     public class IdCalculator
-	{
-		DataAccessors.DataContext _dataContext;
+    {
         public List<PerformanceIdHub> IdManagers { get; set; }
 
-        public IdCalculator(DataAccessors.DataContext dataContext)
-		{
-			_dataContext = dataContext;
-		}
-
-        internal long GetNewId(IEnumerable<long> ids)
+        public IdCalculator()
         {
-            return ids.Max(d => d) + 1;
+        }
+
+        internal long GetNewId(long id)
+        {
+            return id + 1;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace EntityPersistence.DataAccessors
 
             for (int i = 0; i < 6; i++)
             {
-                SetSearchDetail(i==0);
+                SetSearchDetail(i == 0);
             }
 
             Emails.AddRange(GetEmailAddresses());
@@ -56,7 +56,7 @@ namespace EntityPersistence.DataAccessors
             var performanceSetup = GetRandomPerformanceSetup(lastSymbolId, firstSymbolId, isDefault);
             PerformanceSetups.Add(performanceSetup);
             var rand = new Random();
-            var randSymbolId = (long) rand.Next((int)firstSymbolId, (int)lastSymbolId);
+            var randSymbolId = (long)rand.Next((int)firstSymbolId, (int)lastSymbolId);
             SearchDetails.Add(GetSearchDetails(depositRule, tradingRule, randSymbolId, performanceSetup.Id, isDefault));
         }
 
@@ -67,7 +67,7 @@ namespace EntityPersistence.DataAccessors
             {
                 DepositRuleId = depositRule.Id,
                 TradingRuleId = tradingRule.Id,
-                Name =  isDefault ? "Default Setting" :"Saved Setting" + symbolId.ToString(),
+                Name = isDefault ? "Default Setting" : "Saved Setting" + symbolId.ToString(),
                 SymbolId = symbolId,
                 PerformanceSetupId = performanceSetupId,
             };
@@ -98,21 +98,21 @@ namespace EntityPersistence.DataAccessors
         private PerformanceSetup GetRandomPerformanceSetup(long lastSymbolId, long firstSymbolId, bool isDefault)
         {
             if (isDefault)
-                return GetDefaultPerformanceSetup(lastSymbolId,firstSymbolId);
+                return GetDefaultPerformanceSetup(lastSymbolId, firstSymbolId);
 
             var rand = new Random();
 
-            var randYear = rand.Next(2018, DateTime.Now.Year);
+            var randYear = DateTime.Now.AddYears(-4).Year;
             var randMonth = rand.Next(1, 12);
-            var randDay = rand.Next(1,28);
+            var randDay = rand.Next(1, 28);
             var randDate = new DateOnly(randYear, randMonth, randDay).AddDays(rand.Next(1, 100));
             return new PerformanceSetup
             {
                 EndingSymbolId = lastSymbolId,
                 StartingSymbolId = firstSymbolId,
-                StartingYear = randDate ,
+                StartingYear = randDate,
                 EndingYear = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
-                Id = rand.Next(1,1000),
+                Id = rand.Next(1, 1000),
             };
         }
 
@@ -150,15 +150,27 @@ namespace EntityPersistence.DataAccessors
             var highOpenInterest042024 = new List<string>
             {
                 "XLF", "XLE", "SPY", "IWM", "tsla", "mara", "riot", "coin",
-                 "nkla", "nio", "wkhs", "lcid", "amzn", "spy", "gld", "xom", 
-                 "root", "uber", "oxy","dxyz", "djt","nem", "dnut", "geo", 
+                 "nkla", "nio", "wkhs", "lcid", "amzn", "spy", "gld", "xom",
+                 "root", "uber", "oxy","dxyz", "djt","nem", "dnut", "geo",
                  "zgn", "gcts", "cadl","xlf","iwm", "xle","xlf"
+            };
+
+            var from20To50Dollar = new List<string>
+            {
+                "CLS", "CLF", "X", "rig", "WFC", "WMT", "MS", "ET", "BSX",
+            };
+
+            var from20to50Finviz = new List<string>
+            {
+                "CSX", "bkr"
             };
 
             symbols.AddRange(growingIn2022To2023);
             symbols.AddRange(growingIn2020To2024);
             symbols.AddRange(optionStocks042024);
             symbols.AddRange(highOpenInterest042024);
+            symbols.AddRange(from20To50Dollar);
+            symbols.AddRange(from20to50Finviz);
 
             symbols = symbols.Select(a => a.ToUpper()).Distinct().ToList();
             var toSaveSymbols = symbols.Select(symbol => new Symbol
@@ -192,12 +204,12 @@ namespace EntityPersistence.DataAccessors
 
             return new DepositRule
             {
-                DepositAmount = rand.Next(1,5)*100,
+                DepositAmount = rand.Next(1, 5) * 100,
                 FirstDepositDate = 1,
                 SecondDepositDate = 16,
                 NumberOfDepositDate = 2,
-                Id = rand.Next(1,1000),
-                InitialDepositAmount = rand.Next(0,5)*100,
+                Id = rand.Next(1, 1000),
+                InitialDepositAmount = rand.Next(0, 5) * 100,
             };
         }
 
@@ -239,7 +251,7 @@ namespace EntityPersistence.DataAccessors
                 HigherRangeOfTradingDate = randTradeDateHigh,
                 LowerRangeOfTradingDate = randTradeDateLow,
                 PurchaseLimitation = randPurchaseLimit,
-                Id = rand.Next(1,1000),
+                Id = rand.Next(1, 1000),
                 LossLimitation = randLostLimit,
                 NumberOfTradeAMonth = randNumberOfTrade,
                 SellAllWhenPriceDropAtPercentageSinceLastTrade = randSellAll,

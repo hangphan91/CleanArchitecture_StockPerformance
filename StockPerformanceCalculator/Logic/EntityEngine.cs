@@ -1,5 +1,6 @@
 ﻿using StockPerformanceCalculator.Helpers;
 using StockPerformanceCalculator.Logic.Mappers;
+using StockPerformanceCalculator.Models;
 using StockPerformanceCalculator.Models.PerformanceCalculatorSetup;
 
 namespace StockPerformanceCalculator.Logic

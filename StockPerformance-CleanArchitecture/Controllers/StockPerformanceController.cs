@@ -104,7 +104,7 @@ namespace StockPerformance_CleanArchitecture.Controllers
             if (responses == null || responses?.Count == 0)
                 return Ok();
 
-            var filePath =  PerformanceResultFormatter.ExportDataTableToExcelFormatAndGetFile(responses);
+            var filePath = PerformanceResultFormatter.ExportDataTableToExcelFormatAndGetFile(responses);
 
             if (string.IsNullOrWhiteSpace(filePath))
                 return Ok();
@@ -112,9 +112,9 @@ namespace StockPerformance_CleanArchitecture.Controllers
             return await CreateAndDownloadFile(filePath);
         }
 
-        public async Task< IActionResult> CreateAndDownloadFile(string filePath)
+        public async Task<IActionResult> CreateAndDownloadFile(string filePath)
         {
-           // var result = File(System.IO.File.OpenRead(filePath), "application/vnd.ms-excel", Path.GetFileName(filePath));
+            // var result = File(System.IO.File.OpenRead(filePath), "application/vnd.ms-excel", Path.GetFileName(filePath));
             Console.WriteLine(filePath);
 
             Byte[] buffer = await System.IO.File.ReadAllBytesAsync(filePath);

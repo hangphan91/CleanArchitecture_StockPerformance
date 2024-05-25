@@ -2,27 +2,26 @@
 using StockPerformance_CleanArchitecture.Helpers;
 using StockPerformanceCalculator.Models;
 
-namespace StockPerformanceCalculatorUnitTests
+namespace UnitTests
 {
-    [TestClass]
+	[TestClass]
 	public class TestStockPerformanceManager
 	{
 		[TestMethod]
 		public async Task GivenMockHistoryPrice_TestStockPerformanceManagerLogic()
 		{
-            //Arrange
+			//Arrange
 
-            var symbol = "AAPL";
-            var year = 2020;
-			var context = new DataContext();
-			var accessor = new PerformanceDataAccessor(context);
+			var symbol = "AAPL";
+			var year = 2020;
+			var accessor = new PerformanceDataAccessor();
 			var date = new DateDetail(2020, DateTime.Now.Month, DateTime.Now.Day);
-            var manager = new MockStockPerformanceManager(symbol, date, accessor);
+			var manager = new MockStockPerformanceManager(symbol, date, accessor);
 
 			//Act
 			var searchDetail = SearchDetailHelper.GetCurrentSearchDetail(accessor);
-            var mapped = SearchDetailHelper.Map(searchDetail);
-            var summaries = await manager.StartStockPerforamanceCalculation(mapped);
+			var mapped = SearchDetailHelper.Map(searchDetail);
+			var summaries = await manager.StartStockPerforamanceCalculation(mapped);
 
 			//Assert
 
@@ -32,12 +31,12 @@ namespace StockPerformanceCalculatorUnitTests
 			Assert.AreEqual(summaries.StartDate.Year, year);
 
 			Assert.IsTrue(summaries.ProfitByYears.Any());
-            Assert.IsTrue(summaries.ProfitByMonths.Any());
-            Assert.IsTrue(summaries.GrowthSpeedByMonths.Any());
+			Assert.IsTrue(summaries.ProfitByMonths.Any());
+			Assert.IsTrue(summaries.GrowthSpeedByMonths.Any());
 			Assert.IsTrue(summaries.GrowthSpeedByYears.Any());
 
 
-        }
-    }
+		}
+	}
 }
 

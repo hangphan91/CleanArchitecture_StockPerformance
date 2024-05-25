@@ -1,6 +1,5 @@
-﻿using System;
-using StockPerformanceCalculator.ExternalCommunications;
-using StockPerformanceCalculator.Models;
+﻿
+using ExternalCommunications;
 
 namespace StockPerformanceCalculator.Logic
 {

@@ -1,5 +1,7 @@
-﻿using StockPerformanceCalculator.ExternalCommunications;
+﻿using ExternalCommunications;
+using ExternalCommunications.Models;
 using StockPerformanceCalculator.Models;
+using SymbolSummary = ExternalCommunications.Models.SymbolSummary;
 
 namespace StockPerformanceCalculatorUnitTests.ExternalCommunications
 {

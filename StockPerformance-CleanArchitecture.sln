@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1706.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformance-CleanArchitecture", "StockPerformance-CleanArchitecture\StockPerformance-CleanArchitecture.csproj", "{00446A8A-B576-4540-86A2-0D136B3D573E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformance-RazorApi", "StockPerformance-CleanArchitecture\StockPerformance-RazorApi.csproj", "{00446A8A-B576-4540-86A2-0D136B3D573E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceCalculator", "StockPerformanceCalculator\StockPerformanceCalculator.csproj", "{075F1E9E-4936-4EA2-A5E3-755A3C416D80}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exporter", "Exporter\Exporter.csproj", "{3BE5D408-7220-44AD-AB2B-D39C76F6BE43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionPerformance", "OptionPerformance\OptionPerformance.csproj", "{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalCommunicator", "ExternalCommunicator\ExternalCommunicator.csproj", "{7D159752-37A5-44BD-980F-F788BD4A1401}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPerformanceManager", "StockPerformanceManager\StockPerformanceManager.csproj", "{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,14 @@ Global
 		{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CCD56E6-2BEB-4DEF-842A-CF914EADF97B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D159752-37A5-44BD-980F-F788BD4A1401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4936B12-DB0F-4BC0-99D1-95148E3CE5CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
