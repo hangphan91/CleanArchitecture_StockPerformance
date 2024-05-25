@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using EntityPersistence.DataAccessors;
 using StockPerformanceCalculator.DatabaseAccessors;
 
@@ -13,8 +15,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
         {
             if (EntityDefinitionsAccessor == null)
             {
-                var context = new DataContext();
-                EntityDefinitionsAccessor = new PerformanceDataAccessor(context);
+                EntityDefinitionsAccessor = new PerformanceDataAccessor();
             }
             return EntityDefinitionsAccessor;
         }

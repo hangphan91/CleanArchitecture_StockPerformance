@@ -171,29 +171,26 @@ namespace StockPerformance_CleanArchitecture.Helpers
             var starting = current.SearchSetup.StartingYear.Year;
             var ending = _savedSearchDetailsSeeting.First().SearchSetup.EndingYear.Year;
             var all = new List<SearchDetail>();
-            for (int i = starting; i < ending; i++)
+
+            var searchSetup = new SearchInitialSetup
             {
-                var searchSetup = new SearchInitialSetup
-                {
-                    StartingYear = new DateOnly(i, current.SearchSetup.StartingYear.Month,
-                    current.SearchSetup.StartingYear.Day),
-                    EndingYear = current.SearchSetup.EndingYear,
-                    Symbols = current.SearchSetup.Symbols,
-                };
-                var eachSearchDetailList = _searchSetup.Symbols.Select(SymbolSummary => new SearchDetail
-                {
-                    DepositRule = current.DepositRule,
-                    SearchSetup = searchSetup,
-                    SettingDate = current.SettingDate,
-                    Symbol = SymbolSummary,
-                    TradingRule = current.TradingRule,
-                    Name = current.Name,
-                });
-                all.AddRange(eachSearchDetailList);
-            }
+                StartingYear = new DateOnly(starting, current.SearchSetup.StartingYear.Month,
+                current.SearchSetup.StartingYear.Day),
+                EndingYear = current.SearchSetup.EndingYear,
+                Symbols = current.SearchSetup.Symbols,
+            };
+            var eachSearchDetailList = _searchSetup.Symbols.Select(SymbolSummary => new SearchDetail
+            {
+                DepositRule = current.DepositRule,
+                SearchSetup = searchSetup,
+                SettingDate = current.SettingDate,
+                Symbol = SymbolSummary,
+                TradingRule = current.TradingRule,
+                Name = current.Name,
+            });
+            all.AddRange(eachSearchDetailList);
 
             return all;
-
         }
 
         internal static void ResetInitialSearch()
@@ -205,13 +202,13 @@ namespace StockPerformance_CleanArchitecture.Helpers
         {
             var list = new List<SearchDetail>();
             var details = entityDefinitionsAccessor.GetSearchDetails();
-           
+
             foreach (var item in details)
             {
                 var symbols = entityDefinitionsAccessor.GetSymbolsBetweenIds(item.Item4.StartingSymbolId,
                                                 item.Item4.EndingSymbolId);
                 SearchDetail detail = GetDetail(item, symbols);
-             
+
                 list.Add(detail);
                 _savedSearchDetailsSeeting.Add(detail);
             }

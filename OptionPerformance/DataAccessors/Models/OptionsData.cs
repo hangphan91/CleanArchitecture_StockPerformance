@@ -31,6 +31,8 @@ namespace OptionPerformance.DataAccessors.Models
         public decimal Theta { get; set; }
         public decimal Vega { get; set; }
         public decimal Rho { get; set; }
+        public bool IsCall { get; set; }
+        public bool IsPut { get; set; }
 
         public OptionsData(string symbol)
         {

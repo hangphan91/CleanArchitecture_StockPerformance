@@ -8,23 +8,19 @@ namespace StockPerformance_CleanArchitecture.Models
 {
 	public class StockPerformanceHistory
 	{
-		public List<StockPerformanceResponse> StockPerformanceResponses  =>
-		StockPerformanceHistoryStorage.StockPerformanceResponses
-		?.Select(a => a)
-		?.OrderBy(a => a.Symbol)
-        ?.ThenBy(a => a.SearchDetail.SettingDate.Year)
-		?.ToList();
+		public List<StockPerformanceResponse> StockPerformanceResponses { get; set; }
 
-        public ProfitChart ProfitChart { get; set; }
+		public ProfitChart ProfitChart { get; set; }
 
-        public StockPerformanceHistory()
+		public StockPerformanceHistory()
 		{
+			StockPerformanceResponses = new List<StockPerformanceResponse>();
 		}
 
 		public string DisplayPerformanceResult()
 		{
 			return PerformanceResultFormatter.GetStockPerformanceResponseTableHTML(StockPerformanceResponses);
-        }
+		}
 	}
 }
 

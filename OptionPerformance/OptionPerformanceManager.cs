@@ -20,6 +20,13 @@ namespace OptionPerformance
 
             foreach (var optionsData in batchedOptionsDatas.OptionsDatas)
             {
+                var optionStrikePriceAt = OptionStrikePriceAt.AtTheMoney;
+
+                if (optionsData.StockPrice > optionsData.StrikePrice)
+                    optionStrikePriceAt = OptionStrikePriceAt.InTheMoney;
+                else if (optionsData.StockPrice < optionsData.StockPrice)
+                    optionStrikePriceAt = OptionStrikePriceAt.OutOfMoney;
+
                 var strategies = OptionsStrategy.GetOptionStrategy
                  (optionsData.OptionName,
                  batchedOptionsDatas.StockSymbol,
@@ -37,7 +44,10 @@ namespace OptionPerformance
                  optionsData.Gamma,
                  optionsData.Theta,
                  optionsData.Vega,
-                 optionsData.Rho);
+                 optionsData.Rho,
+                 optionsData.IsCall,
+                 optionsData.IsPut,
+                 optionStrikePriceAt);
                 result.AddRange(strategies);
             }
 

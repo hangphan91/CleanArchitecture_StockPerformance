@@ -24,39 +24,48 @@ namespace OptionPerformance.DataAccessors
             // call and get optionDa
             var response = await new GetOptionsDataAccessor().GetOptionsData(symbol);
 
-            if (response.OptionChain.Result.First().Options.Any() == false)
+            if (response?.OptionSymbol?.Any() == false || response == null)
                 return batchedOptionsData;
 
-            var options = response.OptionChain.Result.First().Options;
-            var stockVolume = response.OptionChain.Result.First().Quote?.AverageDailyVolume3Month;
+            var options = response.OptionSymbol;
 
-            foreach (var option in options)
+            for (int i = 0; i < options.Count; i++)
             {
-                foreach (var stradle in option.Straddles)
+                var isCall = response.Side[i] == "call";
+                var isPut = response.Side[i] == "put";
+                var expirationDate = response.Expiration[i];
+                var strike = response.Strike[i];
+                var openInterest = response.OpenInterest[i];
+                var contract = response.OptionSymbol[i];
+                var stockVolume = (int)stockPerformanceResult.Volume;
+
+                if (isCall)
                 {
-                    if (stradle == null)
-                        continue;
-                    OptionsData call = PopulateOptionsData(symbol, stockPerformanceResult, stockVolume, stradle.Call);
+                    OptionsData call = PopulateOptionsData(symbol, stockPerformanceResult, stockVolume, expirationDate, strike, contract, openInterest, true, false);
 
                     if (call != null)
                         batchedOptionsData.OptionsDatas.Add(call);
-
-                    OptionsData put = PopulateOptionsData(symbol, stockPerformanceResult, stockVolume, stradle.Put);
+                }
+                else if (isPut)
+                {
+                    OptionsData put = PopulateOptionsData(symbol, stockPerformanceResult, stockVolume, expirationDate, strike, contract, openInterest, false, true);
 
                     if (put != null)
                         batchedOptionsData.OptionsDatas.Add(put);
                 }
             }
+
             // map to optionsData and return
             return batchedOptionsData;
         }
 
-        private static OptionsData PopulateOptionsData(string symbol, StockPerformanceResponse? stockPerformanceResult, int? stockVolume, Call? stradle)
+        private static OptionsData PopulateOptionsData(string symbol, StockPerformanceResponse? stockPerformanceResult, int? stockVolume,
+        int? expiration, decimal? strike, string contractSymbol, int? openInterest, bool isCall, bool isPut)
         {
-            if (stradle == null || stradle?.Expiration.HasValue == false)
+            if (expiration.HasValue == false)
                 return null;
 
-            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(stradle.Expiration.Value);
+            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(expiration.Value);
             var expirationDate = dateTimeOffset.DateTime;
 
             return new OptionsData(symbol)
@@ -64,45 +73,21 @@ namespace OptionPerformance.DataAccessors
                 StockPrice = stockPerformanceResult?.CurrentPrice ?? 0,
                 YearlyReturn = stockPerformanceResult?.ProfitInPercentage ?? 0,
                 MonthlyReturn = stockPerformanceResult?.ProfitSummaryPercentage?.AVGMonthlyProfit ?? 0,
-                StrikePrice = (decimal)(stradle.Strike ?? 0),
+                StrikePrice = (decimal)(strike ?? 0),
                 ExpirationDate = DateOnly.FromDateTime(expirationDate),
                 RiskDesc = "",
                 DailyMovingAverage = stockVolume ?? 0,
-                OptionName = stradle.ContractSymbol,
+                OptionName = contractSymbol,
                 NumberOfEnterOptions = 1,
-                OpenInterest = stradle.OpenInterest ?? 0,
+                OpenInterest = openInterest ?? 0,
                 OptionPremium = (decimal)3.4,
                 Delta = (decimal)0.7,
                 Gamma = (decimal)0.6,
                 Theta = (decimal)0.6,
                 Vega = (decimal)0.6,
-                Rho = (decimal)0.6
-            };
-        }
-
-        private static OptionsData PopulateOptionsData(string symbol, StockPerformanceResponse? stockPerformanceResult, int? stockVolume, Put? stradle)
-        {
-            if (stradle == null)
-                return null;
-
-            return new OptionsData(symbol)
-            {
-                StockPrice = stockPerformanceResult?.CurrentPrice ?? 0,
-                YearlyReturn = stockPerformanceResult?.ProfitInPercentage ?? 0,
-                MonthlyReturn = stockPerformanceResult?.ProfitSummaryPercentage?.AVGMonthlyProfit ?? 0,
-                StrikePrice = (decimal)(stockPerformanceResult?.CurrentPrice ?? 0 + 5),
-                ExpirationDate = DateOnly.FromDateTime(DateTime.UtcNow),
-                RiskDesc = "",
-                DailyMovingAverage = stockVolume ?? 0,
-                OptionName = stradle.ContractSymbol,
-                NumberOfEnterOptions = 1,
-                OpenInterest = 600,
-                OptionPremium = (decimal)3.4,
-                Delta = (decimal)0.7,
-                Gamma = (decimal)0.6,
-                Theta = (decimal)0.6,
-                Vega = (decimal)0.6,
-                Rho = (decimal)0.6
+                Rho = (decimal)0.6,
+                IsCall = isCall,
+                IsPut = isPut,
             };
         }
     }

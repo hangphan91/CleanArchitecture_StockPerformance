@@ -41,18 +41,8 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
 
         internal bool IsSame(SearchDetail searchDetail)
         {
-            if (searchDetail == null
-                || searchDetail.DepositRule == null
-                || searchDetail.SearchSetup == null
-                || searchDetail.TradingRule == null
-                || searchDetail.SearchSetup == null)
-                return false;
-
-            return searchDetail.DepositRule.IsSame(DepositRule)
-                && searchDetail.SearchSetup.IsSame(SearchSetup)
-                && searchDetail.TradingRule.IsSame(TradingRule)
-                && searchDetail.Symbol.Equals(Symbol)
-                && searchDetail.SettingDate.IsSame(SettingDate);
+            return searchDetail.Symbol.Equals(Symbol);
+            //  && searchDetail.SettingDate.IsSame(SettingDate);
 
         }
         public string ToJson()

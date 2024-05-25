@@ -395,6 +395,4 @@ namespace ExternalCommunicator.ExternalCommunications.Models
         [JsonProperty("put")]
         public Put Put;
     }
-
-
 }

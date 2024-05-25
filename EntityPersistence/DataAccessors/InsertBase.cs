@@ -1,4 +1,5 @@
-﻿using EntityDefinitions;
+﻿using System.Collections.Concurrent;
+using EntityDefinitions;
 using EntityPersistence.Calculators;
 using StockPerformanceCalculator.DatabaseAccessors;
 
@@ -6,16 +7,16 @@ namespace EntityPersistence.DataAccessors
 {
     public class InsertBase : IInsert
     {
-        IdCalculator _idCalculator;
-        DataContext _dataContext;
+        static IdCalculator _idCalculator;
+        static DataContext _dataContext;
         public InsertBase(DataContext dataContext)
         {
             _dataContext = dataContext;
-            _idCalculator = new IdCalculator(dataContext);
+            _idCalculator = new IdCalculator();
         }
         public void SetId(IIdBase idBase, IEnumerable<long> ids)
         {
-            var id = _idCalculator.GetNewId(ids);
+            var id = _idCalculator.GetNewId(ids.Max(a => a));
             idBase.Id = id;
         }
 
@@ -32,14 +33,14 @@ namespace EntityPersistence.DataAccessors
             SetId(symbol, _dataContext.Symbols.Select(a => a.Id));
 
             _dataContext.Symbols.Add(symbol);
-            return symbol.Id; 
+            return symbol.Id;
         }
 
         public long Insert(PerformanceSummary performance)
         {
             SetId(performance, _dataContext.DepositRules.Select(a => a.Id));
 
-            _dataContext.PerformanceSummaries.Add(performance);
+            //_dataContext.PerformanceSummaries.Add(performance);
             return performance.Id;
         }
 
@@ -53,7 +54,7 @@ namespace EntityPersistence.DataAccessors
                 var ids = _dataContext.DepositRules.Select(a => a.Id);
                 if (_dataContext.DepositRules.Any())
                 {
-                    var id = _idCalculator.GetNewId(ids);
+                    var id = _idCalculator.GetNewId(ids.Max(a => a));
                     performance.Id = increment + id;
                 }
                 else
@@ -62,7 +63,7 @@ namespace EntityPersistence.DataAccessors
                 }
             });
 
-            _dataContext.PerformanceByMonths.AddRange(performanceByMonths);
+            // _dataContext.PerformanceByMonths.AddRange(performanceByMonths);
             return performanceByMonths.Select(s => s.Id).ToList();
         }
 
@@ -76,7 +77,7 @@ namespace EntityPersistence.DataAccessors
                 var ids = _dataContext.Positions.Select(a => a.Id);
                 if (_dataContext.Positions.Any())
                 {
-                    var id = _idCalculator.GetNewId(ids);
+                    var id = _idCalculator.GetNewId(ids.Max(a => a));
                     performance.Id = increment + id;
                 }
                 else
@@ -99,7 +100,7 @@ namespace EntityPersistence.DataAccessors
                 var ids = _dataContext.Deposits.Select(a => a.Id);
                 if (_dataContext.Deposits.Any())
                 {
-                    var id = _idCalculator.GetNewId(ids);
+                    var id = _idCalculator.GetNewId(ids.Max(a => a));
                     performance.Id = increment + id;
                 }
                 else
@@ -121,7 +122,7 @@ namespace EntityPersistence.DataAccessors
                 var ids = _dataContext.DepositRules.Select(a => a.Id);
                 if (_dataContext.DepositRules.Any())
                 {
-                    var id = _idCalculator.GetNewId(ids);
+                    var id = _idCalculator.GetNewId(ids.Max(a => a));
                     symbol.Id = increment + id;
                 }
                 else
@@ -144,7 +145,7 @@ namespace EntityPersistence.DataAccessors
                 var ids = _dataContext.DepositRules.Select(a => a.Id);
                 if (_dataContext.DepositRules.Any())
                 {
-                    var id = _idCalculator.GetNewId(ids);
+                    var id = _idCalculator.GetNewId(ids.Max(a => a));
                     symbol.Id = increment + id;
                 }
                 else

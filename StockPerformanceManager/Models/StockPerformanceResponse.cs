@@ -27,6 +27,7 @@ namespace StockPerformance_CleanArchitecture.Models
         public SearchDetail SearchDetail { get; set; }
         public DateTime CreatedTime { get; set; } = DateTime.Now;
         public ProfitChart ProfitChart { get; set; }
+        public decimal Volume { get; set; }
 
         public StockPerformanceResponse()
         {
@@ -49,7 +50,7 @@ namespace StockPerformance_CleanArchitecture.Models
 
         public string DisplayPerformanceResultTable()
         {
-            return PerformanceResultFormatter.GetStockPerformanceResponseTableHTML(new List<StockPerformanceResponse> { this});
+            return PerformanceResultFormatter.GetStockPerformanceResponseTableHTML(new List<StockPerformanceResponse> { this });
         }
 
         public string DisplayStockPerformanceSetting()
@@ -103,6 +104,7 @@ namespace StockPerformance_CleanArchitecture.Models
                 StockLedgerDetails = Map(summary.StockLedger),
                 DepositLedgers = summary.DepositLedgers,
                 SymbolSummaries = new List<SymbolSummary>(),
+                Volume = summary.Volume,
                 ProfitSummaryInDollar = new ProfitSummaryInDollar
                 {
                     MonthlyGrowthSpeeds = new List<MonthlyGrowthSpeed>(),

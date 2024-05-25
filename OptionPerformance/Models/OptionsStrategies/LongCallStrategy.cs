@@ -12,16 +12,19 @@ namespace OptionPerformance.Models.OptionsStrategies
         private EnteringOptionsSetup _enteringOptionsSetup;
         public OptionsLegs OptionsLegs => _optionsLegs ?? new OptionsLegs();
 
+        OptionStrikePriceAt _optionStrikePriceAt;
+
         public ExitOptionsSetup ExitOptionsSetup => _exitOptionsSetup;
 
         public EnteringOptionsSetup EnteringOptionsSetup => _enteringOptionsSetup;
 
         public LongCall LongCall => _longCall;
 
-        public LongCallStrategy(LongCall longCall)
+        public LongCallStrategy(LongCall longCall, OptionStrikePriceAt optionStrikePriceAt, int openInterest)
         {
             _longCall = longCall;
             _optionsLegs = new OptionsLegs(longCall);
+            _optionStrikePriceAt = optionStrikePriceAt;
 
             //TODO: may need to break this part to a separate logic
             int numberOfExitingOptions = longCall.OptionsLeg.NumberOfOptions;
@@ -38,7 +41,7 @@ namespace OptionPerformance.Models.OptionsStrategies
 
             var numberOfWeekToHoldUntilExpiration = (int)numberOfDays / 7;
             _enteringOptionsSetup = new EnteringOptionsSetup(numberOfExitingOptions, stockPriceToEnterOptions,
-            optionPremiumToEnterOptions, numberOfWeekToHoldUntilExpiration);
+            optionPremiumToEnterOptions, numberOfWeekToHoldUntilExpiration, _optionStrikePriceAt, openInterest);
         }
 
         public decimal? ActualReturn(decimal stockPrice)

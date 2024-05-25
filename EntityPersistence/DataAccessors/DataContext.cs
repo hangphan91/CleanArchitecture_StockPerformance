@@ -102,7 +102,7 @@ namespace EntityPersistence.DataAccessors
 
             var rand = new Random();
 
-            var randYear = rand.Next(2018, DateTime.Now.Year);
+            var randYear = DateTime.Now.AddYears(-4).Year;
             var randMonth = rand.Next(1, 12);
             var randDay = rand.Next(1, 28);
             var randDate = new DateOnly(randYear, randMonth, randDay).AddDays(rand.Next(1, 100));

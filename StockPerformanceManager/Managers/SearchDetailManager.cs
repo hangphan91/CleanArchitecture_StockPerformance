@@ -1,4 +1,5 @@
-﻿using FusionChartsRazorSamples.Pages;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using FusionChartsRazorSamples.Pages;
 using StockPerformance_CleanArchitecture.Helpers;
 using StockPerformance_CleanArchitecture.Models;
 using StockPerformance_CleanArchitecture.Models.ProfitDetails;
@@ -13,10 +14,12 @@ namespace StockPerformance_CleanArchitecture.Managers
         IEntityDefinitionsAccessor _entityDefinitionsAccessor;
         private bool IsFirstAdvancedSearch = true;
         SendEmailTimer _timer;
+        ReportTimer _reportTimer;
         public SearchDetailManager()
         {
             _entityDefinitionsAccessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
-            _timer = new SendEmailTimer();
+            //_timer = new SendEmailTimer();
+            _reportTimer = new ReportTimer();
         }
 
         public SearchDetail GetCurrentSearchDetail()
@@ -179,7 +182,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             response.SearchDetail = searchDetail;
 
             CachedHelper.AddCache(response);
-            _timer.AddResponse(response, _entityDefinitionsAccessor.GetEmails());
+            //  _timer.AddResponse(response, _entityDefinitionsAccessor.GetEmails());
             return response;
         }
 
@@ -244,7 +247,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             if (currentSearchDetail != null)
                 currentSearchDetail.ActiveSelectedSearchDetails = toView;
 
-            return currentSearchDetail;
+            return currentSearchDetail ?? GetCurrentSearchDetail();
         }
 
         public async Task<StockPerformanceHistory> PerformAdvanceSearch(bool searchAll)
@@ -254,7 +257,8 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             var advancedSearchResult = new StockPerformanceHistory();
 
-            foreach (var searchDetail in GetActiveSearchDetails())
+            List<SearchDetail> searchDetails = GetActiveSearchDetails();
+            foreach (var searchDetail in searchDetails)
             {
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
                 if (cachedResponse != null)
@@ -265,7 +269,6 @@ namespace StockPerformance_CleanArchitecture.Managers
                 var response = await GetStockPerformanceResponse(searchDetail);
                 StockPerformanceHistoryStorage.AddResponse(response);
             }
-
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =
                 new ProfitChart(advancedSearchResult.StockPerformanceResponses);
@@ -279,7 +282,8 @@ namespace StockPerformance_CleanArchitecture.Managers
         {
             var advancedSearchResult = new StockPerformanceHistory();
 
-            foreach (var searchDetail in GetSearchDetailsForAll())
+            var details = GetSearchDetailsForAll();
+            foreach (var searchDetail in details)
             {
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
                 if (cachedResponse != null)
@@ -288,7 +292,8 @@ namespace StockPerformance_CleanArchitecture.Managers
                     continue;
                 }
                 var response = await GetStockPerformanceResponse(searchDetail);
-                StockPerformanceHistoryStorage.AddResponse(response);
+                // StockPerformanceHistoryStorage.AddResponse(response);
+                advancedSearchResult.StockPerformanceResponses.Add(response);
             }
 
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);

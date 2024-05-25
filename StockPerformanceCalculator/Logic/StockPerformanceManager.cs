@@ -91,6 +91,7 @@ namespace StockPerformanceCalculator.Logic
                 newTradingRule, newDepositRule, performanceInMonths,
                 allPositions, allDeposit);
 
+            result.Volume = symbols.Select(a => a.Volume).LastOrDefault();
             return result;
         }
 

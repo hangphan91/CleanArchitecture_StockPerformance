@@ -19,7 +19,9 @@ namespace StockPerformance_CleanArchitecture.Managers
             foreach (var email in emailsTosend)
             {
                 var emailMessage = GenerateEmail(responses.Distinct().ToList(), email, isProfitable);
-                SendEmail(emailMessage);
+
+                if (isProfitable)
+                    SendEmail(emailMessage);
             }
         }
 
@@ -73,34 +75,35 @@ namespace StockPerformance_CleanArchitecture.Managers
         {
             var responses = stockPerformanceResponses.OrderByDescending(stock => stock.ProfitInPercentage);
             // Hang - gaining list
-           var  gainingProfitResponses = responses
-                .Where(response => response.ProfitSummaryPercentage.IsProfitable()&& response.ProfitInPercentage > 20)
-                .Select(a => a)
-                .Distinct().ToList();
+            var gainingProfitResponses = responses
+                 .Where(response => response.ProfitSummaryPercentage.IsProfitable() && response.ProfitInPercentage > 20)
+                 .Select(a => a)
+                 .Distinct().ToList();
 
-           var  emailsTosend = emails.Select(a => 
-           new EmailContact{
+            var emailsTosend = emails.Select(a =>
+            new EmailContact
+            {
                 EmailAddress = a.EmailAddress,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
-           } )
-           .Distinct().ToList();    
+            })
+            .Distinct().ToList();
 
             var debugEmails = emailsTosend.Where(email => email.FirstName.Equals("Love")).ToList();
-            emailsTosend = Debugger.IsAttached ? debugEmails : emailsTosend; 
+            emailsTosend = Debugger.IsAttached ? debugEmails : emailsTosend;
 
             int minCount = 5;
             var sendEmailGainData = new SendEmailData(gainingProfitResponses, minCount, emailsTosend, true);
 
             //uhaphan - Here is non profit List
-            var  lossingProfitResponses = responses
-                .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable()|| response.ProfitInPercentage < 0)
+            var lossingProfitResponses = responses
+                .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable() || response.ProfitInPercentage < 0)
                 .Select(a => a).Distinct().ToList();
 
-            var  emailsTosendForLostProfit = debugEmails;
+            var emailsTosendForLostProfit = debugEmails;
             var sendEmailLostData = new SendEmailData(lossingProfitResponses, 1, emailsTosendForLostProfit, false);
 
-            var sendEmailData = new List<SendEmailData>{sendEmailGainData, sendEmailLostData};
+            var sendEmailData = new List<SendEmailData> { sendEmailGainData, sendEmailLostData };
             return sendEmailData;
         }
     }

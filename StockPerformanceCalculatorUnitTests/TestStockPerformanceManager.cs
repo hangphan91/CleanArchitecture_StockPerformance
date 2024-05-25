@@ -14,8 +14,7 @@ namespace UnitTests
 
 			var symbol = "AAPL";
 			var year = 2020;
-			var context = new DataContext();
-			var accessor = new PerformanceDataAccessor(context);
+			var accessor = new PerformanceDataAccessor();
 			var date = new DateDetail(2020, DateTime.Now.Month, DateTime.Now.Day);
 			var manager = new MockStockPerformanceManager(symbol, date, accessor);
 

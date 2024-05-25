@@ -27,19 +27,21 @@ namespace ExternalCommunicator.ExternalCommunications
             }
         }
 
-        public async Task<OptionChainResponse> GetOptionsData(string symbol)
+        public async Task<MarketDataOptionChain> GetOptionsData(string symbol)
         {
             try
             {
+                var token = "V1gteXlZUGJESUpMYjNMZjI0NXJNQ1l4OGJZS1g3RENPcVpqZHFqbDJwaz0";
+                var url = $"https://api.marketdata.app/v1/options/chain/{symbol}/?expiration=2025-01-17&side=call";
                 var client = new HttpClient();
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri($"https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v3/get-options?symbol={symbol}&region=US&lang=en-US"),
+                    RequestUri = new Uri(url),
                     Headers =
                     {
-                        { "X-RapidAPI-Key", "66ca04f1b2msh6e01f8b0fc4767ep1caaaejsn889b168ca42a" },
-                        { "X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com" },
+                        { "Accept", "application/json" },
+                        { "Authorization", $"Bearer {token}" },
                     },
                 };
                 using (var response = await client.SendAsync(request))
@@ -48,7 +50,7 @@ namespace ExternalCommunicator.ExternalCommunications
                     var body = await response.Content.ReadAsStringAsync();
                     Console.WriteLine(body);
 
-                    var myDeserializedClass = JsonConvert.DeserializeObject<OptionChainResponse>(body);
+                    var myDeserializedClass = JsonConvert.DeserializeObject<MarketDataOptionChain>(body);
                     if (myDeserializedClass == null)
                         throw new Exception("Failed to retrieve data");
 
