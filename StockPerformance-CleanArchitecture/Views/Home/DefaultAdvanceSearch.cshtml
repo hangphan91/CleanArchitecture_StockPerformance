@@ -52,12 +52,7 @@
 
     @using (Html.BeginForm("AdvanceSearch", "Home", FormMethod.Get, new { willPerformSearch = true }))
     {
-
         <fieldset>
-            <span>
-                @Html.LabelFor(m => m.SearchDetail.Name, Model.SearchDetail.Name)
-
-            </span>
             <span>
                 <h4> Deposit Setting</h4>
                 <p>First One Time Deposit Amount @Html.TextBoxFor(m => m.SearchDetail.DepositRule.InitialDepositAmount)</p>

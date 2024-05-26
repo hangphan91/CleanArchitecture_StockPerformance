@@ -4,8 +4,8 @@
     ViewData["Title"] = "Home Page";
     var symbols = Model.SearchSetup?.Symbols?.OrderBy(a => a);
     var selectListSymbols = symbols?
-        .Select(symbol => new SelectListItem { Text = symbol?.ToUpper(), Value = symbol?.ToUpper() })
-        .ToList();
+    .Select(symbol => new SelectListItem { Text = symbol?.ToUpper(), Value = symbol?.ToUpper() })
+    .ToList();
 
     var selectListSaveName = Model.ActiveSelectedSearchDetails
     .Select(detail => new SelectListItem { Text = detail.Name, Value = detail.Name })
@@ -13,48 +13,39 @@
 
     var count = Model.SearchSetup?.EndingYear.Year - Model.SearchSetup?.StartingYear.Year + 1;
     var selectListYears = Enumerable.Range(2000, DateTime.Now.Year + 1 - 2000)
-        .Select(year => new SelectListItem
-        {
-            Text = year.ToString(),
-            Value = year.ToString(),
-        }).ToList();
+    .Select(year => new SelectListItem
+            {
+                Text = year.ToString(),
+                Value = year.ToString(),
+            }).ToList();
 
     var selectListMonths = Enumerable.Range(1, 12)
     .Select(month => new SelectListItem
-    {
-        Text = month.ToString(),
-        Value = month.ToString(),
-    }).ToList();
+            {
+                Text = month.ToString(),
+                Value = month.ToString(),
+            }).ToList();
 
     var selectListNumberOfDeposits = Enumerable.Range(0, 100)
     .Select(number => new SelectListItem
-    {
-        Text = number.ToString(),
-        Value = number.ToString(),
-    }).ToList();
+            {
+                Text = number.ToString(),
+                Value = number.ToString(),
+            }).ToList();
     var selectListDateOfMonth = Enumerable.Range(1, 31)
-        .Select(number => new SelectListItem
-        {
-            Text = number.ToString(),
-            Value = number.ToString(),
-        }).ToList();
+    .Select(number => new SelectListItem
+            {
+                Text = number.ToString(),
+                Value = number.ToString(),
+            }).ToList();
     var selectListForNumberOftrademonthly = Enumerable.Range(1, 2)
-        .Select(number => new SelectListItem
-        {
-            Text = number.ToString(),
-            Value = number.ToString(),
-        }).ToList();
+    .Select(number => new SelectListItem
+            {
+                Text = number.ToString(),
+                Value = number.ToString(),
+            }).ToList();
 }
 
-<div class="text-center">
-    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
-        {
-        <p>@Html.DropDownListFor(m => m.Name, selectListSaveName)</p>
-        <p>
-            <input type="submit" value="Apply Setting" />
-        </p>
-    }
-</div>
 <div class="text-center">
     @using (Html.BeginForm("StockPerformanceFromSelectedDetail", "StockPerformance", FormMethod.Get))
     {
@@ -105,15 +96,15 @@
             </span>
             <p>
 
-                <h4>Symbol List </h4>
+            <h4>Symbol List </h4>
                 @Html.DropDownListFor(m => m.Symbol, selectListSymbols)
             <p>
                 Year
-                @Html.DropDownListFor(m => m.SettingDate.Year, selectListYears)
+                    @Html.DropDownListFor(m => m.SettingDate.Year, selectListYears)
                 Month
-                @Html.DropDownListFor(m => m.SettingDate.Month, selectListMonths)
+                    @Html.DropDownListFor(m => m.SettingDate.Month, selectListMonths)
                 Date
-                @Html.DropDownListFor(m => m.SettingDate.Day, selectListDateOfMonth)
+                    @Html.DropDownListFor(m => m.SettingDate.Day, selectListDateOfMonth)
             </p>
             </p>
         </fieldset>
@@ -124,11 +115,3 @@
     }
 
 </div>
-<div class="text-center">
-    <button class="button">
-        @Html.ActionLink("Use Default Setting", "Index", "Home", new { useDefaultSetting = true })
-    </button>
-
-</div>
-
-

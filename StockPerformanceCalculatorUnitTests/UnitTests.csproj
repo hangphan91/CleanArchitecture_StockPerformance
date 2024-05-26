@@ -26,5 +26,5 @@
   <ItemGroup>
     <Folder Include="ExternalCommunications\" />
     <Folder Include="Logics\" />
-  </ItemGroup>
+  </ItemGroup>  
 </Project>
