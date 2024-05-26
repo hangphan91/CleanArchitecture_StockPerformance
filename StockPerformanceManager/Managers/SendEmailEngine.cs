@@ -2,11 +2,9 @@
 using System.Net;
 using System.Net.Mail;
 using EntityDefinitions;
-using OoplesFinance.YahooFinanceAPI.Models;
 using StockPerformance_CleanArchitecture.Formatters;
 using StockPerformance_CleanArchitecture.Models;
 using StockPerformance_CleanArchitecture.Models.EmailDetails;
-using Utilities;
 
 namespace StockPerformance_CleanArchitecture.Managers
 {
