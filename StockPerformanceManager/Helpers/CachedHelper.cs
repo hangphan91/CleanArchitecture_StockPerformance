@@ -45,7 +45,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
             if (_responses == null)
                 _responses = new ConcurrentBag<StockPerformanceResponse>();
 
-            var cachedResponse = _responses.Where(a => a.SearchDetail.IsSame(searchDetail)).FirstOrDefault();
+            var cachedResponse = _responses.Where(a => a.SearchDetail.IsSame(searchDetail) && a.Symbol.ToUpper() == searchDetail.Symbol.ToUpper()).FirstOrDefault();
 
             return cachedResponse;
         }

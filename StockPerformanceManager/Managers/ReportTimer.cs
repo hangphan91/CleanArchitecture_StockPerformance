@@ -74,7 +74,7 @@ public class ReportTimer
 
     public async Task GetResponses()
     {
-        var date = DateTime.Now.AddYears(-3);
+        var date = DateTime.Now.AddYears(-4);
         _startingDates.Add(date);
         var searchDetailManager = new SearchDetailManager();
         var result = await searchDetailManager.PerformAdvanceSearch(true, date);

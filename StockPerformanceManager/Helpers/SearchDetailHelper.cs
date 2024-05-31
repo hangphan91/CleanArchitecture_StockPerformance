@@ -17,7 +17,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
         private static SearchDetail _initalSearchDetail;
         private static SearchInitialSetup _searchInitialSetup;
         private static SearchInitialSetup _searchSetup;
-        private static IEntityDefinitionsAccessor _entityDefinitionsAccessor;
+        private static IEntityDefinitionsAccessor _entityDefinitionsAccessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
         private static ConcurrentBag<SearchDetail> _savedSearchDetailsSeeting = new ConcurrentBag<SearchDetail>();
         private static ConcurrentBag<SearchDetail> _activeSearchDetailsSetting = new ConcurrentBag<SearchDetail>();
 
@@ -26,7 +26,7 @@ namespace StockPerformance_CleanArchitecture.Helpers
         public static SearchDetail GetCurrentSearchDetail(IEntityDefinitionsAccessor entityDefinitionsAccessor)
         {
             _entityDefinitionsAccessor = entityDefinitionsAccessor;
-            GetAllSearchDetails(entityDefinitionsAccessor);
+            GetAllSearchDetails(_entityDefinitionsAccessor);
             return GetCurrentSearchDetail();
         }
 

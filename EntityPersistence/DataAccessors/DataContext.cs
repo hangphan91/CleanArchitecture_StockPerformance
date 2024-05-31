@@ -89,7 +89,7 @@ namespace EntityPersistence.DataAccessors
             {
                 EndingSymbolId = lastSymbolId,
                 StartingSymbolId = firstSymbolId,
-                StartingYear = new DateOnly(DateTime.Now.AddYears(-3).Year, DateTime.Now.Month, DateTime.Now.Day),
+                StartingYear = new DateOnly(DateTime.Now.AddYears(-4).Year, DateTime.Now.Month, DateTime.Now.Day),
                 EndingYear = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
                 Id = 1,
             };
@@ -102,7 +102,7 @@ namespace EntityPersistence.DataAccessors
 
             var rand = new Random();
 
-            var randYear = DateTime.Now.AddYears(-3).Year;
+            var randYear = DateTime.Now.AddYears(-4).Year;
             var randMonth = rand.Next(1, 12);
             var randDay = rand.Next(1, 28);
             var randDate = new DateOnly(randYear, randMonth, randDay).AddDays(rand.Next(1, 100));

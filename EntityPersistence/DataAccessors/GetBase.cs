@@ -3,13 +3,13 @@ using StockPerformanceCalculator.DatabaseAccessors;
 
 namespace EntityPersistence.DataAccessors
 {
-    public class GetBase :IGet
-	{
+    public class GetBase : IGet
+    {
         DataContext _dataContext;
-		public GetBase(DataContext dataContext)
-		{
+        public GetBase(DataContext dataContext)
+        {
             _dataContext = dataContext;
-		}
+        }
 
         public DepositRule GetDepositRule()
         {
@@ -17,7 +17,7 @@ namespace EntityPersistence.DataAccessors
         }
         public DepositRule GetDepositRule(long id)
         {
-            return _dataContext.DepositRules.Find(x=>x.Id == id);
+            return _dataContext.DepositRules.Find(x => x.Id == id);
         }
 
         public List<PerformanceSummary> GetPerformancesBySymbol(string symbol)
@@ -114,7 +114,7 @@ namespace EntityPersistence.DataAccessors
                 var tradingRule = GetTradingRule(item.TradingRuleId);
                 var symbol = GetSymbol(item.SymbolId);
                 var setup = GetPerformanceSetup(item.PerformanceSetupId);
-                var table = new Tuple<DepositRule, TradingRule,Symbol, PerformanceSetup, string>
+                var table = new Tuple<DepositRule, TradingRule, Symbol, PerformanceSetup, string>
                     (depositRule, tradingRule, symbol, setup, item.Name);
                 list.Add(table);
             }

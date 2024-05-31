@@ -141,7 +141,7 @@ namespace StockPerformance_CleanArchitecture.Formatters
                     continue;
 
                 item.ProfitSummaryPercentage?.SetTotalProfit();
-                var basedURL = "https://stockperformance.azurewebsites.net/StockPerformance/StockPerformanceFromSelectedDetail";
+                var basedURL = "https://stockperformance.azurewebsites.net/StockPerformance/StockPerformance";
 
                 var link = $"{basedURL}?symbol={item.Symbol}&year={item.SearchDetail?.SettingDate.Year}" +
                     $"&month={item.SearchDetail?.SettingDate.Month}" +
