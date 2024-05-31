@@ -72,14 +72,14 @@ namespace StockPerformance_CleanArchitecture.Managers
             List<Email> emails)
         {
             var responses = stockPerformanceResponses.OrderByDescending(stock => stock.ProfitInPercentage);
-            
-             //uhaphan - Here is non profit List
+
+            //uhaphan - Here is non profit List
             var allResponses = responses
                 .Select(a => a).Distinct().ToList();
-            
+
             // Hang - gaining list
             var gainingProfitResponses = responses
-                 .Where(response => response.ProfitSummaryPercentage.IsProfitable())
+                 .Where(response => response.ProfitSummaryPercentage.IsProfitable() && response.ProfitInPercentage > 20)
                  .Select(a => a)
                  .Distinct().ToList();
 
@@ -100,7 +100,7 @@ namespace StockPerformance_CleanArchitecture.Managers
                 item.FirstName = "Test";
             }
 
-            emailsTosend = debugEmails ;
+            emailsTosend = debugEmails;
 #endif
 
             int minCount = 1;
