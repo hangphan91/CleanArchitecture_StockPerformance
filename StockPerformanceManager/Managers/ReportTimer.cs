@@ -10,8 +10,22 @@ namespace StockPerformance_CleanArchitecture.Managers;
 
 public class ReportTimer
 {
-    private bool IsSent { set; get; }
-    private string _txtFileName =  "sentEmails.txt";
+    private static string _txtFileName = GetFilePath();
+
+    private static string GetFilePath()
+    {
+        string fileName = $"sentEmails.txt";
+
+        var basedPath = AppDomain.CurrentDomain.BaseDirectory;
+        //Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        var uri = new Uri(basedPath);
+        Console.WriteLine("basedPath" + basedPath);
+
+        var formattedBasedPath = CrossPlatform.PathCombine(uri.LocalPath);
+        string filePath = Path.Combine(formattedBasedPath, fileName);
+
+        return filePath;
+    }
 
     private static ConcurrentBag<DateTime> _startingDates = new ConcurrentBag<DateTime>();
     private static System.Timers.Timer _timer;
@@ -80,7 +94,7 @@ public class ReportTimer
         try
         {
             var now = DateTime.Now;
-           if(SentDates.Count ==0)
+            if (SentDates.Count == 0)
             {
                 ReadSentDates();
             }
@@ -110,27 +124,29 @@ public class ReportTimer
         try
         {
             //Pass the file path and file name to the StreamReader constructor
-            StreamReader sr = new StreamReader(_txtFileName);
-            //Read the first line of text
-            line = sr.ReadLine();
-            //Continue to read until you reach end of file
-            while (line != null)
+            using (StreamReader sr = new StreamReader(_txtFileName))
             {
-                //write the line to console window
-                Console.WriteLine(line);
-                var strings =line.Split(",");
-                foreach (var item in strings)
-                {
-                var date = DateTimeOffset.Parse(item).DateTime;
-                    SentDates.Add(date);
-                }
-                //Read the next line
+                //Read the first line of text
                 line = sr.ReadLine();
+                //Continue to read until you reach end of file
+                while (line != null)
+                {
+                    //write the line to console window
+                    Console.WriteLine(line);
+                    var strings = line.Split(",");
+                    foreach (var item in strings)
+                    {
+                        var date = DateTimeOffset.Parse(item).DateTime;
+                        SentDates.Add(date);
+                    }
+                    //Read the next line
+                    line = sr.ReadLine();
+                }
+                sr.Close();
             }
             //close the file
-            sr.Close();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine("Exception: " + e.Message);
         }
@@ -163,7 +179,7 @@ public class ReportTimer
                 dates.ForEach(d => SentDates.Add(d));
             }
         }
-        System.IO.File.AppendAllText(_txtFileName, string.Join(",",SentDates.Distinct().Select(a => a).ToList()));
+        System.IO.File.AppendAllText(_txtFileName, string.Join(",", SentDates.Distinct().Select(a => a).ToList()));
 
     }
 }
