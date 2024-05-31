@@ -11,6 +11,8 @@ namespace StockPerformance_CleanArchitecture.Managers;
 public class ReportTimer
 {
     private bool IsSent { set; get; }
+
+    private static ConcurrentBag<DateTime> _startingDates = new ConcurrentBag<DateTime>();
     private static System.Timers.Timer _timer;
     public static ConcurrentBag<string> _symbols = new ConcurrentBag<string>();
     public static ConcurrentBag<DateTime> SentDates = new ConcurrentBag<DateTime>();
@@ -55,8 +57,10 @@ public class ReportTimer
 
     public async Task GetResponses()
     {
+        var date = DateTime.Now.AddYears(-3);
+        _startingDates.Add(date);
         var searchDetailManager = new SearchDetailManager();
-        var result = await searchDetailManager.PerformAdvanceSearch(true);
+        var result = await searchDetailManager.PerformAdvanceSearch(true, date);
 
         if (result == null)
             return;

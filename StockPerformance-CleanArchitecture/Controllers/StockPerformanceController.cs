@@ -35,12 +35,20 @@ namespace StockPerformance_CleanArchitecture.Controllers
             _response = new ConcurrentBag<StockPerformanceResponse>();
         }
 
-        public async Task<IActionResult> StockPerformance(string json)
+        public async Task<IActionResult> StockPerformance(string json, int year, int month, int day, string symbol)
         {
             SearchDetail? searchDetail = null;
 
             if (!string.IsNullOrWhiteSpace(json))
                 searchDetail = JsonSerializer.Deserialize<SearchDetail>(json);
+            else if(year >0 && month > 0 && day >0 && !string.IsNullOrWhiteSpace(symbol)) 
+                searchDetail = _searchDetailManager.GetCurrentSearchDetail();
+            
+            if(searchDetail != null)
+            {
+                 searchDetail.SettingDate = new Models.Settings.SettingDate(year, month, day);
+                 searchDetail.Symbol = symbol;
+            }
 
             var response = await _searchDetailManager.GetStockPerformanceResponse(searchDetail);
 
@@ -53,6 +61,8 @@ namespace StockPerformance_CleanArchitecture.Controllers
 
             return View("StockPerformance", response);
         }
+
+        
 
         public IActionResult StockPerformanceHistory()
         {

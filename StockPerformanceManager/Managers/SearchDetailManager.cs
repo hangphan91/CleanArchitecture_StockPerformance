@@ -211,7 +211,12 @@ namespace StockPerformance_CleanArchitecture.Managers
 
         public List<SearchDetail> GetSearchDetailsForAll()
         {
+
+#if DEBUG
+            return SearchDetailHelper.GetSearchDetailsForAll().Take(2).ToList();
+#else
             return SearchDetailHelper.GetSearchDetailsForAll();
+#endif
         }
 
         public void SetSearchDetail(SearchDetail searchDetail)
@@ -250,7 +255,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             return currentSearchDetail ?? GetCurrentSearchDetail();
         }
 
-        public async Task<StockPerformanceHistory> PerformAdvanceSearch(bool searchAll)
+        public async Task<StockPerformanceHistory> PerformAdvanceSearch(bool searchAll, DateTime? dateTime = null)
         {
             if (searchAll)
                 return await PerformAdvanceSearchForAll();
@@ -260,6 +265,8 @@ namespace StockPerformance_CleanArchitecture.Managers
             List<SearchDetail> searchDetails = GetActiveSearchDetails();
             foreach (var searchDetail in searchDetails)
             {
+                if(dateTime.HasValue)
+                     searchDetail.SettingDate = new SettingDate(dateTime.Value.Year, dateTime.Value.Month, dateTime.Value.Day);
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
                 if (cachedResponse != null && cachedResponse?.CurrentPrice != 0)
                 {

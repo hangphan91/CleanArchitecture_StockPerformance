@@ -141,10 +141,11 @@ namespace StockPerformance_CleanArchitecture.Formatters
                     continue;
 
                 item.ProfitSummaryPercentage?.SetTotalProfit();
-                var basedURL = "https://stockperformance.azurewebsites.net/";
+                var basedURL = "https://stockperformance.azurewebsites.net/StockPerformance/StockPerformanceFromSelectedDetail";
 
-                var link = $"{basedURL}?symbol={item.Symbol}&startYear={item.SearchDetail?.SettingDate.Year}" +
-                    $"&Name={item.SearchDetail?.Name}";
+                var link = $"{basedURL}?symbol={item.Symbol}&year={item.SearchDetail?.SettingDate.Year}" +
+                    $"&month={item.SearchDetail?.SettingDate.Month}" +
+                    $"&day={item.SearchDetail?.SettingDate.Day}";
 
                 var yearlyMaxGrowth = item.ProfitSummaryPercentage?.MAXYearlyProfit;
                 var yearlyMinGrowth = item.ProfitSummaryPercentage?.MINYearlyProfit;
