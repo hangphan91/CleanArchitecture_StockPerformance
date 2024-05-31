@@ -107,8 +107,13 @@ public class ReportTimer
             {
                 SendEmailEngine.CreateAndSendEmail(sendEmail.StockPerformanceResponses, sendEmail.EmailContacts, sendEmail.IsProfitable);
             }
+            else if (sendEmail.IsProfitable)
+            {
+                var dates = SentDates.Where(d => d.ToShortDateString() != DateTime.Now.ToShortDateString());
+
+                SentDates = new ConcurrentBag<DateTime>();
+                dates.ForEach(d => SentDates.Add(d));
+            }
         }
-
-
     }
 }
