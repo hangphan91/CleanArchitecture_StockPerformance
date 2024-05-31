@@ -98,7 +98,7 @@ namespace StockPerformance_CleanArchitecture.Managers
             emailsTosend = Debugger.IsAttached ? debugEmails : emailsTosend;
 #endif
 
-            int minCount = 5;
+            int minCount = 0;
             var sendEmailGainData = new SendEmailData(gainingProfitResponses, minCount, emailsTosend, true);
 
             //uhaphan - Here is non profit List
