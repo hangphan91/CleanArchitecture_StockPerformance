@@ -17,8 +17,9 @@ namespace StockPerformance_CleanArchitecture.Models
 			StockPerformanceResponses = new List<StockPerformanceResponse>();
 		}
 
-		public string DisplayPerformanceResult()
+		public string DisplayPerformanceResult(List<StockPerformanceResponse> stockPerformanceResponses)
 		{
+			StockPerformanceResponses = stockPerformanceResponses;
 			return PerformanceResultFormatter.GetStockPerformanceResponseTableHTML(StockPerformanceResponses);
 		}
 	}

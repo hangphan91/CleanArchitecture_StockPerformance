@@ -292,6 +292,8 @@ namespace StockPerformance_CleanArchitecture.Managers
                 if (cachedResponse != null)
                 {
                     StockPerformanceHistoryStorage.AddResponse(cachedResponse);
+                    advancedSearchResult.StockPerformanceResponses.Add(cachedResponse);
+
                     continue;
                 }
                 var response = await GetStockPerformanceResponse(searchDetail);
@@ -313,7 +315,8 @@ namespace StockPerformance_CleanArchitecture.Managers
             var responses = CachedHelper.GetAllCache();
             var history = new StockPerformanceHistory
             {
-                ProfitChart = new ProfitChart(responses)
+                ProfitChart = new ProfitChart(responses),
+                StockPerformanceResponses = responses
             };
             return history;
         }

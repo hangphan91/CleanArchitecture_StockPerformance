@@ -6,9 +6,10 @@
     System.Web.HttpUtility.HtmlEncode("'" + a.Symbol + ":" + a.StartDate.Month + "/" + a.StartDate.Year + "'")).ToArray();
     var data = Model.StockPerformanceResponses.Select(a =>
     System.Web.HttpUtility.HtmlEncode(a.ProfitInDollar)).ToArray();
-    var resultTable = Model.DisplayPerformanceResult();
+    var resultTable = Model.DisplayPerformanceResult(@Model.StockPerformanceResponses);
 }
 <h1>@ViewData["Title"]</h1>
+
 <body>
     <form method="post">
         <div>@Html.Raw(Model.ProfitChart.ChartJsonForPerformanceHistory)</div>

@@ -89,12 +89,14 @@ namespace StockPerformance_CleanArchitecture.Managers
 
             var debugEmails = emailsTosend.Where(email => email.FirstName.Equals("Love")).ToList();
 
+#if DEBUG
             foreach (var item in debugEmails)
             {
                 item.FirstName = "Test";
             }
 
             emailsTosend = Debugger.IsAttached ? debugEmails : emailsTosend;
+#endif
 
             int minCount = 5;
             var sendEmailGainData = new SendEmailData(gainingProfitResponses, minCount, emailsTosend, true);

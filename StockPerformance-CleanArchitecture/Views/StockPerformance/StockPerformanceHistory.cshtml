@@ -2,12 +2,13 @@
 @model StockPerformance_CleanArchitecture.Models.StockPerformanceHistory
 @{
     ViewData["Title"] = "Performance History";
-    var resultTable = Model.DisplayPerformanceResult();
+    var resultTable = Model.DisplayPerformanceResult(@Model.StockPerformanceResponses);
 
 }
 <p style="float: right;">
     @Html.ActionLink("Export to Excel", "OnPostDownloadFileForAdvanceSearch", "StockPerformance")
 </p>
+
 <body>
     <form method="post">
         <div>@Html.Raw(Model.ProfitChart.ChartJsonForPerformanceHistory)</div>
