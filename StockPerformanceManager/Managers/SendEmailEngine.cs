@@ -72,9 +72,14 @@ namespace StockPerformance_CleanArchitecture.Managers
             List<Email> emails)
         {
             var responses = stockPerformanceResponses.OrderByDescending(stock => stock.ProfitInPercentage);
+            
+             //uhaphan - Here is non profit List
+            var allResponses = responses
+                .Select(a => a).Distinct().ToList();
+            
             // Hang - gaining list
             var gainingProfitResponses = responses
-                 .Where(response => response.ProfitSummaryPercentage.IsProfitable() && response.ProfitInPercentage > 20)
+                 .Where(response => response.ProfitSummaryPercentage.IsProfitable())
                  .Select(a => a)
                  .Distinct().ToList();
 
@@ -95,19 +100,14 @@ namespace StockPerformance_CleanArchitecture.Managers
                 item.FirstName = "Test";
             }
 
-            emailsTosend = Debugger.IsAttached ? debugEmails : emailsTosend;
+            emailsTosend = debugEmails ;
 #endif
 
-            int minCount = 0;
+            int minCount = 1;
             var sendEmailGainData = new SendEmailData(gainingProfitResponses, minCount, emailsTosend, true);
 
-            //uhaphan - Here is non profit List
-            var lossingProfitResponses = responses
-                .Where(response => response.ProfitSummaryPercentage.IsNeverProfitable() || response.ProfitInPercentage < 0)
-                .Select(a => a).Distinct().ToList();
-
             var emailsTosendForLostProfit = debugEmails;
-            var sendEmailLostData = new SendEmailData(lossingProfitResponses, 1, emailsTosendForLostProfit, false);
+            var sendEmailLostData = new SendEmailData(allResponses, 1, emailsTosendForLostProfit, true);
 
             var sendEmailData = new List<SendEmailData> { sendEmailGainData, sendEmailLostData };
             return sendEmailData;
