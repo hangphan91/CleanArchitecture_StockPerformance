@@ -39,7 +39,6 @@ public class ReportTimer
                             EmailAddress = "stockperformance2023@gmail.com",
                             FirstName = "Love"
                         },
-                        /*
                         new Email
                         {
                             EmailAddress = "cristian.g.navarrete@gmail.com",
@@ -50,7 +49,6 @@ public class ReportTimer
                             EmailAddress = "fisayoayodele01@gmail.com",
                             FirstName = "Joseph"
                         }
-                        */
                     };
 
     private object obj;
@@ -66,7 +64,7 @@ public class ReportTimer
     private void SetTimer()
     {
         // Create a timer with a two second interval.
-        _timer = new System.Timers.Timer(10 * 1000);//every 5 min
+        _timer = new System.Timers.Timer(100 * 1000);//every 5 min
         _timer.Elapsed += OnTimedEventStart;
         _timer.AutoReset = true;
         _timer.Enabled = true;
