@@ -250,7 +250,7 @@ namespace HP.PersonalStocks.Mgr.Helpers
 
 
         [JsonProperty("volume")]
-        public int Volume;
+        public long Volume;
     }
 
     public class RapiAPiResponse

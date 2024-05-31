@@ -88,6 +88,12 @@ namespace StockPerformance_CleanArchitecture.Managers
             .Distinct().ToList();
 
             var debugEmails = emailsTosend.Where(email => email.FirstName.Equals("Love")).ToList();
+
+            foreach (var item in debugEmails)
+            {
+                item.FirstName = "Test";
+            }
+
             emailsTosend = Debugger.IsAttached ? debugEmails : emailsTosend;
 
             int minCount = 5;

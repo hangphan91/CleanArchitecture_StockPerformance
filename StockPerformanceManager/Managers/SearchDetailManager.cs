@@ -261,13 +261,16 @@ namespace StockPerformance_CleanArchitecture.Managers
             foreach (var searchDetail in searchDetails)
             {
                 var cachedResponse = CachedHelper.GetResponseFromCache(searchDetail);
-                if (cachedResponse != null)
+                if (cachedResponse != null && cachedResponse?.CurrentPrice != 0)
                 {
                     StockPerformanceHistoryStorage.AddResponse(cachedResponse);
+                    advancedSearchResult.StockPerformanceResponses.Add(cachedResponse);
+
                     continue;
                 }
                 var response = await GetStockPerformanceResponse(searchDetail);
                 StockPerformanceHistoryStorage.AddResponse(response);
+                advancedSearchResult.StockPerformanceResponses.Add(response);
             }
             CachedHelper.AddCaches(advancedSearchResult.StockPerformanceResponses);
             advancedSearchResult.ProfitChart =
