@@ -131,7 +131,7 @@ namespace EntityPersistence.DataAccessors
                 }
             });
 
-            _dataContext.SymbolSummaries.AddRange(symbolSummaries);
+            _dataContext.SymbolSummaries = symbolSummaries;
             return symbolSummaries.Select(s => s.Id).ToList();
         }
 
@@ -154,7 +154,7 @@ namespace EntityPersistence.DataAccessors
                 }
             };
 
-            _dataContext.Symbols.AddRange(symbols);
+            _dataContext.Symbols = symbols;
             return symbols.Select(s => s.Id).ToList();
         }
 

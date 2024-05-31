@@ -16,7 +16,7 @@ namespace HP.PersonalStocks.Mgr.Helpers
             _startingDate = startingDate;
         }
 
-
+        //https://rapidapi.com/api4stocks/api/apistocks/pricing
         public async Task<RapiAPiResponse> GetHistoricalDataRapicAPI()
         {
             var now = DateTime.Now;

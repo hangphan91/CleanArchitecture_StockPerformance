@@ -34,6 +34,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
 
                 var result = await dataAccessor.GetHistoricalDataRapicAPI();
                 response = new YahooFinanceAPIMapper().Map(result, symbol);
+                await Task.Delay(1000);
             }
             catch (Exception ex0)
             {
