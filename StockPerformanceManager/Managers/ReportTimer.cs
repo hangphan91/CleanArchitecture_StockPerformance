@@ -39,7 +39,6 @@ public class ReportTimer
                             EmailAddress = "stockperformance2023@gmail.com",
                             FirstName = "Love"
                         },
-                        /*
                         new Email
                         {
                             EmailAddress = "cristian.g.navarrete@gmail.com",
@@ -50,7 +49,6 @@ public class ReportTimer
                             EmailAddress = "fisayoayodele01@gmail.com",
                             FirstName = "Joseph"
                         }
-                        */
                     };
 
     private object obj;
