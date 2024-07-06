@@ -43,7 +43,7 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         {
             return searchDetail.Symbol.ToUpper().Equals(Symbol.ToUpper())
               && searchDetail.SettingDate.IsSame(SettingDate)
-              && searchDetail.TradingRule.IsSame(searchDetail.TradingRule);
+              && searchDetail.TradingRule.IsSame(TradingRule);
 
         }
         public string ToJson()

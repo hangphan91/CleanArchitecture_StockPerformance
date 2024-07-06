@@ -176,6 +176,7 @@ namespace EntityPersistence.DataAccessors
             symbols.AddRange(highOpenInterest042024);
             symbols.AddRange(from20To50Dollar);
             symbols.AddRange(from20to50Finviz);
+            symbols.AddRange(from072024YahooFin);
 
             symbols = symbols.Select(a => a.ToUpper()).Distinct().ToList();
             var toSaveSymbols = symbols.Select(symbol => new Symbol
@@ -242,8 +243,8 @@ namespace EntityPersistence.DataAccessors
             var rand = new Random();
             var randBuyNumber = (decimal)rand.Next(0, 20);
             var randSellNumber = (decimal)rand.Next(0, 20);
-            var randTradeDateHigh = rand.Next(15, 30);
-            var randTradeDateLow = rand.Next(1, 14);
+            var randTradeDateHigh = 31;
+            var randTradeDateLow = 1;
 
             var randPurchaseLimit = rand.Next(1, 5) * 500;
             var randLostLimit = rand.Next(1, 5) * randPurchaseLimit;
