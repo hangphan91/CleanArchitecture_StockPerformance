@@ -139,6 +139,9 @@ namespace EntityPersistence.DataAccessors
         {
             var increment = 0;
 
+            if(_dataContext.Symbols.Max(a => a.Id) >0)
+                increment = (int) _dataContext.Symbols.Max(a => a.Id);
+
             foreach (var symbol in symbols)
             {
                 increment++;
@@ -154,7 +157,7 @@ namespace EntityPersistence.DataAccessors
                 }
             };
 
-            _dataContext.Symbols = symbols;
+            _dataContext.Symbols.AddRange(symbols);
             return symbols.Select(s => s.Id).ToList();
         }
 

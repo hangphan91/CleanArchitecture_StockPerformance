@@ -8,7 +8,10 @@ namespace EntityPersistence.DataAccessors
         DataContext _dataContext;
         public GetBase(DataContext dataContext)
         {
-            _dataContext = dataContext;
+            if(dataContext == null)
+                _dataContext = new  DataContext();
+            else
+                _dataContext = dataContext;
         }
 
         public DepositRule GetDepositRule()

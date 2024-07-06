@@ -130,7 +130,7 @@ namespace StockPerformance_CleanArchitecture.Managers
 
         public SearchInitialSetup AddSymbol(SearchInitialSetup searchSetup)
         {
-            var accessor = DatabaseAccessorHelper.EntityDefinitionsAccessor;
+            var accessor = _entityDefinitionsAccessor;
             var detail = SearchDetailHelper.GetCurrentSearchDetail(accessor);
 
             if (!string.IsNullOrWhiteSpace(searchSetup?.AddSymbol))
@@ -188,19 +188,23 @@ namespace StockPerformance_CleanArchitecture.Managers
 
         public void AddNewSymbols(SearchInitialSetup searchSetup, List<string> symbols)
         {
-            var addSymbols = searchSetup.AddingSymbols;
-            var savedSymbols = _entityDefinitionsAccessor.GetSavedSymbols(addSymbols);
-            var toAdd = addSymbols
-                .Where(a => !savedSymbols.Contains(a));
-            var symbolsToInsert = toAdd
-                .Select(a => new EntityDefinitions.Symbol
+            var savedSymbols = _entityDefinitionsAccessor.GetSavedSymbols(symbols);
+
+            var toInsertSymbols =  savedSymbols.
+            Intersect(searchSetup.AddingSymbols)
+            .Select( toSave => toSave.ToUpper())
+            .ToList();
+
+            toInsertSymbols.AddRange(searchSetup.AddingSymbols);
+            
+            _entityDefinitionsAccessor.Insert(toInsertSymbols.Select(a =>  new EntityDefinitions.Symbol
                 {
                     TradingSymbol = a.ToUpper(),
-                })
-                .ToList();
-            symbols.AddRange(toAdd);
-            _entityDefinitionsAccessor.Insert(symbolsToInsert);
-            searchSetup.AddedSymbols = toAdd.ToList();
+                }).ToList());
+
+            symbols.AddRange(toInsertSymbols);
+
+            searchSetup.AddedSymbols = symbols.ToList();
             searchSetup.Symbols.AddRange(symbols.OrderBy(a => a));
         }
 
