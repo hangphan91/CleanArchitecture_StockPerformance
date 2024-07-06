@@ -165,6 +165,11 @@ namespace EntityPersistence.DataAccessors
                 "CSX", "bkr"
             };
 
+            var from072024YahooFin = new List<string>
+            {
+                "CAMT", "ARM"
+            };
+
             symbols.AddRange(growingIn2022To2023);
             symbols.AddRange(growingIn2020To2024);
             symbols.AddRange(optionStocks042024);

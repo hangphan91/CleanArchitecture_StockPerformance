@@ -42,7 +42,8 @@ namespace StockPerformance_CleanArchitecture.Models.ProfitDetails
         internal bool IsSame(SearchDetail searchDetail)
         {
             return searchDetail.Symbol.ToUpper().Equals(Symbol.ToUpper())
-              && searchDetail.SettingDate.IsSame(SettingDate);
+              && searchDetail.SettingDate.IsSame(SettingDate)
+              && searchDetail.TradingRule.IsSame(searchDetail.TradingRule);
 
         }
         public string ToJson()
