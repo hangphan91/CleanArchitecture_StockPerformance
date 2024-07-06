@@ -27,7 +27,6 @@ public class ReportTimer
         return filePath;
     }
 
-    private static ConcurrentBag<DateTime> _startingDates = new ConcurrentBag<DateTime>();
     private static System.Timers.Timer _timer;
     public static ConcurrentBag<string> _symbols = new ConcurrentBag<string>();
     public static ConcurrentBag<DateTime> SentDates = new ConcurrentBag<DateTime>();
@@ -73,7 +72,7 @@ public class ReportTimer
     public async Task GetResponses()
     {
         var date = DateTime.Now.AddYears(-4);
-        _startingDates.Add(date);
+        SentDates.Add(date);
         var searchDetailManager = new SearchDetailManager();
         var result = await searchDetailManager.PerformAdvanceSearch(true, date);
 
@@ -91,24 +90,7 @@ public class ReportTimer
     {
         try
         {
-            var now = DateTime.Now;
-            if (SentDates.Count == 0)
-            {
-                ReadSentDates();
-            }
-
-            if (SentDates.Any(d => d >= now.AddDays(-7)))
-                return;
-
-            SentDates.Add(now);
-            _responses = new ConcurrentBag<StockPerformanceResponse>();
-            var dates = SentDates.Where(d => d > now.AddDays(-9));
-
-            SentDates = new ConcurrentBag<DateTime>();
-            dates.ForEach(d => SentDates.Add(d));
-
-            if (SentDates.Count > 0)
-                await SendEmail();
+            await SendEmail();
         }
         catch (Exception ex)
         {
@@ -156,9 +138,17 @@ public class ReportTimer
 
     private async Task SendEmail()
     {
+        if (DateTime.Now.DayOfWeek != DayOfWeek.Saturday)
+            return;
+
+        if (SentDates.Select(a => a.Date == DateTime.Now.Date).Any())
+            return;
+
+        if (DateTime.Now.Hour != 1)
+            return;
+
         if (_responses.Count == 0)
             await GetResponses();
-
 
         var sendEmailData =
              SendEmailEngine.GetToSendEmailList(_responses.Select(r => r).ToList(), _emails.Select(e => e).ToList());
@@ -171,13 +161,10 @@ public class ReportTimer
             }
             else if (sendEmail.IsProfitable)
             {
-                var dates = SentDates.Where(d => d.ToShortDateString() != DateTime.Now.ToShortDateString());
-
-                SentDates = new ConcurrentBag<DateTime>();
-                dates.ForEach(d => SentDates.Add(d));
+                SentDates = new ConcurrentBag<DateTime>() { DateTime.Now };
             }
         }
-        System.IO.File.AppendAllText(_txtFileName, string.Join(",", SentDates.Distinct().Select(a => a).ToList()));
 
+        System.IO.File.AppendAllText(_txtFileName, string.Join(",", SentDates.Distinct().Select(a => a).ToList()));
     }
 }
