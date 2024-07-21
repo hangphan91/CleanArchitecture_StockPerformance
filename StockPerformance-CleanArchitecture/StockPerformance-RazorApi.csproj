@@ -1,19 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>StockPerformance_CleanArchitecture</RootNamespace>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <None Remove="Views\StockPerformance\" />
     <None Remove="Models\ProfitDetails\" />
     <None Remove="Formatters\" />
-    <None Remove="Helpers\" />
     <None Remove="Models\Settings\" />
     <None Remove="Managers\" />
   </ItemGroup>
@@ -21,21 +18,20 @@
     <Folder Include="Models\" />
     <Folder Include="Views\StockPerformance\" />
     <Folder Include="Formatters\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockPerformanceCalculator\StockPerformanceCalculator.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      <GlobalPropertiesToRemove />
     </ProjectReference>
     <ProjectReference Include="..\EntityPersistence\EntityPersistence.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      <GlobalPropertiesToRemove />
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      <GlobalPropertiesToRemove />
     </ProjectReference>
     <ProjectReference Include="..\Exporter\Exporter.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      <GlobalPropertiesToRemove />
     </ProjectReference>
     <ProjectReference Include="..\StockPerformanceManager\StockPerformanceManager.csproj" />
   </ItemGroup>

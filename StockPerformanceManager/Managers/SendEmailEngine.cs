@@ -109,7 +109,11 @@ namespace StockPerformance_CleanArchitecture.Managers
             var emailsTosendForLostProfit = debugEmails;
             var sendEmailLostData = new SendEmailData(allResponses, 1, emailsTosendForLostProfit, true);
 
-            var sendEmailData = new List<SendEmailData> { sendEmailGainData, sendEmailLostData };
+            var sendEmailData = new List<SendEmailData>
+             {
+                sendEmailGainData
+                //, sendEmailLostData 
+            };
             return sendEmailData;
         }
     }

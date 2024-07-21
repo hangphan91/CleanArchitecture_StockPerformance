@@ -72,7 +72,6 @@ public class ReportTimer
     public async Task GetResponses()
     {
         var date = DateTime.Now.AddYears(-4);
-        SentDates.Add(date);
         var searchDetailManager = new SearchDetailManager();
         var result = await searchDetailManager.PerformAdvanceSearch(true, date);
 
@@ -98,56 +97,16 @@ public class ReportTimer
         }
     }
 
-    private void ReadSentDates()
-    {
-        String line;
-        try
-        {
-            //Pass the file path and file name to the StreamReader constructor
-            using (StreamReader sr = new StreamReader(_txtFileName))
-            {
-                //Read the first line of text
-                line = sr.ReadLine();
-                //Continue to read until you reach end of file
-                while (line != null)
-                {
-                    //write the line to console window
-                    Console.WriteLine(line);
-                    var strings = line.Split(",");
-                    foreach (var item in strings)
-                    {
-                        var date = DateTimeOffset.Parse(item).DateTime;
-                        SentDates.Add(date);
-                    }
-                    //Read the next line
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-            }
-            //close the file
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Exception: " + e.Message);
-        }
-        finally
-        {
-            Console.WriteLine("Executing finally block.");
-        }
-    }
-
     private async Task SendEmail()
     {
-        if (DateTime.Now.DayOfWeek != DayOfWeek.Saturday)
-            return;
+        var willSend = false;
 
-        if (SentDates.Select(a => a.Date == DateTime.Now.Date).Any())
-            return;
+        if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday
+                && SentDates.Select(a => a.Date == DateTime.Now.Date).Count == 0
+                && DateTime.Now.Hour == 1)
+            willSend = true;
 
-        if (DateTime.Now.Hour != 1)
-            return;
-
-        if (_responses.Count == 0)
+        if (_responses.Count == 0 && willSend)
             await GetResponses();
 
         var sendEmailData =
@@ -158,13 +117,8 @@ public class ReportTimer
             if (sendEmail.StockPerformanceResponses.Count >= sendEmail.MaxCount)
             {
                 SendEmailEngine.CreateAndSendEmail(sendEmail.StockPerformanceResponses, sendEmail.EmailContacts, sendEmail.IsProfitable);
-            }
-            else if (sendEmail.IsProfitable)
-            {
                 SentDates = new ConcurrentBag<DateTime>() { DateTime.Now };
             }
         }
-
-        System.IO.File.AppendAllText(_txtFileName, string.Join(",", SentDates.Distinct().Select(a => a).ToList()));
     }
 }

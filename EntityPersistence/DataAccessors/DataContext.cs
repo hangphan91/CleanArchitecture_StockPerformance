@@ -170,6 +170,12 @@ namespace EntityPersistence.DataAccessors
                 "CAMT", "ARM"
             };
 
+            var growthInvestors = new List<string>
+            {
+                "MPC", "ALL", "AXON", "BKNG", "COP" ,"COST", "ETN", "HWM", "LLY", "MSFT", "NTNX", "NVO", "PCAR", "PGR","PSN",
+                "PSX", "TDG", "TRGP", "WFRD", "XOM", "COKE", "CRWD", "DECK", "EME", "FIX", "NVDA", "PWR", "RCL","TOL", "VRT"
+            };
+
             symbols.AddRange(growingIn2022To2023);
             symbols.AddRange(growingIn2020To2024);
             symbols.AddRange(optionStocks042024);
@@ -177,6 +183,7 @@ namespace EntityPersistence.DataAccessors
             symbols.AddRange(from20To50Dollar);
             symbols.AddRange(from20to50Finviz);
             symbols.AddRange(from072024YahooFin);
+            symbols.AddRange(growthInvestors);
 
             symbols = symbols.Select(a => a.ToUpper()).Distinct().ToList();
             var toSaveSymbols = symbols.Select(symbol => new Symbol
