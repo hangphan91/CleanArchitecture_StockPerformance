@@ -31,6 +31,25 @@ namespace StockPerformanceCalculator.ExternalCommunications
 
             try
             {
+                var caller = new YFinanceRapidApi();
+                response = await caller.GetHistory(symbol, startingDate);
+                await Task.Delay(1000);
+            }
+            catch (Exception ex)
+            {
+                response = await GetHistoryData(symbol, response, dataAccessor);
+            }
+
+            _currentPrice = response.OrderByDescending(a => a.Date).FirstOrDefault()?.ClosingPrice ?? 0;
+            _symbolSummaries = response.Where(a => a.Date >= startingDate).ToList();
+
+            return _symbolSummaries;
+        }
+
+        private static async Task<List<SymbolSummary>> GetHistoryData(string symbol, List<SymbolSummary> response, GetStockDatAccessor dataAccessor)
+        {
+            try
+            {
 
                 var result = await dataAccessor.GetHistoricalDataRapicAPI();
                 response = new YahooFinanceAPIMapper().Map(result, symbol);
@@ -67,10 +86,7 @@ namespace StockPerformanceCalculator.ExternalCommunications
                 }
             }
 
-            _currentPrice = response.OrderByDescending(a => a.Date).FirstOrDefault()?.ClosingPrice ?? 0;
-            _symbolSummaries = response.Where(a => a.Date >= startingDate).ToList();
-
-            return _symbolSummaries;
+            return response;
         }
     }
 }

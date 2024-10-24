@@ -11,6 +11,7 @@ namespace StockPerformance_CleanArchitecture.Managers;
 public class ReportTimer
 {
     private static string _txtFileName = GetFilePath();
+    public ConcurrentBag<DateTime> _lastSend = new ConcurrentBag<DateTime> { DateTime.MinValue };
 
     private static string GetFilePath()
     {
@@ -47,10 +48,14 @@ public class ReportTimer
                         {
                             EmailAddress = "fisayoayodele01@gmail.com",
                             FirstName = "Joseph"
+                        },
+                        new Email
+                        {
+                            EmailAddress = "hanahphan2@gmail.com",
+                            FirstName = "Ha"
                         }
                     };
 
-    private object obj;
     public ReportTimer()
     {
         Start();
@@ -99,12 +104,14 @@ public class ReportTimer
 
     private async Task SendEmail()
     {
-        var willSend = false;
+        var willSend = (DateTime.Now - _lastSend.First()).TotalDays >= 1;
+
+        if (!willSend)
+            return;
 
         if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday
-                && SentDates.Select(a => a.Date == DateTime.Now.Date).Count == 0
-                && DateTime.Now.Hour == 1)
-            willSend = true;
+            || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+            return;
 
         if (_responses.Count == 0 && willSend)
             await GetResponses();
@@ -116,6 +123,7 @@ public class ReportTimer
         {
             if (sendEmail.StockPerformanceResponses.Count >= sendEmail.MaxCount)
             {
+                _lastSend = new ConcurrentBag<DateTime> { DateTime.Now };
                 SendEmailEngine.CreateAndSendEmail(sendEmail.StockPerformanceResponses, sendEmail.EmailContacts, sendEmail.IsProfitable);
                 SentDates = new ConcurrentBag<DateTime>() { DateTime.Now };
             }

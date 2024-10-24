@@ -106,6 +106,24 @@ namespace StockPerformanceCalculator.ExternalCommunications
             }
             return summaries.OrderBy(a => a.Date).ToList();
         }
+
+        internal List<SymbolSummary> Map(Root? result, string symbol)
+        {
+            var summaries = new List<SymbolSummary>();
+            foreach (var item in result.Data)
+            {
+                DateTime myDate = DateTime.UnixEpoch.AddMilliseconds(item.Date);
+
+                summaries.Add(new SymbolSummary
+                {
+                    ClosingPrice = (decimal)item.Close,
+                    Date = myDate,
+                    Symbol = symbol,
+                    Volume = (decimal)item.Volume,
+                });
+            }
+            return summaries.OrderBy(a => a.Date).ToList();
+        }
     }
 }
 
