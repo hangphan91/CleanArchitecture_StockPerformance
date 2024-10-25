@@ -105,7 +105,7 @@ public class ReportTimer
     private async Task SendEmail()
     {
         var willSend = (DateTime.Now - _lastSend.First()).TotalDays >= 1;
-
+        willSend = false;
         if (!willSend)
             return;
 
